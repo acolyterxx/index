@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="農業部畜產試驗所承攬作業巡檢表 - 線上填寫版">
+  <title>承攬作業巡檢表 | 農業部畜產試驗所</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .inspect-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 12px;
+    }
+    .inspect-table th {
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      font-weight: 600;
+      padding: 12px 14px;
+      text-align: center;
+      border: 1px solid var(--border);
+      font-size: 13px;
+      letter-spacing: 0.03em;
+    }
+    .inspect-table td {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      vertical-align: middle;
+    }
+    .inspect-table tr:hover td {
+      background: rgba(59, 130, 246, 0.04);
+    }
+    .inspect-table .cat-header td {
+      background: rgba(45, 157, 90, 0.1);
+      color: var(--primary-light);
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .radio-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+    .radio-group input[type="radio"] {
+      accent-color: var(--primary-light);
+      cursor: pointer;
+    }
+    .result-ok { color: #4ade80; }
+    .result-fail { color: #f87171; }
+    .result-na { color: var(--text-muted); }
+    .issue-input {
+      width: 100%;
+      padding: 6px 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 12px;
+      font-family: var(--font-sans);
+      outline: none;
+      min-width: 100px;
+    }
+    .issue-input:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 2px rgba(45,157,90,0.1);
+    }
+    .stat-bar {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      background: rgba(10, 30, 18, 0.6);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .stat-num {
+      font-size: 28px;
+      font-weight: 900;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .stat-ok { color: #4ade80; }
+    .stat-fail { color: #f87171; }
+    .stat-na { color: #94a3b8; }
+    .overall-result {
+      padding: 20px;
+      border-radius: var(--radius-sm);
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
+      margin-top: 16px;
+    }
+    .result-pass { background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; }
+    .result-fail-box { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.3); color: #f87171; }
+    @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="form-page">
+
+  <div class="bg-animation">
+    <div class="orb orb-1" style="background:radial-gradient(circle,#1e40af,transparent)"></div>
+    <div class="orb orb-2" style="background:radial-gradient(circle,#1a6b3c,transparent)"></div>
+  </div>
+
+  <nav class="form-topbar">
+    <a href="index.html" class="back-btn">← 返回首頁</a>
+    <span class="topbar-title">承攬作業巡檢表</span>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" onclick="clearForm()">🗑 清除</button>
+      <button class="btn btn-print" onclick="window.print()">🖨 列印</button>
+      <button class="btn btn-primary" onclick="saveForm()">💾 儲存</button>
+    </div>
+  </nav>
+
+  <div class="form-container">
+
+    <div class="form-header" style="border-color: rgba(59,130,246,0.3);">
+      <div class="form-org">農業部畜產試驗所</div>
+      <h1 class="form-title-main">承攬作業<span style="background:linear-gradient(135deg,#60a5fa,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">巡檢表</span></h1>
+      <p class="form-subtitle">承攬作業安全衛生現場巡視查核紀錄</p>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width: 0%; background: linear-gradient(90deg, #60a5fa, #3b82f6);"></div>
+    </div>
+
+    <!-- 基本資料 -->
+    <div class="form-section">
+      <div class="section-title" style="color:#60a5fa;">
+        <span class="section-num" style="background:#3b82f6;">1</span>
+        基本資料
+      </div>
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label" for="insp-date">巡檢日期 <span class="required">*</span></label>
+          <div class="date-row">
+            <input class="date-input-sm" id="insp-year" type="text" placeholder="年" maxlength="3" oninput="updateProgress()">
+            <label>年</label>
+            <input class="date-input-sm" id="insp-month" type="text" placeholder="月" maxlength="2" style="width:55px" oninput="updateProgress()">
+            <label>月</label>
+            <input class="date-input-sm" id="insp-day" type="text" placeholder="日" maxlength="2" style="width:55px" oninput="updateProgress()">
+            <label>日</label>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="insp-time">巡檢時間</label>
+          <input class="form-input" id="insp-time" type="text" placeholder="例如：09:00 ~ 10:00" oninput="updateProgress()">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="insp-contractor">承攬商名稱 <span class="required">*</span></label>
+          <input class="form-input" id="insp-contractor" type="text" placeholder="請輸入承攬商名稱" oninput="updateProgress()">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="insp-work">作業名稱 <span class="required">*</span></label>
+          <input class="form-input" id="insp-work" type="text" placeholder="請輸入作業項目" oninput="updateProgress()">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="insp-location">作業地點 <span class="required">*</span></label>
+          <input class="form-input" id="insp-location" type="text" placeholder="請輸入作業地點" oninput="updateProgress()">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="insp-workers">在場作業人數</label>
+          <input class="form-input" id="insp-workers" type="number" placeholder="人數" min="0" oninput="updateProgress()">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="insp-site-person">現場負責人</label>
+          <input class="form-input" id="insp-site-person" type="text" placeholder="現場負責人姓名" oninput="updateProgress()">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="insp-inspector">巡檢人員 <span class="required">*</span></label>
+          <input class="form-input" id="insp-inspector" type="text" placeholder="巡檢人員姓名" oninput="updateProgress()">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="insp-weather">當日天氣</label>
+          <select class="form-select" id="insp-weather" oninput="updateProgress()">
+            <option value="">-- 請選擇 --</option>
+            <option>☀️ 晴天</option>
+            <option>⛅ 多雲</option>
+            <option>🌧️ 雨天</option>
+            <option>⛈️ 雷雨</option>
+            <option>🌬️ 強風</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="insp-temp">氣溫（℃）</label>
+          <input class="form-input" id="insp-temp" type="text" placeholder="例如：28℃" oninput="updateProgress()">
+        </div>
+      </div>
+    </div>
+
+    <!-- 巡檢統計 -->
+    <div id="stats-container" class="form-section" style="display:none; border-color: rgba(59,130,246,0.3);">
+      <div class="section-title" style="color:#60a5fa;">
+        <span class="section-num" style="background:#3b82f6;">📊</span>
+        巡檢統計
+      </div>
+      <div class="stat-bar">
+        <div class="stat-item">
+          <span class="stat-num" id="stat-total" style="color:var(--text-primary)">0</span>
+          <span class="stat-label">總項目</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num stat-ok" id="stat-ok">0</span>
+          <span class="stat-label">✅ 符合</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num stat-fail" id="stat-fail">0</span>
+          <span class="stat-label">❌ 不符合</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num stat-na" id="stat-na">0</span>
+          <span class="stat-label">➖ 不適用</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" style="color:#fbbf24" id="stat-pct">0%</span>
+          <span class="stat-label">符合率</span>
+        </div>
+      </div>
+      <div class="overall-result" id="overall-result"></div>
+    </div>
+
+    <!-- 巡檢查核表 -->
+    <div class="form-section">
+      <div class="section-title" style="color:#60a5fa;">
+        <span class="section-num" style="background:#3b82f6;">2</span>
+        安全衛生查核項目
+        <span style="font-size:12px; font-weight:400; color:var(--text-muted); margin-left:8px;">（✅=符合　❌=不符合　➖=不適用）</span>
+      </div>
+      <div style="overflow-x:auto; -webkit-overflow-scrolling:touch;">
+        <table class="inspect-table">
+          <thead>
+            <tr>
+              <th style="width:40px">項次</th>
+              <th style="min-width:220px">查核項目</th>
+              <th style="width:150px">查核結果</th>
+              <th style="min-width:140px">缺失描述 / 改善追蹤</th>
+            </tr>
+          </thead>
+          <tbody id="inspect-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 缺失改善追蹤 -->
+    <div class="form-section">
+      <div class="section-title" style="color:#60a5fa;">
+        <span class="section-num" style="background:#3b82f6;">3</span>
+        缺失改善追蹤
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="issues-summary">本次巡檢發現之主要缺失</label>
+        <textarea class="form-textarea" id="issues-summary" rows="4" placeholder="請描述本次巡檢發現之主要缺失及問題..." oninput="updateProgress()"></textarea>
+      </div>
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label" for="corrective-actions">要求改善事項</label>
+          <textarea class="form-textarea" id="corrective-actions" rows="4" placeholder="請列出要求承攬商改善之項目..." oninput="updateProgress()"></textarea>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="improvement-deadline">改善期限</label>
+          <div class="date-row" style="margin-bottom:8px;">
+            <input class="date-input-sm" id="improve-year" type="text" placeholder="年" maxlength="3">
+            <label>年</label>
+            <input class="date-input-sm" id="improve-month" type="text" placeholder="月" maxlength="2" style="width:55px">
+            <label>月</label>
+            <input class="date-input-sm" id="improve-day" type="text" placeholder="日" maxlength="2" style="width:55px">
+            <label>日前</label>
+          </div>
+          <label class="form-label" for="follow-up-result" style="margin-top:12px;">改善結果確認</label>
+          <textarea class="form-textarea" id="follow-up-result" rows="3" placeholder="後續確認改善情形..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 停工命令 -->
+    <div class="form-section" style="border-color: rgba(239,68,68,0.2);">
+      <div class="section-title" style="color:#f87171;">
+        <span class="section-num" style="background:#ef4444;">⚠</span>
+        停工記錄
+      </div>
+      <div class="form-field" style="margin-bottom:16px;">
+        <label class="form-label">本次巡檢是否有要求停工？</label>
+        <div style="display:flex;gap:16px;margin-top:8px;">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--text-secondary);">
+            <input type="radio" name="stop-work" id="stop-yes" value="yes" style="accent-color:#f87171;" onchange="toggleStopWork(true)"> 是，已要求停工
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--text-secondary);">
+            <input type="radio" name="stop-work" id="stop-no" value="no" style="accent-color:#4ade80;" onchange="toggleStopWork(false)"> 否
+          </label>
+        </div>
+      </div>
+      <div id="stop-work-detail" style="display:none;">
+        <div class="form-field">
+          <label class="form-label" for="stop-reason">停工原因</label>
+          <textarea class="form-textarea" id="stop-reason" rows="3" placeholder="請說明要求停工之原因..."></textarea>
+        </div>
+        <div class="form-field" style="margin-top:12px;">
+          <label class="form-label" for="resume-condition">復工條件</label>
+          <textarea class="form-textarea" id="resume-condition" rows="2" placeholder="請說明復工所需滿足之條件..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 巡檢人員簽章 -->
+    <div class="form-section">
+      <div class="section-title" style="color:#60a5fa;">
+        <span class="section-num" style="background:#3b82f6;">4</span>
+        簽章欄
+      </div>
+      <div class="sig-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="sig-box">
+          <div class="sig-title">巡檢人員<br>簽章</div>
+          <div class="sig-area" style="height:70px;"></div>
+          <div class="sig-hint">簽名</div>
+        </div>
+        <div class="sig-box">
+          <div class="sig-title">單位主管<br>簽章</div>
+          <div class="sig-area" style="height:70px;"></div>
+          <div class="sig-hint">簽名／蓋章</div>
+        </div>
+        <div class="sig-box">
+          <div class="sig-title">承攬商現場負責人<br>簽章（確認知悉）</div>
+          <div class="sig-area" style="height:70px;"></div>
+          <div class="sig-hint">簽名</div>
+        </div>
+      </div>
+      <div class="form-field" style="margin-top:16px;">
+        <label class="form-label" for="insp-remarks">其他備注</label>
+        <textarea class="form-textarea" id="insp-remarks" rows="3" placeholder="其他備注事項..."></textarea>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div style="display:flex;gap:16px;justify-content:flex-end;margin-top:8px;">
+      <button class="btn btn-ghost" onclick="clearForm()">🗑 清除表單</button>
+      <button class="btn btn-print" onclick="window.print()">🖨 列印 / 匯出PDF</button>
+      <button class="btn btn-primary" onclick="saveForm()">💾 儲存資料</button>
+    </div>
+
+  </div>
+
+  <footer class="site-footer">
+    <p>農業部畜產試驗所 &copy; 中華民國114年　｜　承攬作業巡檢表</p>
+  </footer>
+
+  <script>
+    const INSPECT_ITEMS = [
+      { cat: '一、個人防護設備', items: [
+        '作業人員佩戴安全帽',
+        '作業人員穿著安全鞋',
+        '作業人員穿著適當工作服',
+        '高架作業人員佩掛安全帶及安全索',
+        '電氣作業人員穿著絕緣防護具',
+        '其他必要防護具（護目鏡、耳塞、口罩等）依規定配戴',
+      ]},
+      { cat: '二、作業環境安全', items: [
+        '作業區域設置適當圍柵或警告標示',
+        '通道及緊急出口保持暢通',
+        '作業現場照明充足',
+        '地面乾燥、無積水或油污滑倒危害',
+        '有害物品或廢棄物妥善存放',
+        '作業場所通風良好',
+      ]},
+      { cat: '三、高架作業安全', items: [
+        '施工架搭設符合規定（護欄高度≥90公分）',
+        '施工架穩固，無搖晃鬆動現象',
+        '梯子設置安全，角度適當，固定良好',
+        '開口部分設置護蓋或安全網',
+        '2公尺以上作業確實佩掛安全帶',
+        '施工架腳底部設置防滑及固定措施',
+      ]},
+      { cat: '四、電氣作業安全', items: [
+        '臨時用電裝設漏電斷路器',
+        '電線架設離地，避免被車輛輾壓',
+        '電氣設備外殼接地',
+        '帶電作業有明確標示及隔離',
+        '操作人員具有相關資格或執照',
+        '電氣設備外觀良好，無破損或異常',
+      ]},
+      { cat: '五、動火作業安全', items: [
+        '動火作業已取得施工許可',
+        '作業現場備有滅火設備',
+        '動火作業區域清除易燃物品',
+        '使用遮火圍幕或防火毯',
+        '鋼瓶固定良好，直立存放',
+        '作業結束後確認無遺留火種',
+      ]},
+      { cat: '六、局限空間作業', items: [
+        '進入局限空間前已實施氣體測定',
+        '作業現場備有機械通風設備',
+        '作業人員配戴適當呼吸防護具',
+        '設置監視人員在外監看',
+        '準備救援器材（防護索、呼吸器等）',
+        '每2小時重新確認氣體濃度',
+      ]},
+      { cat: '七、吊裝作業安全', items: [
+        '吊車/吊機具有合格檢驗證',
+        '操作人員具備合格資格',
+        '吊掛物下方嚴禁人員停留',
+        '吊裝前確認捆綁索具狀況',
+        '高壓線附近設置安全距離管制',
+        '吊裝指揮人員明確且通訊順暢',
+      ]},
+      { cat: '八、一般作業管理', items: [
+        '作業人員均已接受危害告知教育訓練',
+        '承攬作業範圍與合約一致',
+        '作業時間符合規定，無延誤或提前',
+        '廢棄物依規定分類及暫存',
+        '承攬商自行配備急救器材',
+        '緊急聯絡機制建立，通訊暢通',
+        '作業記錄填寫完整',
+      ]},
+    ];
+
+    function renderInspectTable() {
+      const tbody = document.getElementById('inspect-tbody');
+      let html = '';
+      let itemIndex = 0;
+
+      INSPECT_ITEMS.forEach(cat => {
+        html += `<tr class="cat-header">
+          <td colspan="4">${cat.cat}</td>
+        </tr>`;
+        cat.items.forEach(item => {
+          const idx = itemIndex++;
+          html += `<tr>
+            <td style="text-align:center; color:var(--text-muted); font-size:12px;">${idx + 1}</td>
+            <td>${item}</td>
+            <td>
+              <div class="radio-group">
+                <label><input type="radio" name="insp-${idx}" value="ok" onchange="updateStats(); updateProgress()"> <span class="result-ok">✅</span></label>
+                <label><input type="radio" name="insp-${idx}" value="fail" onchange="updateStats(); updateProgress()"> <span class="result-fail">❌</span></label>
+                <label><input type="radio" name="insp-${idx}" value="na" onchange="updateStats(); updateProgress()"> <span class="result-na">➖</span></label>
+              </div>
+            </td>
+            <td><input class="issue-input" type="text" id="issue-${idx}" placeholder="缺失描述..." onchange="updateProgress()"></td>
+          </tr>`;
+        });
+      });
+
+      tbody.innerHTML = html;
+    }
+
+    function updateStats() {
+      const totalItems = document.querySelectorAll('[name^="insp-"]').length / 3;
+      let ok = 0, fail = 0, na = 0;
+
+      for (let i = 0; i < totalItems; i++) {
+        const checked = document.querySelector(`[name="insp-${i}"]:checked`);
+        if (checked) {
+          if (checked.value === 'ok') ok++;
+          else if (checked.value === 'fail') fail++;
+          else if (checked.value === 'na') na++;
+        }
+      }
+
+      const answered = ok + fail + na;
+      const pct = (ok + na > 0 && answered > 0) ? Math.round((ok / (ok + fail)) * 100) : 0;
+
+      document.getElementById('stat-total').textContent = Math.round(totalItems);
+      document.getElementById('stat-ok').textContent = ok;
+      document.getElementById('stat-fail').textContent = fail;
+      document.getElementById('stat-na').textContent = na;
+      document.getElementById('stat-pct').textContent = fail === 0 && ok > 0 ? '100%' : (ok + fail > 0 ? pct + '%' : '-');
+
+      const container = document.getElementById('stats-container');
+      const overallEl = document.getElementById('overall-result');
+      container.style.display = 'block';
+
+      if (answered === 0) {
+        overallEl.className = 'overall-result';
+        overallEl.textContent = '';
+      } else if (fail === 0) {
+        overallEl.className = 'overall-result result-pass';
+        overallEl.textContent = '✅ 本次巡檢結果：全部符合，無缺失';
+      } else {
+        overallEl.className = 'overall-result result-fail-box';
+        overallEl.textContent = `❌ 本次巡檢結果：發現 ${fail} 項缺失，請要求承攬商立即改善`;
+      }
+    }
+
+    function updateProgress() {
+      const inputs = document.querySelectorAll('.form-input, .form-textarea, .date-input-sm');
+      const radios = document.querySelectorAll('[name^="insp-"]');
+      let filled = 0;
+      inputs.forEach(f => { if (f.value.trim()) filled++; });
+      const totalItems = radios.length / 3;
+      for (let i = 0; i < totalItems; i++) {
+        if (document.querySelector(`[name="insp-${i}"]:checked`)) filled++;
+      }
+      const total = inputs.length + totalItems;
+      const pct = total > 0 ? Math.round((filled / total) * 100) : 0;
+      document.getElementById('progress-fill').style.width = Math.min(100, pct) + '%';
+    }
+
+    function toggleStopWork(show) {
+      document.getElementById('stop-work-detail').style.display = show ? 'block' : 'none';
+    }
+
+    function saveForm() {
+      const data = {};
+      document.querySelectorAll('[id]').forEach(el => {
+        if (el.tagName === 'INPUT' && el.type === 'radio') return;
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
+          data[el.id] = el.value;
+        }
+      });
+      // Save radio states
+      const totalItems = document.querySelectorAll('[name^="insp-"]').length / 3;
+      for (let i = 0; i < totalItems; i++) {
+        const checked = document.querySelector(`[name="insp-${i}"]:checked`);
+        data[`insp-radio-${i}`] = checked ? checked.value : '';
+      }
+      const sw = document.querySelector('[name="stop-work"]:checked');
+      data['stop-work-val'] = sw ? sw.value : '';
+      localStorage.setItem('inspect-form-data', JSON.stringify(data));
+      showToast('✅ 巡檢表資料已儲存！');
+    }
+
+    function loadForm() {
+      const saved = localStorage.getItem('inspect-form-data');
+      if (!saved) return;
+      const data = JSON.parse(saved);
+      Object.entries(data).forEach(([id, val]) => {
+        if (id.startsWith('insp-radio-')) {
+          const idx = id.replace('insp-radio-', '');
+          if (val) {
+            const radio = document.querySelector(`[name="insp-${idx}"][value="${val}"]`);
+            if (radio) radio.checked = true;
+          }
+          return;
+        }
+        if (id === 'stop-work-val') {
+          if (val) {
+            const radio = document.querySelector(`[name="stop-work"][value="${val}"]`);
+            if (radio) { radio.checked = true; toggleStopWork(val === 'yes'); }
+          }
+          return;
+        }
+        const el = document.getElementById(id);
+        if (el) el.value = val;
+      });
+      updateStats();
+      updateProgress();
+    }
+
+    function clearForm() {
+      if (!confirm('確定要清除所有填寫內容嗎？')) return;
+      document.querySelectorAll('.form-input, .form-textarea, .date-input-sm').forEach(el => el.value = '');
+      document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+      document.querySelectorAll('.issue-input').forEach(el => el.value = '');
+      document.getElementById('stop-work-detail').style.display = 'none';
+      localStorage.removeItem('inspect-form-data');
+      updateStats();
+      updateProgress();
+      showToast('🗑 表單已清除');
+    }
+
+    function showToast(msg) {
+      const toast = document.createElement('div');
+      toast.textContent = msg;
+      Object.assign(toast.style, {
+        position: 'fixed', bottom: '32px', right: '32px',
+        background: 'rgba(10,20,40,0.95)', border: '1px solid rgba(59,130,246,0.5)',
+        color: '#e8f5ee', padding: '14px 24px', borderRadius: '12px',
+        fontSize: '14px', fontWeight: '600', zIndex: '9999',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+        animation: 'fadeIn .3s ease', backdropFilter: 'blur(20px)'
+      });
+      document.body.appendChild(toast);
+      setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = '.4s'; setTimeout(() => toast.remove(), 400); }, 3000);
+    }
+
+    function setTodayROC() {
+      const now = new Date();
+      const roc = now.getFullYear() - 1911;
+      document.getElementById('insp-year').value = roc;
+      document.getElementById('insp-month').value = now.getMonth() + 1;
+      document.getElementById('insp-day').value = now.getDate();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderInspectTable();
+      setTodayROC();
+      loadForm();
+      updateProgress();
+    });
+  </script>
+</body>
+</html>
