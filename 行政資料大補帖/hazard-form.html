@@ -19,24 +19,55 @@
   <link rel="apple-touch-icon" href="icons/icon-192.png">
 
   <style>
-    /* ---------- Pure signature blank box ---------- */
-    .sig-blank-box {
-      min-height: 72px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      background: rgba(255,255,255,0.03);
-      transition: background 0.2s, border-color 0.2s;
+
+    /* ── Signature Pad ── */
+    .sig-pad-wrap {
       position: relative;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.04);
+      overflow: hidden;
+      transition: border-color 0.2s;
+      touch-action: none; /* prevent page scroll while signing */
     }
-    .sig-blank-box::after {
-      content: '簽章';
-      position: absolute;
-      bottom: 6px;
-      right: 10px;
+    .sig-pad-wrap:hover { border-color: var(--primary); }
+    .sig-pad-wrap.has-sig { border-color: rgba(45,157,90,0.6); background: rgba(45,157,90,0.03); }
+
+    .sig-canvas {
+      display: block;
+      width: 100%;
+      height: 90px;
+      cursor: crosshair;
+      touch-action: none;
+    }
+    .sig-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 8px;
+      border-top: 1px solid var(--border);
+      background: rgba(0,0,0,0.15);
+    }
+    .sig-hint {
       font-size: 11px;
       color: var(--text-muted);
-      opacity: 0.5;
+      user-select: none;
     }
+    .sig-clear-btn {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.07);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .sig-clear-btn:hover { background: rgba(220,60,60,0.15); color: #f87171; border-color: rgba(220,60,60,0.3); }
+
+    /* Print image (hidden on screen, shown in print) */
+    .sig-print-img { display: none; }
+
 
     /* ---------- Env description checkbox grid ---------- */
     .env-check-grid {
@@ -214,9 +245,14 @@
       .date-input-sm, input[type="text"], input[type="tel"] { border:none !important; border-bottom:1px solid #888 !important; background:transparent !important; color:#000 !important; font-size:10pt !important; padding:0 2pt !important; width:26pt !important; border-radius:0 !important; font-family:'Times New Roman',Times,serif !important; }
       .date-row label { font-size:10pt !important; color:#000 !important; margin:0 1pt !important; font-family:'Times New Roman',Times,serif !important; }
 
-      /* ─ Sig blank boxes in basic info ─ */
-      .sig-blank-box { display:block !important; width:100% !important; min-height:38pt !important; border:1px solid #aaa !important; background:#fff !important; border-radius:0 !important; margin-top:2pt !important; }
-      .sig-blank-box::after { display:none !important; }
+      /* ─ Sig pads in print: hide canvas, show saved image ─ */
+      .sig-pad-wrap { border:1px solid #aaa !important; background:#fff !important; border-radius:0 !important; overflow:visible !important; display:block !important; min-height:38pt !important; touch-action:auto !important; }
+      .sig-canvas { display:none !important; }
+      .sig-actions { display:none !important; }
+      .sig-print-img { display:block !important; width:auto !important; max-width:100% !important; max-height:60pt !important; object-fit:contain !important; margin:2pt auto !important; }
+      /* If no signature saved, show empty space */
+      .sig-print-img[src=""] { display:none !important; }
+
 
       /* ─ Env description checkboxes ─ */
       .env-check-grid { display:block !important; columns:2 !important; column-gap:10pt !important; border:1px solid #ccc !important; padding:3pt 5pt !important; margin-bottom:3pt !important; }
@@ -379,8 +415,16 @@
         <!-- 負責人簽章 -->
         <div class="form-field" id="ff-boss">
           <label class="form-label">負責人簽章</label>
-          <div class="sig-blank-box" id="sig-boss"></div>
+          <div class="sig-pad-wrap" id="sig-boss">
+            <canvas class="sig-canvas" data-key="sig-boss"></canvas>
+            <div class="sig-actions">
+              <span class="sig-hint">✍️ 用手指在此簽名</span>
+              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-boss')">清除</button>
+            </div>
+            <img class="sig-print-img" id="sig-boss-img" src="" alt="簽章">
+          </div>
         </div>
+
         <div class="form-field" id="ff-tel">
           <label class="form-label" for="emergency-tel">緊急連絡電話</label>
           <input class="form-input" id="emergency-tel" type="tel" placeholder="例如：0912-345-678" oninput="syncPledge(); updateProgress()">
@@ -388,8 +432,16 @@
         <!-- 現場主管簽章 -->
         <div class="form-field" id="ff-supervisor">
           <label class="form-label">現場主管簽章</label>
-          <div class="sig-blank-box" id="sig-supervisor"></div>
+          <div class="sig-pad-wrap" id="sig-supervisor">
+            <canvas class="sig-canvas" data-key="sig-supervisor"></canvas>
+            <div class="sig-actions">
+              <span class="sig-hint">✍️ 用手指在此簽名</span>
+              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-supervisor')">清除</button>
+            </div>
+            <img class="sig-print-img" id="sig-supervisor-img" src="" alt="簽章">
+          </div>
         </div>
+
         <div class="form-field" id="ff-purchase">
           <label class="form-label" for="purchase-dept">請購單位</label>
           <input class="form-input" id="purchase-dept" type="text" placeholder="請輸入請購單位" oninput="updateProgress()">
@@ -397,13 +449,28 @@
         <!-- 承辦人簽章 -->
         <div class="form-field" id="ff-handler">
           <label class="form-label">承辦人簽章</label>
-          <div class="sig-blank-box" id="sig-handler"></div>
+          <div class="sig-pad-wrap" id="sig-handler">
+            <canvas class="sig-canvas" data-key="sig-handler"></canvas>
+            <div class="sig-actions">
+              <span class="sig-hint">✍️ 用手指在此簽名</span>
+              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-handler')">清除</button>
+            </div>
+            <img class="sig-print-img" id="sig-handler-img" src="" alt="簽章">
+          </div>
         </div>
         <!-- 單位主管簽章 -->
         <div class="form-field" id="ff-depthead">
           <label class="form-label">單位主管簽章</label>
-          <div class="sig-blank-box" id="sig-depthead"></div>
+          <div class="sig-pad-wrap" id="sig-depthead">
+            <canvas class="sig-canvas" data-key="sig-depthead"></canvas>
+            <div class="sig-actions">
+              <span class="sig-hint">✍️ 用手指在此簽名</span>
+              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-depthead')">清除</button>
+            </div>
+            <img class="sig-print-img" id="sig-depthead-img" src="" alt="簽章">
+          </div>
         </div>
+
         <div class="form-field form-grid-full" id="ff-workname">
           <label class="form-label" for="work-name">承攬作業名稱 <span class="required">*</span></label>
           <input class="form-input" id="work-name" type="text" placeholder="請輸入承攬作業名稱" oninput="syncPledge(); updateProgress()">
@@ -537,8 +604,16 @@
         <!-- 簽章欄移至承攬商名稱下方 -->
         <div class="form-field form-grid-full" id="pledge-ff-sig-inline" style="margin-bottom:4px;">
           <label class="form-label" style="margin-bottom:6px; display:block;">承攬商負責人（代理負責人）簽章</label>
-          <div class="sig-blank-box" style="min-height:80px;"></div>
+          <div class="sig-pad-wrap" id="sig-pledge">
+            <canvas class="sig-canvas" data-key="sig-pledge"></canvas>
+            <div class="sig-actions">
+              <span class="sig-hint">✍️ 用手指在此簽名</span>
+              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-pledge')">清除</button>
+            </div>
+            <img class="sig-print-img" id="sig-pledge-img" src="" alt="簽章">
+          </div>
         </div>
+
         <div class="form-field">
           <label class="form-label" for="pledge-address">地址</label>
           <input class="form-input" id="pledge-address" type="text" placeholder="公司地址">
@@ -1029,7 +1104,161 @@
 </body>
 
 <script>
+// ════════════════════════════════════════════
+//   SIGNATURE PAD ENGINE
+// ════════════════════════════════════════════
+const SIG_KEYS = ['sig-boss', 'sig-supervisor', 'sig-handler', 'sig-depthead', 'sig-pledge'];
+
+class SignaturePad {
+  constructor(wrapId) {
+    this.wrap = document.getElementById(wrapId);
+    if (!this.wrap) return;
+    this.canvas = this.wrap.querySelector('.sig-canvas');
+    this.img    = this.wrap.querySelector('.sig-print-img');
+    this.key    = this.canvas.dataset.key;
+    this.ctx    = this.canvas.getContext('2d');
+    this.drawing = false;
+    this.lastX = 0;
+    this.lastY = 0;
+    this._init();
+    this._load();
+  }
+
+  _init() {
+    // Resize canvas to match CSS display size
+    const resize = () => {
+      const rect = this.canvas.getBoundingClientRect();
+      const dpr  = window.devicePixelRatio || 1;
+      // Save current drawing
+      const data = this.canvas.toDataURL();
+      this.canvas.width  = rect.width  * dpr;
+      this.canvas.height = rect.height * dpr;
+      this.ctx.scale(dpr, dpr);
+      this.ctx.strokeStyle = '#111';
+      this.ctx.lineWidth   = 2.2;
+      this.ctx.lineCap     = 'round';
+      this.ctx.lineJoin    = 'round';
+      // Restore drawing after resize
+      if (data !== 'data:,') {
+        const img = new Image();
+        img.onload = () => this.ctx.drawImage(img, 0, 0, rect.width, rect.height);
+        img.src = data;
+      }
+    };
+    resize();
+    new ResizeObserver(resize).observe(this.canvas);
+
+    // ── Touch events ──
+    this.canvas.addEventListener('touchstart', e => {
+      e.preventDefault();
+      const t = e.changedTouches[0];
+      const r = this.canvas.getBoundingClientRect();
+      this.drawing = true;
+      this.lastX = t.clientX - r.left;
+      this.lastY = t.clientY - r.top;
+    }, { passive: false });
+
+    this.canvas.addEventListener('touchmove', e => {
+      e.preventDefault();
+      if (!this.drawing) return;
+      const t = e.changedTouches[0];
+      const r = this.canvas.getBoundingClientRect();
+      const x = t.clientX - r.left;
+      const y = t.clientY - r.top;
+      this._draw(this.lastX, this.lastY, x, y);
+      this.lastX = x; this.lastY = y;
+    }, { passive: false });
+
+    this.canvas.addEventListener('touchend', e => {
+      e.preventDefault();
+      this.drawing = false;
+      this._save();
+    }, { passive: false });
+
+    // ── Mouse events (desktop) ──
+    this.canvas.addEventListener('mousedown', e => {
+      const r = this.canvas.getBoundingClientRect();
+      this.drawing = true;
+      this.lastX = e.clientX - r.left;
+      this.lastY = e.clientY - r.top;
+    });
+    this.canvas.addEventListener('mousemove', e => {
+      if (!this.drawing) return;
+      const r = this.canvas.getBoundingClientRect();
+      const x = e.clientX - r.left;
+      const y = e.clientY - r.top;
+      this._draw(this.lastX, this.lastY, x, y);
+      this.lastX = x; this.lastY = y;
+    });
+    this.canvas.addEventListener('mouseup',   () => { this.drawing = false; this._save(); });
+    this.canvas.addEventListener('mouseleave',() => { if (this.drawing) { this.drawing = false; this._save(); } });
+  }
+
+  _draw(x1, y1, x2, y2) {
+    this.ctx.beginPath();
+    this.ctx.moveTo(x1, y1);
+    this.ctx.lineTo(x2, y2);
+    this.ctx.stroke();
+    this.wrap.classList.add('has-sig');
+  }
+
+  _save() {
+    const data = this.canvas.toDataURL('image/png');
+    try { localStorage.setItem('hazard_' + this.key, data); } catch(e) {}
+    if (this.img) this.img.src = data;
+  }
+
+  _load() {
+    const data = localStorage.getItem('hazard_' + this.key);
+    if (!data || data === 'data:,') return;
+    const rect = this.canvas.getBoundingClientRect();
+    const img  = new Image();
+    img.onload = () => {
+      this.ctx.drawImage(img, 0, 0, rect.width || this.canvas.width, rect.height || this.canvas.height);
+      this.wrap.classList.add('has-sig');
+    };
+    img.src = data;
+    if (this.img) this.img.src = data;
+  }
+
+  clear() {
+    const dpr  = window.devicePixelRatio || 1;
+    this.ctx.clearRect(0, 0, this.canvas.width / dpr, this.canvas.height / dpr);
+    this.wrap.classList.remove('has-sig');
+    try { localStorage.removeItem('hazard_' + this.key); } catch(e) {}
+    if (this.img) this.img.src = '';
+  }
+}
+
+// Global pad registry
+const sigPads = {};
+
+function initSignaturePads() {
+  SIG_KEYS.forEach(key => {
+    sigPads[key] = new SignaturePad(key);
+  });
+}
+
+function clearSig(key) {
+  if (sigPads[key]) sigPads[key].clear();
+}
+
+// Extend clearForm to also clear all signatures
+const _origClearForm = typeof clearForm === 'function' ? clearForm : null;
+function clearForm() {
+  if (_origClearForm) _origClearForm();
+  SIG_KEYS.forEach(k => clearSig(k));
+}
+
+// Init after DOM ready (wait a tick for canvas to get layout)
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(initSignaturePads, 100);
+});
+</script>
+
+<script>
   // ── PWA：Service Worker 註冊 ──
+
   let deferredInstallPrompt = null;
 
   if ('serviceWorker' in navigator) {
