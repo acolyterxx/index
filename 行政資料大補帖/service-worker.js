@@ -1,15 +1,15 @@
 // ── 農業部畜產試驗所危害告知單 Service Worker ──
 // 版本號：每次更新內容時請遞增，確保舊快取被清除
-const CACHE_VERSION = 'hazard-v1.0';
+const CACHE_VERSION = 'hazard-v1.1';
 
 // 需要快取的檔案（離線可用）
 const CACHE_FILES = [
-  './hazard-form.html',
-  './style.css',
-  './index.html',
-  './manifest.json',
-  './icons/icon-192.png',
-  './icons/icon-512.png'
+  '/index/hazard-form.html',
+  '/index/style.css',
+  '/index/index.html',
+  '/index/manifest.json',
+  '/index/icons/icon-192.png',
+  '/index/icons/icon-512.png'
 ];
 
 // ── 安裝：快取所有資源 ──

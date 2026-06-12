@@ -2,8 +2,8 @@
   "name": "農業部畜產試驗所承攬作業環境危害告知單",
   "short_name": "危害告知單",
   "description": "承攬作業環境危害告知單及安全衛生承諾書填寫系統",
-  "start_url": "./hazard-form.html",
-  "scope": "./",
+  "start_url": "/index/hazard-form.html",
+  "scope": "/index/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0d1f0d",
@@ -12,13 +12,13 @@
   "categories": ["productivity", "utilities"],
   "icons": [
     {
-      "src": "icons/icon-192.png",
+      "src": "/index/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icons/icon-512.png",
+      "src": "/index/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -27,8 +27,9 @@
   "shortcuts": [
     {
       "name": "填寫危害告知單",
-      "url": "./hazard-form.html",
+      "url": "/index/hazard-form.html",
       "description": "開啟承攬作業環境危害告知單"
     }
   ]
 }
+
