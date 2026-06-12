@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
@@ -20,7 +20,7 @@
 
   <style>
 
-    /* ── Signature Pad ── */
+    /* ── Signature Pad (small preview in form) ── */
     .sig-pad-wrap {
       position: relative;
       border: 1.5px solid var(--border);
@@ -28,17 +28,15 @@
       background: rgba(255,255,255,0.04);
       overflow: hidden;
       transition: border-color 0.2s;
-      touch-action: none; /* prevent page scroll while signing */
+      cursor: pointer;
     }
     .sig-pad-wrap:hover { border-color: var(--primary); }
     .sig-pad-wrap.has-sig { border-color: rgba(45,157,90,0.6); background: rgba(45,157,90,0.03); }
-
     .sig-canvas {
       display: block;
       width: 100%;
       height: 90px;
-      cursor: crosshair;
-      touch-action: none;
+      pointer-events: none; /* clicks open modal instead */
     }
     .sig-actions {
       display: flex;
@@ -67,6 +65,111 @@
 
     /* Print image (hidden on screen, shown in print) */
     .sig-print-img { display: none; }
+
+    /* ── Fullscreen Signature Modal ── */
+    #sig-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: rgba(8, 20, 8, 0.92);
+      backdrop-filter: blur(6px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+      animation: sigFadeIn 0.18s ease;
+    }
+    #sig-modal.open { display: flex; }
+    @keyframes sigFadeIn { from { opacity:0; transform:scale(0.97); } to { opacity:1; transform:scale(1); } }
+
+    #sig-modal-inner {
+      width: 100%;
+      max-width: 600px;
+      background: #0f1f0f;
+      border: 2px solid rgba(45,157,90,0.5);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+      display: flex;
+      flex-direction: column;
+    }
+    #sig-modal-title {
+      padding: 12px 18px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #a3e8b8;
+      border-bottom: 1px solid rgba(45,157,90,0.2);
+      background: rgba(45,157,90,0.06);
+      text-align: center;
+      user-select: none;
+    }
+    #sig-modal-canvas-wrap {
+      position: relative;
+      background: #fff;
+      margin: 0;
+      flex: 1;
+      min-height: 240px;
+    }
+    #sig-modal-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 240px;
+      cursor: crosshair;
+      touch-action: none;
+    }
+    #sig-modal-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      color: #aaa;
+      pointer-events: none;
+      user-select: none;
+      transition: opacity 0.2s;
+    }
+    #sig-modal-placeholder.hidden { opacity: 0; }
+    #sig-modal-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: rgba(0,0,0,0.3);
+      border-top: 1px solid rgba(45,157,90,0.2);
+      gap: 10px;
+    }
+    #sig-modal-clear {
+      flex: 1;
+      padding: 10px 0;
+      border-radius: 8px;
+      border: 1.5px solid rgba(220,60,60,0.4);
+      background: rgba(220,60,60,0.1);
+      color: #f87171;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    #sig-modal-clear:hover, #sig-modal-clear:active { background: rgba(220,60,60,0.25); }
+    #sig-modal-confirm {
+      flex: 2;
+      padding: 10px 0;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(135deg, #2d9d5a, #1a6e3a);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.05em;
+    }
+    #sig-modal-confirm:hover, #sig-modal-confirm:active { filter: brightness(1.15); }
+    @media print { #sig-modal { display: none !important; } }
 
 
     /* ---------- Env description checkbox grid ---------- */
@@ -384,6 +487,21 @@
     📱 安裝到手機主畫面：<br>
     點擊瀏覽器底部分享鍵 <strong>⎋</strong>，選「加入至主畫面」
     <br><button onclick="document.getElementById('ios-install-hint').classList.remove('show')">我明白了</button>
+  </div>
+
+  <!-- ── Fullscreen Signature Modal ── -->
+  <div id="sig-modal">
+    <div id="sig-modal-inner">
+      <div id="sig-modal-title">✍️ 請在下方空白處簽名</div>
+      <div id="sig-modal-canvas-wrap">
+        <canvas id="sig-modal-canvas"></canvas>
+        <div id="sig-modal-placeholder">← 用手指在此簽名 →</div>
+      </div>
+      <div id="sig-modal-bar">
+        <button id="sig-modal-clear" type="button">清除</button>
+        <button id="sig-modal-confirm" type="button">✓ 確定</button>
+      </div>
+    </div>
   </div>
 
 
@@ -1105,159 +1223,251 @@
 
 <script>
 // ════════════════════════════════════════════
-//   SIGNATURE PAD ENGINE
+//   SIGNATURE PAD — Fullscreen Modal System
 // ════════════════════════════════════════════
 const SIG_KEYS = ['sig-boss', 'sig-supervisor', 'sig-handler', 'sig-depthead', 'sig-pledge'];
 
-class SignaturePad {
-  constructor(wrapId) {
-    this.wrap = document.getElementById(wrapId);
-    if (!this.wrap) return;
-    this.canvas = this.wrap.querySelector('.sig-canvas');
-    this.img    = this.wrap.querySelector('.sig-print-img');
-    this.key    = this.canvas.dataset.key;
-    this.ctx    = this.canvas.getContext('2d');
-    this.drawing = false;
-    this.lastX = 0;
-    this.lastY = 0;
-    this._init();
-    this._load();
-  }
+// Label map for modal title
+const SIG_LABELS = {
+  'sig-boss':       '負責人簽章',
+  'sig-supervisor': '現場主管簽章',
+  'sig-handler':    '承辦人簽章',
+  'sig-depthead':   '單位主管簽章',
+  'sig-pledge':     '承攬商負責人簽章',
+};
 
-  _init() {
-    // Resize canvas to match CSS display size
-    const resize = () => {
-      const rect = this.canvas.getBoundingClientRect();
-      const dpr  = window.devicePixelRatio || 1;
-      // Save current drawing
-      const data = this.canvas.toDataURL();
-      this.canvas.width  = rect.width  * dpr;
-      this.canvas.height = rect.height * dpr;
-      this.ctx.scale(dpr, dpr);
-      this.ctx.strokeStyle = '#111';
-      this.ctx.lineWidth   = 2.2;
-      this.ctx.lineCap     = 'round';
-      this.ctx.lineJoin    = 'round';
-      // Restore drawing after resize
-      if (data !== 'data:,') {
-        const img = new Image();
-        img.onload = () => this.ctx.drawImage(img, 0, 0, rect.width, rect.height);
-        img.src = data;
-      }
-    };
-    resize();
-    new ResizeObserver(resize).observe(this.canvas);
+// ── Modal elements ──
+const modal        = document.getElementById('sig-modal');
+const modalTitle   = document.getElementById('sig-modal-title');
+const modalCanvas  = document.getElementById('sig-modal-canvas');
+const modalPlaceholder = document.getElementById('sig-modal-placeholder');
+const modalClear   = document.getElementById('sig-modal-clear');
+const modalConfirm = document.getElementById('sig-modal-confirm');
+const modalCtx     = modalCanvas.getContext('2d');
 
-    // ── Touch events ──
-    this.canvas.addEventListener('touchstart', e => {
-      e.preventDefault();
-      const t = e.changedTouches[0];
-      const r = this.canvas.getBoundingClientRect();
-      this.drawing = true;
-      this.lastX = t.clientX - r.left;
-      this.lastY = t.clientY - r.top;
-    }, { passive: false });
+let activeKey    = null;   // which pad is being signed
+let modalDrawing = false;
+let modalLastX   = 0;
+let modalLastY   = 0;
+let modalHasDraw = false;
 
-    this.canvas.addEventListener('touchmove', e => {
-      e.preventDefault();
-      if (!this.drawing) return;
-      const t = e.changedTouches[0];
-      const r = this.canvas.getBoundingClientRect();
-      const x = t.clientX - r.left;
-      const y = t.clientY - r.top;
-      this._draw(this.lastX, this.lastY, x, y);
-      this.lastX = x; this.lastY = y;
-    }, { passive: false });
-
-    this.canvas.addEventListener('touchend', e => {
-      e.preventDefault();
-      this.drawing = false;
-      this._save();
-    }, { passive: false });
-
-    // ── Mouse events (desktop) ──
-    this.canvas.addEventListener('mousedown', e => {
-      const r = this.canvas.getBoundingClientRect();
-      this.drawing = true;
-      this.lastX = e.clientX - r.left;
-      this.lastY = e.clientY - r.top;
-    });
-    this.canvas.addEventListener('mousemove', e => {
-      if (!this.drawing) return;
-      const r = this.canvas.getBoundingClientRect();
-      const x = e.clientX - r.left;
-      const y = e.clientY - r.top;
-      this._draw(this.lastX, this.lastY, x, y);
-      this.lastX = x; this.lastY = y;
-    });
-    this.canvas.addEventListener('mouseup',   () => { this.drawing = false; this._save(); });
-    this.canvas.addEventListener('mouseleave',() => { if (this.drawing) { this.drawing = false; this._save(); } });
-  }
-
-  _draw(x1, y1, x2, y2) {
-    this.ctx.beginPath();
-    this.ctx.moveTo(x1, y1);
-    this.ctx.lineTo(x2, y2);
-    this.ctx.stroke();
-    this.wrap.classList.add('has-sig');
-  }
-
-  _save() {
-    const data = this.canvas.toDataURL('image/png');
-    try { localStorage.setItem('hazard_' + this.key, data); } catch(e) {}
-    if (this.img) this.img.src = data;
-  }
-
-  _load() {
-    const data = localStorage.getItem('hazard_' + this.key);
-    if (!data || data === 'data:,') return;
-    const rect = this.canvas.getBoundingClientRect();
-    const img  = new Image();
-    img.onload = () => {
-      this.ctx.drawImage(img, 0, 0, rect.width || this.canvas.width, rect.height || this.canvas.height);
-      this.wrap.classList.add('has-sig');
-    };
-    img.src = data;
-    if (this.img) this.img.src = data;
-  }
-
-  clear() {
-    const dpr  = window.devicePixelRatio || 1;
-    this.ctx.clearRect(0, 0, this.canvas.width / dpr, this.canvas.height / dpr);
-    this.wrap.classList.remove('has-sig');
-    try { localStorage.removeItem('hazard_' + this.key); } catch(e) {}
-    if (this.img) this.img.src = '';
-  }
+// ── Init modal canvas (high-DPR) ──
+function initModalCanvas() {
+  const wrap = document.getElementById('sig-modal-canvas-wrap');
+  const rect  = wrap.getBoundingClientRect();
+  const dpr   = window.devicePixelRatio || 1;
+  const w     = rect.width  || 340;
+  const h     = rect.height || 240;
+  modalCanvas.width  = w * dpr;
+  modalCanvas.height = h * dpr;
+  modalCanvas.style.width  = w + 'px';
+  modalCanvas.style.height = h + 'px';
+  modalCtx.scale(dpr, dpr);
+  modalCtx.strokeStyle = '#111';
+  modalCtx.lineWidth   = 2.8;
+  modalCtx.lineCap     = 'round';
+  modalCtx.lineJoin    = 'round';
 }
 
-// Global pad registry
-const sigPads = {};
+// ── Open modal ──
+function openSigModal(key) {
+  activeKey    = key;
+  modalHasDraw = false;
+  modalTitle.textContent = '✍️ ' + (SIG_LABELS[key] || '簽名');
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
 
-function initSignaturePads() {
-  SIG_KEYS.forEach(key => {
-    sigPads[key] = new SignaturePad(key);
+  // Wait for layout then init canvas
+  requestAnimationFrame(() => {
+    initModalCanvas();
+    // Pre-load existing signature if any
+    const saved = localStorage.getItem('hazard_' + key);
+    if (saved && saved.length > 10) {
+      const img = new Image();
+      img.onload = () => {
+        const dpr = window.devicePixelRatio || 1;
+        const w   = modalCanvas.width  / dpr;
+        const h   = modalCanvas.height / dpr;
+        modalCtx.drawImage(img, 0, 0, w, h);
+        modalHasDraw = true;
+        modalPlaceholder.classList.add('hidden');
+      };
+      img.src = saved;
+    } else {
+      modalPlaceholder.classList.remove('hidden');
+    }
   });
 }
 
+// ── Close modal ──
+function closeSigModal() {
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+  activeKey = null;
+}
+
+// ── Draw on modal canvas ──
+function modalDraw(x1, y1, x2, y2) {
+  modalCtx.beginPath();
+  modalCtx.moveTo(x1, y1);
+  modalCtx.lineTo(x2, y2);
+  modalCtx.stroke();
+  if (!modalHasDraw) {
+    modalHasDraw = true;
+    modalPlaceholder.classList.add('hidden');
+  }
+}
+
+// Touch helpers
+function getTouchPos(canvas, touch) {
+  const r = canvas.getBoundingClientRect();
+  return { x: touch.clientX - r.left, y: touch.clientY - r.top };
+}
+
+// ── Modal touch events ──
+modalCanvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const pos = getTouchPos(modalCanvas, e.changedTouches[0]);
+  modalDrawing = true;
+  modalLastX = pos.x; modalLastY = pos.y;
+}, { passive: false });
+
+modalCanvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (!modalDrawing) return;
+  const pos = getTouchPos(modalCanvas, e.changedTouches[0]);
+  modalDraw(modalLastX, modalLastY, pos.x, pos.y);
+  modalLastX = pos.x; modalLastY = pos.y;
+}, { passive: false });
+
+modalCanvas.addEventListener('touchend', e => {
+  e.preventDefault();
+  modalDrawing = false;
+}, { passive: false });
+
+// ── Modal mouse events (desktop) ──
+modalCanvas.addEventListener('mousedown', e => {
+  const r = modalCanvas.getBoundingClientRect();
+  modalDrawing = true;
+  modalLastX = e.clientX - r.left;
+  modalLastY = e.clientY - r.top;
+});
+modalCanvas.addEventListener('mousemove', e => {
+  if (!modalDrawing) return;
+  const r = modalCanvas.getBoundingClientRect();
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+  modalDraw(modalLastX, modalLastY, x, y);
+  modalLastX = x; modalLastY = y;
+});
+modalCanvas.addEventListener('mouseup',    () => { modalDrawing = false; });
+modalCanvas.addEventListener('mouseleave', () => { modalDrawing = false; });
+
+// ── Clear modal canvas ──
+modalClear.addEventListener('click', () => {
+  const dpr = window.devicePixelRatio || 1;
+  modalCtx.clearRect(0, 0, modalCanvas.width / dpr, modalCanvas.height / dpr);
+  modalHasDraw = false;
+  modalPlaceholder.classList.remove('hidden');
+});
+
+// ── Confirm: copy to mini preview + save ──
+modalConfirm.addEventListener('click', () => {
+  if (!activeKey) { closeSigModal(); return; }
+
+  const data = modalCanvas.toDataURL('image/png');
+
+  // Save to localStorage
+  try { localStorage.setItem('hazard_' + activeKey, data); } catch(e) {}
+
+  // Copy to mini preview canvas
+  const wrap   = document.getElementById(activeKey);
+  const canvas = wrap ? wrap.querySelector('.sig-canvas') : null;
+  if (canvas) {
+    const ctx  = canvas.getContext('2d');
+    const dpr  = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width  = rect.width  * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+    const img = new Image();
+    img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height);
+    img.src = data;
+    wrap.classList.toggle('has-sig', modalHasDraw);
+  }
+
+  // Update print image
+  const printImg = document.getElementById(activeKey + '-img');
+  if (printImg) printImg.src = modalHasDraw ? data : '';
+
+  closeSigModal();
+});
+
+// ── Click on any sig-pad-wrap opens modal ──
+function initSignaturePads() {
+  SIG_KEYS.forEach(key => {
+    const wrap = document.getElementById(key);
+    if (!wrap) return;
+
+    // Tap anywhere on the pad to open modal
+    wrap.addEventListener('click', () => openSigModal(key));
+    wrap.addEventListener('touchend', e => {
+      e.preventDefault();
+      openSigModal(key);
+    }, { passive: false });
+
+    // Load saved signature into mini canvas
+    const saved = localStorage.getItem('hazard_' + key);
+    if (saved && saved.length > 10) {
+      const canvas = wrap.querySelector('.sig-canvas');
+      const ctx    = canvas ? canvas.getContext('2d') : null;
+      if (ctx) {
+        const img = new Image();
+        img.onload = () => {
+          const dpr  = window.devicePixelRatio || 1;
+          const rect = canvas.getBoundingClientRect();
+          canvas.width  = (rect.width  || 200) * dpr;
+          canvas.height = (rect.height || 90)  * dpr;
+          ctx.scale(dpr, dpr);
+          ctx.drawImage(img, 0, 0, rect.width || 200, rect.height || 90);
+          wrap.classList.add('has-sig');
+        };
+        img.src = saved;
+      }
+      const printImg = document.getElementById(key + '-img');
+      if (printImg) printImg.src = saved;
+    }
+  });
+}
+
+// ── Update hint text in mini pad after confirm ──
 function clearSig(key) {
-  if (sigPads[key]) sigPads[key].clear();
+  try { localStorage.removeItem('hazard_' + key); } catch(e) {}
+  const wrap = document.getElementById(key);
+  if (wrap) {
+    const canvas = wrap.querySelector('.sig-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    wrap.classList.remove('has-sig');
+  }
+  const printImg = document.getElementById(key + '-img');
+  if (printImg) printImg.src = '';
 }
 
 // Extend clearForm to also clear all signatures
 const _origClearForm = typeof clearForm === 'function' ? clearForm : null;
-function clearForm() {
+window.clearForm = function() {
   if (_origClearForm) _origClearForm();
   SIG_KEYS.forEach(k => clearSig(k));
-}
+};
 
-// Init after DOM ready (wait a tick for canvas to get layout)
 document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(initSignaturePads, 100);
+  setTimeout(initSignaturePads, 150);
 });
 </script>
 
-<script>
-  // ── PWA：Service Worker 註冊 ──
+
 
   let deferredInstallPrompt = null;
 
