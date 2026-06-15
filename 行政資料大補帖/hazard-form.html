@@ -514,7 +514,7 @@
     <div class="topbar-actions">
       <button id="pwa-install-btn" onclick="triggerInstall()">📲 安裝 APP</button>
       <button class="btn btn-ghost" onclick="clearForm()">🗑 清除</button>
-      <button class="btn btn-print" onclick="window.print()">🖨 列印</button>
+      <button class="btn btn-print" onclick="window.print()">🖨 列印 / 匯出PDF</button>
       <button class="btn btn-primary" onclick="saveForm()">💾 暫存</button>
     </div>
   </nav>
@@ -1258,7 +1258,6 @@
           } catch (e) {}
         }
       }
-      if (!saved) saved = localStorage.getItem('hazard-form-data');
       if (!saved) return;
       const data = JSON.parse(saved);
       Object.entries(data).forEach(([id, val]) => {

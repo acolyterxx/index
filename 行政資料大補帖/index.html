@@ -170,8 +170,21 @@
             <span>建立：${formatDraftTime(item.createdAt)}</span>
             <span>更新：${formatDraftTime(item.updatedAt)}</span>
           </div>
+          <button class="draft-delete" type="button" data-draft-id="${escapeHtml(item.id)}">刪除</button>
         </a>
       `).join('');
+    }
+
+    function deleteDraft(id) {
+      let drafts = [];
+      try {
+        drafts = JSON.parse(localStorage.getItem('admin-form-drafts') || '[]');
+      } catch (e) {
+        drafts = [];
+      }
+      localStorage.removeItem('admin-form-draft:' + id);
+      localStorage.setItem('admin-form-drafts', JSON.stringify(drafts.filter(item => item.id !== id)));
+      renderDraftList();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -186,6 +199,13 @@
         }, 200 + i * 150);
       });
       renderDraftList();
+      document.getElementById('draft-list').addEventListener('click', event => {
+        const button = event.target.closest('.draft-delete');
+        if (!button) return;
+        event.preventDefault();
+        event.stopPropagation();
+        deleteDraft(button.dataset.draftId);
+      });
     });
   </script>
 </body>
