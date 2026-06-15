@@ -17,8 +17,8 @@
       margin-top: 12px;
     }
     .inspect-table th {
-      background: rgba(63, 143, 199, 0.1);
-      color: #2f6f9f;
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
       font-weight: 600;
       padding: 12px 14px;
       text-align: center;
@@ -36,7 +36,7 @@
       background: rgba(59, 130, 246, 0.04);
     }
     .inspect-table .cat-header td {
-      background: rgba(47, 125, 87, 0.09);
+      background: rgba(45, 157, 90, 0.1);
       color: var(--primary-light);
       font-weight: 700;
       font-size: 14px;
@@ -58,13 +58,13 @@
       accent-color: var(--primary-light);
       cursor: pointer;
     }
-    .result-ok { color: #218a55; }
-    .result-fail { color: #b83c35; }
+    .result-ok { color: #4ade80; }
+    .result-fail { color: #f87171; }
     .result-na { color: var(--text-muted); }
     .issue-input {
       width: 100%;
       padding: 6px 10px;
-      background: rgba(255,255,255,0.86);
+      background: rgba(255,255,255,0.04);
       border: 1px solid var(--border);
       border-radius: 8px;
       color: var(--text-primary);
@@ -75,13 +75,13 @@
     }
     .issue-input:focus {
       border-color: var(--primary-light);
-      box-shadow: 0 0 0 2px rgba(47,125,87,0.1);
+      box-shadow: 0 0 0 2px rgba(45,157,90,0.1);
     }
     .stat-bar {
       display: flex;
       gap: 20px;
       padding: 20px;
-      background: rgba(255, 255, 255, 0.72);
+      background: rgba(10, 30, 18, 0.6);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       margin-bottom: 24px;
@@ -101,8 +101,8 @@
       font-size: 12px;
       color: var(--text-muted);
     }
-    .stat-ok { color: #218a55; }
-    .stat-fail { color: #b83c35; }
+    .stat-ok { color: #4ade80; }
+    .stat-fail { color: #f87171; }
     .stat-na { color: #94a3b8; }
     .overall-result {
       padding: 20px;
@@ -112,8 +112,8 @@
       font-weight: 700;
       margin-top: 16px;
     }
-    .result-pass { background: rgba(47,125,87,0.08); border: 1px solid rgba(47,125,87,0.24); color: #218a55; }
-    .result-fail-box { background: rgba(184,60,53,0.08); border: 1px solid rgba(184,60,53,0.24); color: #b83c35; }
+    .result-pass { background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; }
+    .result-fail-box { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.3); color: #f87171; }
     @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
   </style>
 </head>
@@ -138,18 +138,18 @@
 
     <div class="form-header" style="border-color: rgba(59,130,246,0.3);">
       <div class="form-org">農業部畜產試驗所</div>
-      <h1 class="form-title-main">承攬作業<span style="background:linear-gradient(135deg,#3f8fc7,#2f7d57);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">巡檢表</span></h1>
+      <h1 class="form-title-main">承攬作業<span style="background:linear-gradient(135deg,#60a5fa,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">巡檢表</span></h1>
       <p class="form-subtitle">承攬作業安全衛生現場巡視查核紀錄</p>
     </div>
 
     <div class="progress-bar">
-      <div class="progress-fill" id="progress-fill" style="width: 0%; background: linear-gradient(90deg, #3f8fc7, #2f7d57);"></div>
+      <div class="progress-fill" id="progress-fill" style="width: 0%; background: linear-gradient(90deg, #60a5fa, #3b82f6);"></div>
     </div>
 
     <!-- 基本資料 -->
     <div class="form-section">
-      <div class="section-title" style="color:#2f6f9f;">
-        <span class="section-num" style="background:#3f8fc7;">1</span>
+      <div class="section-title" style="color:#60a5fa;">
+        <span class="section-num" style="background:#3b82f6;">1</span>
         基本資料
       </div>
       <div class="form-grid">
@@ -212,8 +212,8 @@
 
     <!-- 巡檢統計 -->
     <div id="stats-container" class="form-section" style="display:none; border-color: rgba(59,130,246,0.3);">
-      <div class="section-title" style="color:#2f6f9f;">
-        <span class="section-num" style="background:#3f8fc7;">📊</span>
+      <div class="section-title" style="color:#60a5fa;">
+        <span class="section-num" style="background:#3b82f6;">📊</span>
         巡檢統計
       </div>
       <div class="stat-bar">
@@ -234,7 +234,7 @@
           <span class="stat-label">➖ 不適用</span>
         </div>
         <div class="stat-item">
-          <span class="stat-num" style="color:#c97b24" id="stat-pct">0%</span>
+          <span class="stat-num" style="color:#fbbf24" id="stat-pct">0%</span>
           <span class="stat-label">符合率</span>
         </div>
       </div>
@@ -243,8 +243,8 @@
 
     <!-- 巡檢查核表 -->
     <div class="form-section">
-      <div class="section-title" style="color:#2f6f9f;">
-        <span class="section-num" style="background:#3f8fc7;">2</span>
+      <div class="section-title" style="color:#60a5fa;">
+        <span class="section-num" style="background:#3b82f6;">2</span>
         安全衛生查核項目
         <span style="font-size:12px; font-weight:400; color:var(--text-muted); margin-left:8px;">（✅=符合　❌=不符合　➖=不適用）</span>
       </div>
@@ -265,8 +265,8 @@
 
     <!-- 缺失改善追蹤 -->
     <div class="form-section">
-      <div class="section-title" style="color:#2f6f9f;">
-        <span class="section-num" style="background:#3f8fc7;">3</span>
+      <div class="section-title" style="color:#60a5fa;">
+        <span class="section-num" style="background:#3b82f6;">3</span>
         缺失改善追蹤
       </div>
       <div class="form-field">
@@ -296,18 +296,18 @@
 
     <!-- 停工命令 -->
     <div class="form-section" style="border-color: rgba(239,68,68,0.2);">
-      <div class="section-title" style="color:#b83c35;">
-        <span class="section-num" style="background:#c84b42;">⚠</span>
+      <div class="section-title" style="color:#f87171;">
+        <span class="section-num" style="background:#ef4444;">⚠</span>
         停工記錄
       </div>
       <div class="form-field" style="margin-bottom:16px;">
         <label class="form-label">本次巡檢是否有要求停工？</label>
         <div style="display:flex;gap:16px;margin-top:8px;">
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--text-secondary);">
-            <input type="radio" name="stop-work" id="stop-yes" value="yes" style="accent-color:#b83c35;" onchange="toggleStopWork(true)"> 是，已要求停工
+            <input type="radio" name="stop-work" id="stop-yes" value="yes" style="accent-color:#f87171;" onchange="toggleStopWork(true)"> 是，已要求停工
           </label>
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--text-secondary);">
-            <input type="radio" name="stop-work" id="stop-no" value="no" style="accent-color:#218a55;" onchange="toggleStopWork(false)"> 否
+            <input type="radio" name="stop-work" id="stop-no" value="no" style="accent-color:#4ade80;" onchange="toggleStopWork(false)"> 否
           </label>
         </div>
       </div>
@@ -325,8 +325,8 @@
 
     <!-- 巡檢人員簽章 -->
     <div class="form-section">
-      <div class="section-title" style="color:#2f6f9f;">
-        <span class="section-num" style="background:#3f8fc7;">4</span>
+      <div class="section-title" style="color:#60a5fa;">
+        <span class="section-num" style="background:#3b82f6;">4</span>
         簽章欄
       </div>
       <div class="sig-grid" style="grid-template-columns: repeat(3, 1fr);">
@@ -583,8 +583,8 @@
       toast.textContent = msg;
       Object.assign(toast.style, {
         position: 'fixed', bottom: '32px', right: '32px',
-        background: 'rgba(255,255,255,0.97)', border: '1px solid rgba(63,143,199,0.28)',
-        color: '#1d2b24', padding: '14px 24px', borderRadius: '12px',
+        background: 'rgba(10,20,40,0.95)', border: '1px solid rgba(59,130,246,0.5)',
+        color: '#e8f5ee', padding: '14px 24px', borderRadius: '12px',
         fontSize: '14px', fontWeight: '600', zIndex: '9999',
         boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
         animation: 'fadeIn .3s ease', backdropFilter: 'blur(20px)'

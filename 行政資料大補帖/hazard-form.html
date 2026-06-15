@@ -21,6 +21,12 @@
   <style>
 
     /* ── Signature Pad (small preview in form) ── */
+    .hazard-page {
+      --text-primary: #142019;
+      --text-secondary: #2d3f34;
+      --text-muted: #4f6256;
+    }
+
     .sig-pad-wrap {
       position: relative;
       border: 1.5px solid var(--border);
@@ -254,6 +260,15 @@
 
     /* ──── Pledge section title – centered on screen ──── */
     #section-pledge > .section-title { justify-content: center; text-align: center; }
+    #section-pledge .pledge-zhi {
+      display: block;
+      margin: 12px 0 10px;
+      color: var(--text-primary);
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.8;
+      text-align: left;
+    }
 
     /* Times New Roman for number/date inputs on screen */
     .date-input-sm, input[type="number"] {
@@ -404,8 +419,6 @@
       #pledge-form-grid { order:3 !important; }
       /* Sig wrapper: right after form-grid */
       #pledge-sig-wrapper { order:4 !important; margin-top:0 !important; }
-      /* Hide 此致 inside pledge-box */
-      .pledge-box .pledge-zhi-inline { display:none !important; }
       /* Hide 備註事項 */
       #section-pledge .form-field[style*="margin-top:16px"] { display:none !important; }
       /* pledge-box styling */
@@ -465,7 +478,7 @@
   </style>
 
 </head>
-<body class="form-page">
+<body class="form-page hazard-page">
 
   <div class="bg-animation">
     <div class="orb orb-1"></div>
@@ -705,12 +718,9 @@
         <p>4. 作業期間如遇颱風、大雨等預報時，本公司應提前採取預防措施。天然災害過後，應實施檢查確認安全無虞後始可復工。</p>
         <p>5. 本公司承諾經貴所巡視發現本公司作業員工有違反法令規定情事，同意貴所要求下立即停止作業，通知本公司改善完成後才復工。</p>
         <p>6. 本公司如違反職業安全衛生法暨相關規定，造成之災害，導致貴所損失，本公司願負起賠償責任。</p>
-
-        <p class="pledge-zhi-inline" style="margin-top:12px; color: var(--primary-light);">此致　農業部畜產試驗所</p>
       </div>
 
-      <!-- Print-only 此致 above form-grid: two lines, left-aligned -->
-      <div class="pledge-zhi" style="display:none;">此致<br>農業部畜產試驗所</div>
+      <div class="pledge-zhi">此致<br>農業部畜產試驗所</div>
 
       <div id="pledge-form-grid" class="form-grid">
         <div class="form-field form-grid-full" id="pledge-ff-name">
@@ -1219,8 +1229,6 @@
   </script>
 
 
-</body>
-
 <script>
 // ════════════════════════════════════════════
 //   SIGNATURE PAD — Fullscreen Modal System
@@ -1468,7 +1476,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 
-
+<script>
   let deferredInstallPrompt = null;
 
   if ('serviceWorker' in navigator) {
@@ -1523,4 +1531,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 </script>
+</body>
 </html>
