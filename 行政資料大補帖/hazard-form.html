@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="style.css">
   <!-- PWA Support -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#1a3a1a">
+  <meta name="theme-color" content="#2f7d57">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -25,13 +25,13 @@
       position: relative;
       border: 1.5px solid var(--border);
       border-radius: var(--radius-sm);
-      background: rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.86);
       overflow: hidden;
       transition: border-color 0.2s;
       cursor: pointer;
     }
     .sig-pad-wrap:hover { border-color: var(--primary); }
-    .sig-pad-wrap.has-sig { border-color: rgba(45,157,90,0.6); background: rgba(45,157,90,0.03); }
+    .sig-pad-wrap.has-sig { border-color: rgba(47,125,87,0.5); background: rgba(47,125,87,0.05); }
     .sig-canvas {
       display: block;
       width: 100%;
@@ -44,7 +44,7 @@
       justify-content: space-between;
       padding: 4px 8px;
       border-top: 1px solid var(--border);
-      background: rgba(0,0,0,0.15);
+      background: rgba(47,125,87,0.05);
     }
     .sig-hint {
       font-size: 11px;
@@ -54,7 +54,7 @@
     .sig-clear-btn {
       font-size: 11px;
       color: var(--text-muted);
-      background: rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.9);
       border: 1px solid var(--border);
       border-radius: 4px;
       padding: 2px 10px;
@@ -72,7 +72,7 @@
       position: fixed;
       inset: 0;
       z-index: 99999;
-      background: rgba(8, 20, 8, 0.92);
+      background: rgba(29, 43, 36, 0.45);
       backdrop-filter: blur(6px);
       flex-direction: column;
       align-items: center;
@@ -87,11 +87,11 @@
     #sig-modal-inner {
       width: 100%;
       max-width: 600px;
-      background: #0f1f0f;
-      border: 2px solid rgba(45,157,90,0.5);
+      background: #ffffff;
+      border: 2px solid rgba(47,125,87,0.32);
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+      box-shadow: 0 24px 60px rgba(31,95,65,0.22);
       display: flex;
       flex-direction: column;
     }
@@ -99,9 +99,9 @@
       padding: 12px 18px;
       font-size: 15px;
       font-weight: 600;
-      color: #a3e8b8;
-      border-bottom: 1px solid rgba(45,157,90,0.2);
-      background: rgba(45,157,90,0.06);
+      color: var(--primary-dark);
+      border-bottom: 1px solid rgba(47,125,87,0.18);
+      background: rgba(47,125,87,0.06);
       text-align: center;
       user-select: none;
     }
@@ -127,7 +127,7 @@
       align-items: center;
       justify-content: center;
       font-size: 15px;
-      color: #aaa;
+      color: #8b9890;
       pointer-events: none;
       user-select: none;
       transition: opacity 0.2s;
@@ -138,8 +138,8 @@
       align-items: center;
       justify-content: space-between;
       padding: 12px 16px;
-      background: rgba(0,0,0,0.3);
-      border-top: 1px solid rgba(45,157,90,0.2);
+      background: rgba(47,125,87,0.04);
+      border-top: 1px solid rgba(47,125,87,0.18);
       gap: 10px;
     }
     #sig-modal-clear {
@@ -184,14 +184,14 @@
       align-items: flex-start;
       gap: 10px;
       padding: 10px 14px;
-      background: rgba(255,255,255,0.03);
+      background: rgba(255,255,255,0.7);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       cursor: pointer;
       transition: all 0.25s ease;
     }
     .env-check-item:hover {
-      background: rgba(45,157,90,0.06);
+      background: rgba(47,125,87,0.06);
       border-color: var(--border-strong);
     }
     .env-check-item input[type="checkbox"] {
@@ -203,7 +203,7 @@
       margin-top: 2px;
     }
     .env-check-item.checked {
-      background: rgba(45,157,90,0.08);
+      background: rgba(47,125,87,0.1);
       border-color: var(--primary-light);
     }
     .env-check-label {
@@ -217,7 +217,7 @@
     .hazard-notes {
       margin-top: 16px;
       padding: 14px 18px;
-      background: rgba(255,255,255,0.02);
+      background: rgba(255,255,255,0.7);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       font-size: 13px;
@@ -437,7 +437,7 @@
     /* PWA install button */
     #pwa-install-btn {
       display: none; align-items: center; gap: 6px;
-      background: linear-gradient(135deg, #2d9d5a, #1a6e3a);
+      background: linear-gradient(135deg, #3f9b72, #2f7d57);
       color: #fff; border: none; border-radius: 8px;
       padding: 7px 14px; font-size: 13px; font-weight: 600;
       cursor: pointer; transition: all 0.2s; white-space: nowrap;
@@ -448,17 +448,17 @@
     #ios-install-hint {
       display: none; position: fixed; bottom: 20px; left: 50%;
       transform: translateX(-50%);
-      background: rgba(20,40,20,0.97); color: #fff;
+      background: rgba(255,255,255,0.96); color: var(--text-primary);
       padding: 14px 20px; border-radius: 14px;
       font-size: 14px; line-height: 1.6; text-align: center;
-      z-index: 9999; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-      border: 1px solid rgba(45,157,90,0.4);
+      z-index: 9999; box-shadow: 0 8px 32px rgba(31,95,65,0.18);
+      border: 1px solid rgba(47,125,87,0.24);
       max-width: 320px; width: 90vw; animation: fadeIn 0.3s ease;
     }
     #ios-install-hint.show { display: block; }
     #ios-install-hint button {
-      margin-top: 10px; background: rgba(255,255,255,0.15);
-      border: none; color: #fff; border-radius: 6px;
+      margin-top: 10px; background: rgba(47,125,87,0.1);
+      border: none; color: var(--primary-dark); border-radius: 6px;
       padding: 6px 18px; cursor: pointer; font-size: 13px;
     }
     @media print { #pwa-install-btn, #ios-install-hint { display: none !important; } }
@@ -652,7 +652,7 @@
       <div class="work-notice-print" style="display:none;">承攬商若有下列作業，應於施工前填寫該項作業之申請單，提交請購單位，並經核可後使得施工：（1）動火；（2）高架；（3）局限空間；（4）活線；（5）吊掛（如附件1~5）</div>
       <div class="section-title">二、勾選作業項目</div>
       <!-- Screen notice (hidden in print) -->
-      <div class="notice-block" style="background: rgba(59,130,246,0.05); border-color: rgba(59,130,246,0.2); color: #93c5fd; margin-bottom:16px;">
+      <div class="notice-block" style="background: rgba(63,143,199,0.08); border-color: rgba(63,143,199,0.2); color: #2f6f9f; margin-bottom:16px;">
         承攬商若有下列作業，應於施工前填寫該項作業之申請單，提交請購單位，並經核可後使得施工：（1）動火；（2）高架；（3）局限空間；（4）活線；（5）吊掛（如附件1~5）
       </div>
       <div class="checkbox-grid" id="work-type-grid">
@@ -1182,8 +1182,8 @@
       toast.textContent = msg;
       Object.assign(toast.style, {
         position: 'fixed', bottom: '32px', right: '32px',
-        background: 'rgba(10,30,18,0.95)', border: '1px solid rgba(45,157,90,0.5)',
-        color: '#e8f5ee', padding: '14px 24px', borderRadius: '12px',
+        background: 'rgba(255,255,255,0.97)', border: '1px solid rgba(47,125,87,0.28)',
+        color: '#1d2b24', padding: '14px 24px', borderRadius: '12px',
         fontSize: '14px', fontWeight: '600', zIndex: '9999',
         boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
         animation: 'fadeIn .3s ease', backdropFilter: 'blur(20px)'
