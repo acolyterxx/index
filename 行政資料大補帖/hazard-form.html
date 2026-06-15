@@ -294,7 +294,7 @@
       .form-section > div[style*="overflow-x"] { overflow:visible !important; }
       /* Remove all gaps between sections */
       .form-section { background:#fff !important; border:none !important; border-radius:0 !important; padding:0 !important; margin-bottom:2pt !important; backdrop-filter:none !important; box-shadow:none !important; }
-      .section-title { font-size:11pt !important; font-weight:bold !important; color:#000 !important; border:none !important; border-bottom:1.5px solid #000 !important; padding:4pt 0 8pt !important; margin-bottom:5pt !important; background:none !important; line-height:2 !important; display:block !important; box-sizing:content-box !important; }
+      .section-title { font-size:11pt !important; font-weight:bold !important; color:#000 !important; border:none !important; border-bottom:1.5px solid #000 !important; padding:5pt 0 11pt !important; margin-bottom:5pt !important; background:none !important; line-height:1.75 !important; display:block !important; box-sizing:content-box !important; overflow:visible !important; }
       /* Hide 基本資料 section title in print */
       .form-section:first-child .section-title { display:none !important; }
       /* Hide env label hint */
@@ -492,7 +492,7 @@
       <button id="pwa-install-btn" onclick="triggerInstall()">📲 安裝 APP</button>
       <button class="btn btn-ghost" onclick="clearForm()">🗑 清除</button>
       <button class="btn btn-print" onclick="window.print()">🖨 列印</button>
-      <button class="btn btn-primary" onclick="saveForm()">💾 儲存</button>
+      <button class="btn btn-primary" onclick="saveForm()">💾 暫存</button>
     </div>
   </nav>
   <!-- iOS Safari install hint -->
@@ -786,7 +786,7 @@
     <div style="display: flex; gap:16px; justify-content: flex-end; margin-top: 8px;">
       <button class="btn btn-ghost" onclick="clearForm()">🗑 清除表單</button>
       <button class="btn btn-print" onclick="window.print()">🖨 列印 / 匯出PDF</button>
-      <button class="btn btn-primary" onclick="saveForm()">💾 儲存資料</button>
+      <button class="btn btn-primary" onclick="saveForm()">💾 暫存表單</button>
     </div>
 
   </div>
@@ -1140,37 +1140,124 @@
       document.getElementById('progress-fill').style.width = pct + '%';
     }
 
-    // ---- Save to localStorage ----
-    function saveForm() {
+    const DRAFT_INDEX_KEY = 'admin-form-drafts';
+    const DRAFT_RECORD_PREFIX = 'admin-form-draft:';
+    const HAZARD_SIGNATURE_KEYS = ['sig-boss', 'sig-supervisor', 'sig-handler', 'sig-depthead', 'sig-pledge'];
+    let currentDraftId = new URLSearchParams(window.location.search).get('draft') || '';
+
+    function getDraftIndex() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(DRAFT_INDEX_KEY) || '[]');
+        return Array.isArray(saved) ? saved : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function setDraftIndex(items) {
+      localStorage.setItem(DRAFT_INDEX_KEY, JSON.stringify(items));
+    }
+
+    function collectFormData() {
       const data = {};
       document.querySelectorAll('[id]').forEach(el => {
         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
-          if (el.type === 'checkbox') {
-            data[el.id] = el.checked;
-          } else {
-            data[el.id] = el.value;
-          }
+          data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
         }
       });
-      localStorage.setItem('hazard-form-data', JSON.stringify(data));
-      showToast('✅ 表單資料已儲存！');
+      data._signatures = {};
+      HAZARD_SIGNATURE_KEYS.forEach(key => {
+        data._signatures[key] = localStorage.getItem('hazard_' + key) || '';
+      });
+      return data;
+    }
+
+    function makeDraftTitle() {
+      const contractor = document.getElementById('contractor-name').value.trim();
+      const work = document.getElementById('work-name').value.trim();
+      return [contractor, work].filter(Boolean).join(' / ') || '未命名危害告知單';
+    }
+
+    // ---- Draft to localStorage ----
+    function saveForm() {
+      const now = new Date().toISOString();
+      if (!currentDraftId) {
+        currentDraftId = 'hazard-' + Date.now();
+        const url = new URL(window.location.href);
+        url.searchParams.set('draft', currentDraftId);
+        window.history.replaceState({}, '', url);
+      }
+
+      const record = {
+        id: currentDraftId,
+        type: 'hazard',
+        typeLabel: '承攬作業環境危害告知單',
+        title: makeDraftTitle(),
+        url: 'hazard-form.html?draft=' + encodeURIComponent(currentDraftId),
+        createdAt: now,
+        updatedAt: now,
+        data: collectFormData()
+      };
+
+      const existingRaw = localStorage.getItem(DRAFT_RECORD_PREFIX + currentDraftId);
+      if (existingRaw) {
+        try {
+          const existing = JSON.parse(existingRaw);
+          record.createdAt = existing.createdAt || now;
+        } catch (e) {}
+      }
+
+      localStorage.setItem(DRAFT_RECORD_PREFIX + currentDraftId, JSON.stringify(record));
+      localStorage.setItem('hazard-form-data', JSON.stringify(record.data));
+
+      const index = getDraftIndex().filter(item => item.id !== currentDraftId);
+      index.push({
+        id: record.id,
+        type: record.type,
+        typeLabel: record.typeLabel,
+        title: record.title,
+        url: record.url,
+        createdAt: record.createdAt,
+        updatedAt: record.updatedAt
+      });
+      setDraftIndex(index);
+      showToast('✅ 表單已暫存，可回首頁清冊繼續修改');
     }
 
     function loadForm() {
-      const saved = localStorage.getItem('hazard-form-data');
+      let saved = '';
+      if (currentDraftId) {
+        const recordRaw = localStorage.getItem(DRAFT_RECORD_PREFIX + currentDraftId);
+        if (recordRaw) {
+          try {
+            const record = JSON.parse(recordRaw);
+            saved = JSON.stringify(record.data || {});
+          } catch (e) {}
+        }
+      }
+      if (!saved) saved = localStorage.getItem('hazard-form-data');
       if (!saved) return;
       const data = JSON.parse(saved);
       Object.entries(data).forEach(([id, val]) => {
+        if (id === '_signatures') return;
         const el = document.getElementById(id);
         if (el) {
           if (el.type === 'checkbox') {
             el.checked = val;
             el.closest('.checkbox-item')?.classList.toggle('checked', val);
+            el.closest('.env-check-item')?.classList.toggle('checked', val);
           } else {
             el.value = val;
           }
         }
       });
+      if (data._signatures) {
+        HAZARD_SIGNATURE_KEYS.forEach(key => {
+          const value = data._signatures[key] || '';
+          if (value) localStorage.setItem('hazard_' + key, value);
+          else localStorage.removeItem('hazard_' + key);
+        });
+      }
       updateProgress();
     }
 

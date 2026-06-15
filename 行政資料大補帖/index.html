@@ -85,6 +85,13 @@
       </div>
     </section>
 
+    <section class="drafts-section">
+      <div class="section-label">暫存表單清冊</div>
+      <div class="draft-list" id="draft-list">
+        <div class="draft-empty">目前沒有暫存表單</div>
+      </div>
+    </section>
+
     <section class="info-strip">
       <div class="info-item">
         <div class="info-icon">📌</div>
@@ -117,7 +124,56 @@
   </footer>
 
   <script>
-    // Add entrance animation
+    function formatDraftTime(value) {
+      if (!value) return '';
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return '';
+      const pad = n => String(n).padStart(2, '0');
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function escapeHtml(value) {
+      return String(value || '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+    }
+
+    function renderDraftList() {
+      const list = document.getElementById('draft-list');
+      let drafts = [];
+      try {
+        drafts = JSON.parse(localStorage.getItem('admin-form-drafts') || '[]');
+      } catch (e) {
+        drafts = [];
+      }
+
+      if (!Array.isArray(drafts) || drafts.length === 0) {
+        list.innerHTML = '<div class="draft-empty">目前沒有暫存表單</div>';
+        return;
+      }
+
+      drafts = drafts
+        .slice()
+        .sort((a, b) => new Date(b.createdAt || b.updatedAt || 0) - new Date(a.createdAt || a.updatedAt || 0));
+
+      list.innerHTML = drafts.map(item => `
+        <a class="draft-item" href="${escapeHtml(item.url)}">
+          <div class="draft-main">
+            <span class="draft-type">${escapeHtml(item.typeLabel || '表單')}</span>
+            <strong>${escapeHtml(item.title || '未命名表單')}</strong>
+          </div>
+          <div class="draft-time">
+            <span>建立：${formatDraftTime(item.createdAt)}</span>
+            <span>更新：${formatDraftTime(item.updatedAt)}</span>
+          </div>
+        </a>
+      `).join('');
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const cards = document.querySelectorAll('.card');
       cards.forEach((card, i) => {
@@ -129,6 +185,7 @@
           card.style.transform = 'translateY(0)';
         }, 200 + i * 150);
       });
+      renderDraftList();
     });
   </script>
 </body>
