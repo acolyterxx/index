@@ -274,6 +274,7 @@
     .date-input-sm, input[type="number"] {
       font-family: 'Times New Roman', Times, serif;
     }
+    .print-input-value { display: none; }
     @media print {
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box !important; }
       body { background:#fff !important; color:#000 !important; font-family:'標楷體','DFKai-SB',serif !important; font-size:11pt !important; margin:0 !important; }
@@ -468,6 +469,28 @@
       .pledge-box p[style] { color:#000 !important; }
       .pledge-box .form-input { display:inline !important; padding:0 3pt !important; border-top:none !important; border-left:none !important; border-right:none !important; border-bottom:1.5px solid #000 !important; border-radius:0 !important; background:transparent !important; font-size:10pt !important; color:#000 !important; min-width:80pt !important; }
       .pledge-box .print-input-value { border-bottom:1.5px solid #000 !important; min-width:80pt !important; }
+      .pledge-box #pledge-company + .print-input-value {
+        display:inline-block !important;
+        width:200px !important;
+        min-width:200px !important;
+        max-width:200px !important;
+        white-space:normal !important;
+        overflow-wrap:anywhere !important;
+        word-break:break-word !important;
+        vertical-align:baseline !important;
+        line-height:1.25 !important;
+      }
+      .pledge-box #pledge-project + .print-input-value {
+        display:inline-block !important;
+        width:250px !important;
+        min-width:250px !important;
+        max-width:250px !important;
+        white-space:normal !important;
+        overflow-wrap:anywhere !important;
+        word-break:break-word !important;
+        vertical-align:baseline !important;
+        line-height:1.25 !important;
+      }
       /* Pledge info grid */
       #pledge-form-grid { border-top:1px solid #000 !important; border-left:1px solid #000 !important; gap:0 !important; }
       #section-pledge .form-field { border-right:1px solid #000 !important; border-bottom:1px solid #000 !important; padding:1.5pt 4pt !important; line-height:1.25 !important; min-height:0 !important; }
