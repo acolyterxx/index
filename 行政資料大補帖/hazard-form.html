@@ -269,6 +269,19 @@
       line-height: 1.8;
       text-align: left;
     }
+    .pledge-list-item {
+      display: grid;
+      grid-template-columns: 1.6em 1fr;
+      column-gap: 0.25em;
+      align-items: start;
+    }
+    .pledge-list-num {
+      text-align: right;
+      white-space: nowrap;
+    }
+    .pledge-list-text {
+      min-width: 0;
+    }
 
     /* Times New Roman for number/date inputs on screen */
     .date-input-sm, input[type="number"] {
@@ -385,6 +398,13 @@
         max-height:32pt !important;
         margin:1pt auto !important;
       }
+      #ff-boss .sig-pad-wrap, #ff-supervisor .sig-pad-wrap {
+        min-height:38pt !important;
+      }
+      #ff-boss .sig-print-img, #ff-supervisor .sig-print-img {
+        max-height:60pt !important;
+        margin:2pt auto !important;
+      }
       /* Show notify note in print */
       .notify-note { font-size:9pt !important; color:#000 !important; display:inline !important; }
       .form-label { font-size:8.5pt !important; font-weight:bold !important; color:#000 !important; display:inline !important; margin:0 3pt 0 0 !important; }
@@ -478,6 +498,9 @@
       /* pledge-box styling */
       .pledge-box { background:#fff !important; border:1.5px solid #000 !important; color:#000 !important; padding:6pt 9pt !important; font-size:10pt !important; line-height:1.65 !important; border-radius:0 !important; margin-bottom:2pt !important; }
       .pledge-box p { margin-bottom:2pt !important; text-align:justify !important; }
+      .pledge-list-item { grid-template-columns:1.5em 1fr !important; column-gap:0.25em !important; }
+      .pledge-list-num { text-align:right !important; }
+      .pledge-list-text { min-width:0 !important; }
       /* First paragraph of pledge: left-aligned (no number, intro sentence) */
       .pledge-box p:first-child { text-align:left !important; }
       .pledge-box p[style] { color:#000 !important; }
@@ -792,12 +815,12 @@
 
       <div class="pledge-box">
         <p>本公司（人）<input class="form-input" id="pledge-company" type="text" placeholder="承攬商名稱（自動帶入）" style="display:inline; width:200px; padding:4px 10px;"> 承攬農業部畜產試驗所（以下簡稱貴所）<input class="form-input" id="pledge-project" type="text" placeholder="承攬項目名稱（自動帶入）" style="display:inline; width:250px; padding:4px 10px;"> 案。</p>
-        <p>1. 貴所已告知本公司（人）有關工作場所環境危害因素，本公司承諾妥善規劃以避免災害發生，所屬人員進行作業時，全程使用符合職業安全衛生法暨相關規定之防護器具，並於作業期間指派<strong>工作場所負責人</strong>於現場指揮監督管理及負起雇主應負之一切責任，因作業產生之廢棄物應取得該場所管理人同意暫時堆放於指定區域，並於作業結束後，即盡速清理復原作業區域，若該場所管理人不同意暫時堆放情形，於作業當日立即清運離所。</p>
-        <p>2. 本公司若有再交付承攬時，本公司承諾會負起「職業安全衛生法」所定雇主之責任。</p>
-        <p>3. 本公司承諾作業開始前評估各項細部作業之可能危害，採取相應防護措施，對所屬人員實施法定教育訓練與危害告知，若貴所要求查證，本公司有提供人員教育訓練證明之義務。</p>
-        <p>4. 作業期間如遇颱風、大雨等預報時，本公司應提前採取預防措施。天然災害過後，應實施檢查確認安全無虞後始可復工。</p>
-        <p>5. 本公司承諾經貴所巡視發現本公司作業員工有違反法令規定情事，同意貴所要求下立即停止作業，通知本公司改善完成後才復工。</p>
-        <p>6. 本公司如違反職業安全衛生法暨相關規定，造成之災害，導致貴所損失，本公司願負起賠償責任。</p>
+        <p class="pledge-list-item"><span class="pledge-list-num">1.</span><span class="pledge-list-text">貴所已告知本公司（人）有關工作場所環境危害因素，本公司承諾妥善規劃以避免災害發生，所屬人員進行作業時，全程使用符合職業安全衛生法暨相關規定之防護器具，並於作業期間指派<strong>工作場所負責人</strong>於現場指揮監督管理及負起雇主應負之一切責任，因作業產生之廢棄物應取得該場所管理人同意暫時堆放於指定區域，並於作業結束後，即盡速清理復原作業區域，若該場所管理人不同意暫時堆放情形，於作業當日立即清運離所。</span></p>
+        <p class="pledge-list-item"><span class="pledge-list-num">2.</span><span class="pledge-list-text">本公司若有再交付承攬時，本公司承諾會負起「職業安全衛生法」所定雇主之責任。</span></p>
+        <p class="pledge-list-item"><span class="pledge-list-num">3.</span><span class="pledge-list-text">本公司承諾作業開始前評估各項細部作業之可能危害，採取相應防護措施，對所屬人員實施法定教育訓練與危害告知，若貴所要求查證，本公司有提供人員教育訓練證明之義務。</span></p>
+        <p class="pledge-list-item"><span class="pledge-list-num">4.</span><span class="pledge-list-text">作業期間如遇颱風、大雨等預報時，本公司應提前採取預防措施。天然災害過後，應實施檢查確認安全無虞後始可復工。</span></p>
+        <p class="pledge-list-item"><span class="pledge-list-num">5.</span><span class="pledge-list-text">本公司承諾經貴所巡視發現本公司作業員工有違反法令規定情事，同意貴所要求下立即停止作業，通知本公司改善完成後才復工。</span></p>
+        <p class="pledge-list-item"><span class="pledge-list-num">6.</span><span class="pledge-list-text">本公司如違反職業安全衛生法暨相關規定，造成之災害，導致貴所損失，本公司願負起賠償責任。</span></p>
       </div>
 
       <div class="pledge-zhi">此致<br>農業部畜產試驗所</div>
