@@ -594,7 +594,7 @@
     <div class="topbar-actions">
       <button id="pwa-install-btn" onclick="triggerInstall()">📲 安裝 APP</button>
       <button class="btn btn-ghost" onclick="clearForm()">🗑 清除</button>
-      <button class="btn btn-print" onclick="window.print()">🖨 列印 / 匯出PDF</button>
+      <button class="btn btn-print" onclick="handlePrintExport()">🖨 列印 / 匯出PDF</button>
       <button class="btn btn-primary" onclick="saveForm()">💾 暫存</button>
     </div>
   </nav>
@@ -888,7 +888,7 @@
     <!-- Submit Area -->
     <div class="submit-area" style="display: flex; gap:16px; justify-content: flex-end; margin-top: 8px;">
       <button class="btn btn-ghost" onclick="clearForm()">🗑 清除表單</button>
-      <button class="btn btn-print" onclick="window.print()">🖨 列印 / 匯出PDF</button>
+      <button class="btn btn-print" onclick="handlePrintExport()">🖨 列印 / 匯出PDF</button>
       <button class="btn btn-primary" onclick="saveForm()">💾 暫存表單</button>
     </div>
 
@@ -1253,6 +1253,86 @@
       document.querySelectorAll('.print-mirror-source').forEach(input => input.classList.remove('print-mirror-source'));
     });
 
+    function isMobileDevice() {
+      return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth <= 768;
+    }
+
+    function printForm() {
+      syncPrintInputValues();
+      window.print();
+    }
+
+    function exportPdfForm() {
+      syncPrintInputValues();
+      showToast('請在系統視窗選擇「儲存為 PDF」及儲存位置');
+      setTimeout(() => window.print(), 80);
+    }
+
+    function closePrintChoice() {
+      const modal = document.getElementById('print-choice-modal');
+      if (modal) modal.remove();
+    }
+
+    function showPrintChoice() {
+      closePrintChoice();
+      const modal = document.createElement('div');
+      modal.id = 'print-choice-modal';
+      modal.innerHTML = `
+        <div class="print-choice-panel" role="dialog" aria-modal="true" aria-label="列印或匯出PDF">
+          <div class="print-choice-title">列印 / 匯出PDF</div>
+          <div class="print-choice-actions">
+            <button type="button" class="btn btn-ghost" id="print-choice-print">列印</button>
+            <button type="button" class="btn btn-print" id="print-choice-pdf">匯出PDF</button>
+            <button type="button" class="btn btn-ghost" id="print-choice-cancel">取消</button>
+          </div>
+        </div>`;
+      Object.assign(modal.style, {
+        position: 'fixed', inset: '0', zIndex: '100000',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'rgba(20,32,25,0.42)', padding: '18px'
+      });
+      document.body.appendChild(modal);
+      const panel = modal.querySelector('.print-choice-panel');
+      Object.assign(panel.style, {
+        width: 'min(360px, 100%)', background: '#fff', borderRadius: '12px',
+        padding: '18px', boxShadow: '0 18px 48px rgba(0,0,0,0.2)',
+        border: '1px solid rgba(47,125,87,0.24)'
+      });
+      Object.assign(modal.querySelector('.print-choice-title').style, {
+        fontSize: '16px', fontWeight: '700', marginBottom: '14px', color: '#1d2b24'
+      });
+      Object.assign(modal.querySelector('.print-choice-actions').style, {
+        display: 'grid', gap: '10px'
+      });
+      modal.querySelector('#print-choice-print').addEventListener('click', () => { closePrintChoice(); printForm(); });
+      modal.querySelector('#print-choice-pdf').addEventListener('click', () => { closePrintChoice(); exportPdfForm(); });
+      modal.querySelector('#print-choice-cancel').addEventListener('click', closePrintChoice);
+      modal.addEventListener('click', event => { if (event.target === modal) closePrintChoice(); });
+    }
+
+    function handlePrintExport() {
+      if (isMobileDevice()) {
+        exportPdfForm();
+        return;
+      }
+      showPrintChoice();
+    }
+    window.handlePrintExport = handlePrintExport;
+    window.exportPdfForm = exportPdfForm;
+    window.printForm = printForm;
+
+    function resetNewFormState() {
+      if (currentDraftId) return;
+      document.querySelectorAll('.form-input, .form-textarea').forEach(el => { el.value = ''; delete el.dataset.manualEdit; });
+      document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+        el.checked = false;
+        el.closest('.checkbox-item')?.classList.remove('checked');
+        el.closest('.env-check-item')?.classList.remove('checked');
+      });
+      localStorage.removeItem('hazard-form-data');
+      HAZARD_SIGNATURE_KEYS.forEach(key => localStorage.removeItem('hazard_' + key));
+    }
+
     // ---- Progress ----
     function updateProgress() {
       const fields = document.querySelectorAll('.form-input, .form-textarea');
@@ -1430,6 +1510,7 @@
       renderCheckboxes('work-type-grid', WORK_TYPES);
       renderCheckboxes('hazard-grid', HAZARDS);
       renderHazardTable();
+      resetNewFormState();
       setTodayROC();
       loadForm();
       updateProgress();
