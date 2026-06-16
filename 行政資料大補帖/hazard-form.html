@@ -374,6 +374,23 @@
       .hazard-mobile-detail-title:first-child {
         margin-top: 0;
       }
+      .hazard-mobile-measures > div {
+        display: grid !important;
+        grid-template-columns: 1.8em 1fr !important;
+        column-gap: 0.25em !important;
+        width: 100% !important;
+      }
+      .hazard-mobile-measures > div > span:first-child {
+        display: block !important;
+        width: auto !important;
+        padding-right: 0 !important;
+        text-align: right !important;
+        white-space: nowrap !important;
+      }
+      .hazard-mobile-measures > div > span:last-child {
+        display: block !important;
+        min-width: 0 !important;
+      }
     }
     @media print {
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box !important; }
@@ -735,7 +752,7 @@
         </div>
         <div class="form-field" id="ff-taxid">
           <label class="form-label" for="tax-id">統一編號</label>
-          <input class="form-input" id="tax-id" type="text" placeholder="8碼統一編號" maxlength="8" oninput="syncPledge(); updateProgress()">
+          <input class="form-input" id="tax-id" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="8碼統一編號" maxlength="8" oninput="syncPledge(); updateProgress()">
         </div>
         <!-- 負責人簽章 -->
         <div class="form-field" id="ff-boss">
@@ -950,7 +967,7 @@
           <label class="form-label" for="pledge-taxid">統一編號
             <span style="font-size:11px; font-weight:400; color:var(--primary-light); margin-left:6px;">↑ 自動帶入</span>
           </label>
-          <input class="form-input" id="pledge-taxid" type="text" placeholder="8碼統一編號（自動帶入）" maxlength="8">
+          <input class="form-input" id="pledge-taxid" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="8碼統一編號（自動帶入）" maxlength="8">
         </div>
         <div class="form-field">
           <label class="form-label">簽署日期
@@ -1294,7 +1311,7 @@
               <span class="hazard-mobile-detail-title">潛在危害因素</span>
               <div>${row.risk}</div>
               <span class="hazard-mobile-detail-title">危害防止對策</span>
-              <div>${measureHtml}</div>
+              <div class="hazard-mobile-measures">${measureHtml}</div>
             </div>
           </td>
         </tr>`;
