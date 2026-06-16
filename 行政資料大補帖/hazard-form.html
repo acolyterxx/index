@@ -374,8 +374,16 @@
       /* Sig boxes inside grid cells: horizontal label+box layout */
       #ff-boss .sig-blank-box, #ff-supervisor .sig-blank-box,
       #ff-handler .sig-blank-box, #ff-depthead .sig-blank-box {
-        min-height:28pt !important;
+        min-height:22pt !important;
         margin-top:2pt !important;
+      }
+      #ff-handler .sig-pad-wrap, #ff-depthead .sig-pad-wrap {
+        min-height:28pt !important;
+        margin-top:1pt !important;
+      }
+      #ff-handler .sig-print-img, #ff-depthead .sig-print-img {
+        max-height:32pt !important;
+        margin:1pt auto !important;
       }
       /* Show notify note in print */
       .notify-note { font-size:9pt !important; color:#000 !important; display:inline !important; }
@@ -428,6 +436,12 @@
       .checkbox-item.checked .checkbox-label { font-weight:bold !important; }
       .checkbox-label { font-size:8.5pt !important; color:#000 !important; line-height:1.3 !important; }
       input[type="checkbox"] { width:9pt !important; height:9pt !important; accent-color:#000; flex-shrink:0 !important; margin-top:1pt !important; }
+      #section-hazard { margin-bottom:2pt !important; }
+      #section-hazard .section-title { margin-bottom:3pt !important; padding-bottom:2pt !important; }
+      #section-hazard .checkbox-grid { grid-template-columns:repeat(4,1fr) !important; gap:0 !important; padding:1pt 3pt !important; }
+      #section-hazard .checkbox-item { gap:2pt !important; padding:0.5pt 1.5pt !important; }
+      #section-hazard .checkbox-label { font-size:8pt !important; line-height:1.15 !important; }
+      #section-hazard input[type="checkbox"] { width:8pt !important; height:8pt !important; margin-top:0.5pt !important; }
 
       /* ─ Hazard prevention notes (above table) ─ */
       .hazard-notes { border:none !important; background:transparent !important; border-radius:0 !important; padding:2pt 0 4pt !important; font-size:9pt !important; color:#000 !important; line-height:1.6 !important; margin-bottom:3pt !important; }
@@ -739,7 +753,7 @@
     </div>
 
     <!-- Section 4: 勾選可能危害 -->
-    <div class="form-section">
+    <div class="form-section" id="section-hazard">
       <div class="section-title">三、勾選可能危害</div>
       <div class="checkbox-grid" id="hazard-grid">
         <!-- JS will populate -->
@@ -1197,25 +1211,22 @@
     });
 
     function syncPrintInputValues() {
+      document.querySelectorAll('.print-input-value').forEach(mirror => mirror.remove());
       document.querySelectorAll('.form-input').forEach(input => {
         if (!['text', 'tel'].includes(input.type)) return;
         input.classList.add('print-mirror-source');
-        let mirror = input.nextElementSibling;
-        if (!mirror || !mirror.classList.contains('print-input-value')) {
-          mirror = document.createElement('span');
-          mirror.className = 'print-input-value';
-          mirror.setAttribute('aria-hidden', 'true');
-          input.insertAdjacentElement('afterend', mirror);
-        }
+        const mirror = document.createElement('span');
+        mirror.className = 'print-input-value';
+        mirror.setAttribute('aria-hidden', 'true');
+        input.insertAdjacentElement('afterend', mirror);
         mirror.textContent = input.value || '\u00a0';
       });
     }
 
     window.addEventListener('beforeprint', syncPrintInputValues);
-    document.addEventListener('input', e => {
-      if (e.target && e.target.classList && e.target.classList.contains('form-input')) {
-        syncPrintInputValues();
-      }
+    window.addEventListener('afterprint', () => {
+      document.querySelectorAll('.print-input-value').forEach(mirror => mirror.remove());
+      document.querySelectorAll('.print-mirror-source').forEach(input => input.classList.remove('print-mirror-source'));
     });
 
     // ---- Progress ----
@@ -1397,7 +1408,6 @@
       renderHazardTable();
       setTodayROC();
       loadForm();
-      syncPrintInputValues();
       updateProgress();
     });
   </script>
