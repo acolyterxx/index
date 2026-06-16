@@ -405,6 +405,25 @@ body {
   transform: translateY(-2px);
 }
 
+.draft-delete {
+  flex-shrink: 0;
+  border: 1px solid rgba(184, 60, 53, 0.24);
+  background: rgba(184, 60, 53, 0.08);
+  color: #9f312b;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.draft-delete:hover {
+  background: rgba(184, 60, 53, 0.14);
+  border-color: rgba(184, 60, 53, 0.38);
+}
+
 .draft-main {
   display: flex;
   flex-direction: column;
@@ -983,17 +1002,82 @@ body {
 @media (max-width: 768px) {
   .main-content { padding: 40px 20px 60px; }
   .form-container { padding: 0 20px 60px; }
-  .form-topbar { padding: 14px 20px; }
+  .form-topbar {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    padding: 12px 14px;
+    gap: 10px;
+  }
+  .topbar-title {
+    width: auto;
+    font-size: 14px;
+    text-align: right;
+  }
+  .topbar-actions {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+    gap: 8px;
+    width: 100%;
+  }
+  .btn,
+  #pwa-install-btn {
+    min-height: 44px;
+    padding: 9px 12px;
+    font-size: 13px;
+    justify-content: center;
+  }
   .cards-grid { grid-template-columns: 1fr; }
   .form-grid { grid-template-columns: 1fr; }
   .form-grid-3 { grid-template-columns: 1fr; }
-  .checkbox-grid { grid-template-columns: 1fr 1fr; }
+  .checkbox-grid {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: none !important;
+    grid-auto-flow: row !important;
+  }
   .sig-grid { grid-template-columns: 1fr; }
   .info-strip { flex-direction: column; gap: 20px; }
   .info-divider { width: 50px; height: 1px; }
   .hazard-table { font-size: 12px; }
   .draft-item { align-items: flex-start; flex-direction: column; }
   .draft-time { text-align: left; white-space: normal; }
+  .date-row {
+    gap: 8px 6px;
+    align-items: center;
+  }
+  .date-input-sm {
+    width: 62px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .notify-note {
+    display: block;
+    width: 100%;
+    margin-left: 0 !important;
+    margin-top: 4px;
+  }
+  .hazard-page .form-header {
+    padding: 24px 16px;
+  }
+  .hazard-page .form-section {
+    padding: 22px 16px;
+  }
+  .hazard-page .pledge-box .form-input {
+    display: block !important;
+    width: 100% !important;
+    margin: 6px 0;
+  }
+  .hazard-page #pledge-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .hazard-page .submit-area {
+    flex-direction: column;
+  }
+  .hazard-page .submit-area .btn {
+    justify-content: center;
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {

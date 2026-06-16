@@ -2,7 +2,7 @@
   "name": "農業部畜產試驗所行政資料大補帖",
   "short_name": "行政大補帖",
   "description": "農業部畜產試驗所承攬作業表單線上填寫工具",
-  "start_url": "./hazard-form.html",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
