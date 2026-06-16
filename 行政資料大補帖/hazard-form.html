@@ -258,7 +258,8 @@
       vertical-align: top;
     }
     .hazard-mobile-toggle,
-    .hazard-mobile-detail {
+    .hazard-mobile-detail,
+    .hazard-mobile-detail-row {
       display: none;
     }
 
@@ -301,11 +302,17 @@
       .hazard-table {
         table-layout: fixed;
       }
-      .hazard-table thead th:nth-child(3),
       .hazard-table thead th:nth-child(4),
-      .hazard-table .hazard-risk-cell,
       .hazard-table .hazard-measures-cell {
         display: none;
+      }
+      .hazard-table thead th:nth-child(3) {
+        width: 54px !important;
+        font-size: 0;
+      }
+      .hazard-table thead th:nth-child(3)::after {
+        content: '展開';
+        font-size: 13px;
       }
       .hazard-table thead th:first-child {
         width: 54px !important;
@@ -313,20 +320,21 @@
       .hazard-table thead th:nth-child(2) {
         width: auto !important;
       }
-      .hazard-table .hazard-op-cell {
-        position: relative;
-        padding-right: 42px;
+      .hazard-table .hazard-risk-cell {
+        width: 54px;
+        padding: 6px 4px;
+        text-align: center;
+        vertical-align: middle;
+      }
+      .hazard-table .hazard-risk-text {
+        display: none;
       }
       .hazard-mobile-toggle {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        position: absolute;
-        top: 50%;
-        right: 8px;
         width: 30px;
         height: 30px;
-        transform: translateY(-50%);
         border: 1px solid var(--border);
         border-radius: 999px;
         background: rgba(255,255,255,0.9);
@@ -336,19 +344,25 @@
         cursor: pointer;
       }
       .hazard-row.expanded .hazard-mobile-toggle {
-        transform: translateY(-50%) rotate(180deg);
+        transform: rotate(180deg);
+      }
+      .hazard-mobile-detail-row {
+        display: none;
+      }
+      .hazard-mobile-detail-row.expanded {
+        display: table-row;
+      }
+      .hazard-mobile-detail-cell {
+        padding: 0 !important;
       }
       .hazard-mobile-detail {
         display: none;
-        margin-top: 10px;
-        padding: 10px 12px;
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
+        padding: 12px 14px;
         background: rgba(255,255,255,0.78);
         color: var(--text-secondary);
         line-height: 1.65;
       }
-      .hazard-row.expanded .hazard-mobile-detail {
+      .hazard-mobile-detail-row.expanded .hazard-mobile-detail {
         display: block;
       }
       .hazard-mobile-detail-title {
@@ -549,7 +563,8 @@
       .hazard-table .row-num { background:#f5f5f5 !important; color:#000 !important; text-align:center !important; width:28pt !important; }
       .hazard-table .op-name { font-weight:bold !important; color:#000 !important; }
       .hazard-table tr { page-break-inside:avoid !important; }
-      .hazard-mobile-toggle, .hazard-mobile-detail { display:none !important; }
+      .hazard-mobile-toggle, .hazard-mobile-detail, .hazard-mobile-detail-row { display:none !important; }
+      .hazard-risk-text { display:inline !important; }
       /* Measure numbered rows: number cell fixed width, text cell wraps */
       .hazard-table td > div { display:table !important; width:100% !important; table-layout:fixed !important; }
       .hazard-table td > div > span:first-child { display:table-cell !important; white-space:nowrap !important; width:18pt !important; vertical-align:top !important; padding-right:2pt !important; font-size:8.5pt !important; }
@@ -1266,7 +1281,15 @@
           <td class="row-num">${row.num}</td>
           <td class="hazard-op-cell">
             <span class="op-name">${row.op}</span>${row.sub ? `<br><small style="color:var(--text-muted)">${row.sub}</small>` : ''}
+          </td>
+          <td class="hazard-risk-cell">
+            <span class="hazard-risk-text">${row.risk}</span>
             <button class="hazard-mobile-toggle" type="button" aria-label="展開${row.op}" aria-expanded="false">▾</button>
+          </td>
+          <td class="hazard-measures-cell">${measureHtml}</td>
+        </tr>
+        <tr class="hazard-mobile-detail-row">
+          <td class="hazard-mobile-detail-cell" colspan="3">
             <div class="hazard-mobile-detail">
               <span class="hazard-mobile-detail-title">潛在危害因素</span>
               <div>${row.risk}</div>
@@ -1274,8 +1297,6 @@
               <div>${measureHtml}</div>
             </div>
           </td>
-          <td class="hazard-risk-cell">${row.risk}</td>
-          <td class="hazard-measures-cell">${measureHtml}</td>
         </tr>`;
       }).join('');
     }
@@ -1286,6 +1307,7 @@
       const row = toggle.closest('.hazard-row');
       if (!row) return;
       const expanded = row.classList.toggle('expanded');
+      row.nextElementSibling?.classList.toggle('expanded', expanded);
       toggle.setAttribute('aria-expanded', String(expanded));
     });
 
@@ -1358,7 +1380,6 @@
 
     function exportPdfForm() {
       syncPrintInputValues();
-      showToast('請在系統視窗選擇「儲存為 PDF」及儲存位置');
       setTimeout(() => window.print(), 80);
     }
 
