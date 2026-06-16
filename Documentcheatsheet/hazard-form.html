@@ -1,0 +1,1964 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="description" content="農業部畜產試驗所承攬作業環境危害告知單 - 線上填寫版">
+  <title>承攬作業環境危害告知單 | 農業部畜產試驗所</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- PWA Support -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2f7d57">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="危害告知單">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <style>
+
+    /* ── Signature Pad (small preview in form) ── */
+    .hazard-page {
+      --text-primary: #142019;
+      --text-secondary: #2d3f34;
+      --text-muted: #4f6256;
+    }
+
+    .sig-pad-wrap {
+      position: relative;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.86);
+      overflow: hidden;
+      transition: border-color 0.2s;
+      cursor: pointer;
+    }
+    .sig-pad-wrap:hover { border-color: var(--primary); }
+    .sig-pad-wrap.has-sig { border-color: rgba(47,125,87,0.5); background: rgba(47,125,87,0.05); }
+    .sig-canvas {
+      display: block;
+      width: 100%;
+      height: 90px;
+      pointer-events: none; /* clicks open modal instead */
+    }
+    .sig-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 8px;
+      border-top: 1px solid var(--border);
+      background: rgba(47,125,87,0.05);
+    }
+    .sig-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      user-select: none;
+    }
+    .sig-clear-btn {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.9);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .sig-clear-btn:hover { background: rgba(220,60,60,0.15); color: #f87171; border-color: rgba(220,60,60,0.3); }
+
+    /* Print image (hidden on screen, shown in print) */
+    .sig-print-img { display: none; }
+
+    /* ── Fullscreen Signature Modal ── */
+    #sig-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: rgba(29, 43, 36, 0.45);
+      backdrop-filter: blur(6px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+      animation: sigFadeIn 0.18s ease;
+    }
+    #sig-modal.open { display: flex; }
+    @keyframes sigFadeIn { from { opacity:0; transform:scale(0.97); } to { opacity:1; transform:scale(1); } }
+
+    #sig-modal-inner {
+      width: 100%;
+      max-width: 600px;
+      background: #ffffff;
+      border: 2px solid rgba(47,125,87,0.32);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(31,95,65,0.22);
+      display: flex;
+      flex-direction: column;
+    }
+    #sig-modal-title {
+      padding: 12px 18px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--primary-dark);
+      border-bottom: 1px solid rgba(47,125,87,0.18);
+      background: rgba(47,125,87,0.06);
+      text-align: center;
+      user-select: none;
+    }
+    #sig-modal-canvas-wrap {
+      position: relative;
+      background: #fff;
+      margin: 0;
+      flex: 1;
+      min-height: 240px;
+    }
+    #sig-modal-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 240px;
+      cursor: crosshair;
+      touch-action: none;
+    }
+    #sig-modal-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      color: #8b9890;
+      pointer-events: none;
+      user-select: none;
+      transition: opacity 0.2s;
+    }
+    #sig-modal-placeholder.hidden { opacity: 0; }
+    #sig-modal-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: rgba(47,125,87,0.04);
+      border-top: 1px solid rgba(47,125,87,0.18);
+      gap: 10px;
+    }
+    #sig-modal-clear {
+      flex: 1;
+      padding: 10px 0;
+      border-radius: 8px;
+      border: 1.5px solid rgba(220,60,60,0.4);
+      background: rgba(220,60,60,0.1);
+      color: #f87171;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    #sig-modal-clear:hover, #sig-modal-clear:active { background: rgba(220,60,60,0.25); }
+    #sig-modal-confirm {
+      flex: 2;
+      padding: 10px 0;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(135deg, #2d9d5a, #1a6e3a);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.05em;
+    }
+    #sig-modal-confirm:hover, #sig-modal-confirm:active { filter: brightness(1.15); }
+    @media print { #sig-modal { display: none !important; } }
+
+
+    /* ---------- Env description checkbox grid ---------- */
+    .env-check-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .env-check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .env-check-item:hover {
+      background: rgba(47,125,87,0.06);
+      border-color: var(--border-strong);
+    }
+    .env-check-item input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary-light);
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .env-check-item.checked {
+      background: rgba(47,125,87,0.1);
+      border-color: var(--primary-light);
+    }
+    .env-check-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      cursor: pointer;
+    }
+
+    /* ---------- Hazard notes (numbered list below table) ---------- */
+    .hazard-notes {
+      margin-top: 16px;
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    .hazard-notes p {
+      margin-bottom: 6px;
+    }
+    .hazard-notes p:last-child {
+      margin-bottom: 0;
+    }
+    .hazard-notes strong {
+      color: var(--text-primary);
+      margin-right: 4px;
+    }
+
+    /* ──── Hide 基本資料 section title on screen ──── */
+    .form-section:first-of-type .section-title { display: none; }
+
+    /* ──── Hazard table measure rows: display:table for hanging indent on screen ──── */
+    .hazard-table td > div { display: table; width: 100%; }
+    .hazard-table td > div > span:first-child {
+      display: table-cell;
+      white-space: nowrap;
+      width: 22px;
+      padding-right: 4px;
+      vertical-align: top;
+    }
+    .hazard-table td > div > span:last-child {
+      display: table-cell;
+      vertical-align: top;
+    }
+    .hazard-mobile-toggle,
+    .hazard-mobile-detail,
+    .hazard-mobile-detail-row {
+      display: none;
+    }
+
+    /* ──── Pledge section title – centered on screen ──── */
+    #section-pledge > .section-title { justify-content: center; text-align: center; }
+    #section-pledge .pledge-zhi {
+      display: block;
+      margin: 12px 0 10px;
+      color: var(--text-primary);
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.8;
+      text-align: left;
+    }
+    .pledge-list-item {
+      display: grid;
+      grid-template-columns: 1.6em 1fr;
+      column-gap: 0.25em;
+      align-items: start;
+    }
+    .pledge-list-num {
+      text-align: right;
+      white-space: nowrap;
+    }
+    .pledge-list-text {
+      min-width: 0;
+    }
+
+    /* Times New Roman for number/date inputs on screen */
+    .date-input-sm, input[type="number"] {
+      font-family: 'Times New Roman', Times, serif;
+    }
+    #pledge-company,
+    #pledge-project {
+      text-align: center;
+    }
+    .print-input-value { display: none; }
+
+    @media (max-width: 700px) {
+      .hazard-table {
+        table-layout: fixed;
+      }
+      .hazard-table thead th:nth-child(4),
+      .hazard-table .hazard-measures-cell {
+        display: none;
+      }
+      .hazard-table thead th:nth-child(3) {
+        width: 54px !important;
+        font-size: 0;
+      }
+      .hazard-table thead th:nth-child(3)::after {
+        content: '展開';
+        font-size: 13px;
+      }
+      .hazard-table thead th:first-child {
+        width: 54px !important;
+      }
+      .hazard-table thead th:nth-child(2) {
+        width: auto !important;
+      }
+      .hazard-table .hazard-risk-cell {
+        width: 54px;
+        padding: 6px 4px;
+        text-align: center;
+        vertical-align: middle;
+      }
+      .hazard-table .hazard-risk-text {
+        display: none;
+      }
+      .hazard-mobile-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: rgba(255,255,255,0.9);
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 1;
+        cursor: pointer;
+      }
+      .hazard-row.expanded .hazard-mobile-toggle {
+        transform: rotate(180deg);
+      }
+      .hazard-mobile-detail-row {
+        display: none;
+      }
+      .hazard-mobile-detail-row.expanded {
+        display: table-row;
+      }
+      .hazard-mobile-detail-cell {
+        padding: 0 !important;
+      }
+      .hazard-mobile-detail {
+        display: none;
+        padding: 12px 14px;
+        background: rgba(255,255,255,0.78);
+        color: var(--text-secondary);
+        line-height: 1.65;
+      }
+      .hazard-mobile-detail-row.expanded .hazard-mobile-detail {
+        display: block;
+      }
+      .hazard-mobile-detail-title {
+        display: block;
+        margin: 8px 0 4px;
+        color: var(--text-primary);
+        font-weight: 700;
+      }
+      .hazard-mobile-detail-title:first-child {
+        margin-top: 0;
+      }
+      .hazard-mobile-measures > div {
+        display: grid !important;
+        grid-template-columns: 1.8em 1fr !important;
+        column-gap: 0.25em !important;
+        width: 100% !important;
+      }
+      .hazard-mobile-measures > div > span:first-child {
+        display: block !important;
+        width: auto !important;
+        padding-right: 0 !important;
+        text-align: right !important;
+        white-space: nowrap !important;
+      }
+      .hazard-mobile-measures > div > span:last-child {
+        display: block !important;
+        min-width: 0 !important;
+      }
+    }
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box !important; }
+      body { background:#fff !important; color:#000 !important; font-family:'標楷體','DFKai-SB',serif !important; font-size:11pt !important; margin:0 !important; }
+      .bg-animation,.form-topbar,.progress-bar,.notice-block,.btn,footer.site-footer { display:none !important; }
+      .form-container { max-width:100% !important; padding:0 !important; margin:0 !important; }
+
+      /* ─ Header ─ */
+      .form-header { background:#fff !important; border:none !important; border-radius:0 !important; padding:0 0 3pt !important; margin-bottom:4pt !important; text-align:center !important; box-shadow:none !important; }
+      .form-org { display:none !important; }
+      .form-title-main { font-size:16pt !important; font-weight:bold !important; color:#000 !important; letter-spacing:2pt !important; display:block !important; margin-bottom:1pt !important; background:none !important; -webkit-text-fill-color:#000 !important; font-family:'標楷體','DFKai-SB',serif !important; }
+      .form-subtitle { font-size:8.5pt !important; color:#444 !important; }
+
+      /* ─ Sections ─ */
+      .form-section { background:#fff !important; border:none !important; border-radius:0 !important; padding:0 !important; margin-bottom:4pt !important; backdrop-filter:none !important; box-shadow:none !important; break-inside:auto !important; page-break-inside:auto !important; }
+      /* Hazard section: page 2 */
+      #section-pledge { page-break-before:always !important; }
+      /* Hazard table wrapper: allow natural overflow in print */
+      .form-section > div[style*="overflow-x"] { overflow:visible !important; }
+      /* Remove all gaps between sections */
+      .form-section { background:#fff !important; border:none !important; border-radius:0 !important; padding:0 !important; margin-bottom:2pt !important; backdrop-filter:none !important; box-shadow:none !important; break-inside:auto !important; page-break-inside:auto !important; }
+      .section-title {
+        position:relative !important;
+        display:block !important;
+        overflow:visible !important;
+        box-sizing:border-box !important;
+        font-family:'Microsoft JhengHei','Noto Sans TC',sans-serif !important;
+        font-size:11pt !important;
+        font-weight:700 !important;
+        color:#000 !important;
+        border:none !important;
+        padding:0 0 3pt !important;
+        margin:0 0 5pt !important;
+        background:none !important;
+        line-height:1.35 !important;
+        min-height:0 !important;
+      }
+      .section-title::after {
+        content:'' !important;
+        position:absolute !important;
+        left:0 !important;
+        right:0 !important;
+        bottom:0 !important;
+        border-bottom:1.5px solid #000 !important;
+      }
+      /* Hide 基本資料 section title in print */
+      .form-section:first-child .section-title { display:none !important; }
+      /* Hide env label hint */
+      .env-field-label { display:none !important; }
+      /* ※ notice: show above section title via flex order on section-env */
+      #section-env { display:flex !important; flex-direction:column !important; }
+      #section-env .env-notice-print { order:-1 !important; display:block !important; font-size:9pt !important; color:#000 !important; margin-bottom:4pt !important; line-height:1.7 !important; }
+      #section-env .section-title { order:0 !important; }
+      #section-env .form-field { order:1 !important; }
+      /* Section-work 二、: work-notice-print ABOVE section-title */
+      #section-work { display:flex !important; flex-direction:column !important; }
+      #section-work .work-notice-print { order:-1 !important; display:block !important; font-size:8.5pt !important; color:#000 !important; margin-bottom:3pt !important; line-height:1.6 !important; }
+      #section-work .section-title { order:0 !important; }
+      #section-work .checkbox-grid { order:1 !important; }
+
+      /* ─ Basic info grid: 6-col for 7-row print layout ─ */
+      #basic-info-grid {
+        display:grid !important;
+        grid-template-columns: repeat(6,1fr) !important;
+        gap:0 !important;
+        border-top:1.5px solid #000 !important;
+        border-left:1.5px solid #000 !important;
+        margin-bottom:3pt !important;
+        style:none !important;
+      }
+      #basic-info-grid .form-field {
+        border-right:1.5px solid #000 !important;
+        border-bottom:1.5px solid #000 !important;
+        padding:2pt 4pt !important;
+        margin:0 !important;
+        overflow:visible !important;
+      }
+      /* ─ Row 1: 承攬商名稱(col1-3) | 統一編號(col4-6) ─ */
+      #ff-contractor { grid-column:1/4 !important; grid-row:1 !important; }
+      #ff-taxid      { grid-column:4/7 !important; grid-row:1 !important; }
+      /* ─ Row 2: 負責人簽章(col1-2) | 現場主管簽章(col3-4) | 緊急連絡電話(col5-6) ─ */
+      #ff-boss       { grid-column:1/3 !important; grid-row:2 !important; }
+      #ff-supervisor { grid-column:3/5 !important; grid-row:2 !important; }
+      #ff-tel        { grid-column:5/7 !important; grid-row:2 !important; }
+      /* ─ Row 3: 承攬作業名稱(full) ─ */
+      #ff-workname   { grid-column:1/7 !important; grid-row:3 !important; }
+      /* ─ Row 4: 作業期間(full) ─ */
+      #ff-period     { grid-column:1/7 !important; grid-row:4 !important; margin-top:0 !important; }
+      /* ─ Row 5: 作業地點(full) ─ */
+      #ff-location   { grid-column:1/7 !important; grid-row:5 !important; }
+      /* ─ Row 6: 請購單位(col1-2) | 承辦人簽章(col3-4) | 單位主管簽章(col5-6) ─ */
+      #ff-purchase   { grid-column:1/3 !important; grid-row:6 !important; }
+      #ff-handler    { grid-column:3/5 !important; grid-row:6 !important; }
+      #ff-depthead   { grid-column:5/7 !important; grid-row:6 !important; }
+      /* ─ Row 7: 危害告知日期+※說明(full) ─ */
+      #ff-notify     { grid-column:1/7 !important; grid-row:7 !important; }
+
+      /* Sig boxes inside grid cells: horizontal label+box layout */
+      #ff-boss .sig-blank-box, #ff-supervisor .sig-blank-box,
+      #ff-handler .sig-blank-box, #ff-depthead .sig-blank-box {
+        min-height:22pt !important;
+        margin-top:2pt !important;
+      }
+      #ff-handler .sig-pad-wrap, #ff-depthead .sig-pad-wrap {
+        min-height:28pt !important;
+        margin-top:1pt !important;
+      }
+      #ff-handler .sig-print-img, #ff-depthead .sig-print-img {
+        max-height:32pt !important;
+        margin:1pt auto !important;
+      }
+      #ff-boss .sig-pad-wrap, #ff-supervisor .sig-pad-wrap {
+        min-height:38pt !important;
+      }
+      #ff-boss .sig-print-img, #ff-supervisor .sig-print-img {
+        max-height:60pt !important;
+        margin:2pt auto !important;
+      }
+      /* Show notify note in print */
+      .notify-note { font-size:9pt !important; color:#000 !important; display:inline !important; }
+      .form-label { font-size:8.5pt !important; font-weight:bold !important; color:#000 !important; display:inline !important; margin:0 3pt 0 0 !important; }
+      .form-label>span { display:none !important; }
+      .form-input { border:none !important; border-bottom:1px solid #888 !important; background:transparent !important; color:#000 !important; font-size:10pt !important; font-family:'標楷體','DFKai-SB',serif !important; padding:0 2pt !important; min-width:70pt !important; display:inline !important; border-radius:0 !important; width:auto !important; }
+      .date-row { display:inline-flex !important; align-items:center !important; gap:2pt !important; flex-wrap:wrap !important; }
+      /* Times New Roman for all numeric inputs */
+      .date-input-sm { border:none !important; border-bottom:1px solid #888 !important; background:transparent !important; color:#000 !important; font-size:10pt !important; padding:0 2pt !important; width:26pt !important; border-radius:0 !important; font-family:'Times New Roman',Times,serif !important; }
+      .date-row label { font-size:10pt !important; color:#000 !important; margin:0 1pt !important; font-family:'Times New Roman',Times,serif !important; }
+      .print-mirror-source { display:none !important; }
+      .print-input-value {
+        display:inline !important;
+        min-width:70pt !important;
+        max-width:100% !important;
+        border-bottom:1px solid #888 !important;
+        color:#000 !important;
+        font-family:'標楷體','DFKai-SB',serif !important;
+        font-size:10pt !important;
+        line-height:1.45 !important;
+        padding:0 2pt !important;
+        white-space:normal !important;
+        overflow-wrap:anywhere !important;
+        word-break:break-word !important;
+        vertical-align:baseline !important;
+      }
+
+      /* ─ Sig pads in print: hide canvas, show saved image ─ */
+      .sig-pad-wrap { border:1px solid #aaa !important; background:#fff !important; border-radius:0 !important; overflow:visible !important; display:block !important; min-height:38pt !important; touch-action:auto !important; }
+      .sig-canvas { display:none !important; }
+      .sig-actions { display:none !important; }
+      .sig-print-img { display:block !important; width:auto !important; max-width:100% !important; max-height:60pt !important; object-fit:contain !important; margin:2pt auto !important; }
+      /* If no signature saved, show empty space */
+      .sig-print-img[src=""] { display:none !important; }
+
+
+      /* ─ Env description checkboxes ─ */
+      .env-check-grid { display:block !important; columns:2 !important; column-gap:10pt !important; border:1px solid #ccc !important; padding:3pt 5pt !important; margin-bottom:3pt !important; }
+      .env-check-item { display:none !important; }
+      .env-check-item.checked { display:block !important; break-inside:avoid !important; border:none !important; padding:0.5pt 0 !important; background:transparent !important; }
+      .env-check-item.checked .env-check-label { color:#000 !important; font-size:9.5pt !important; line-height:1.5 !important; }
+      .env-check-item.checked .env-check-label::before { content:'☑ '; }
+      .env-check-item.checked input[type="checkbox"] { display:none !important; }
+      #env-other { display:block !important; font-size:9.5pt !important; color:#000 !important; border:none !important; border-bottom:1px solid #888 !important; background:transparent !important; width:100% !important; margin-top:3pt !important; font-family:'標楷體','DFKai-SB',serif !important; }
+
+      /* ─ Work type & hazard checkboxes ─ */
+      .checkbox-grid { display:grid !important; grid-template-columns:repeat(3,1fr) !important; gap:1pt !important; border:1px solid #ccc !important; padding:2pt 4pt !important; }
+      .checkbox-item { display:flex !important; align-items:flex-start !important; gap:3pt !important; border:none !important; background:transparent !important; padding:1pt 2pt !important; border-radius:0 !important; }
+      .checkbox-item.checked { background:transparent !important; }
+      .checkbox-item.checked .checkbox-label { font-weight:bold !important; }
+      .checkbox-label { font-size:8.5pt !important; color:#000 !important; line-height:1.3 !important; }
+      input[type="checkbox"] { width:9pt !important; height:9pt !important; accent-color:#000; flex-shrink:0 !important; margin-top:1pt !important; }
+      #section-hazard { margin-bottom:2pt !important; }
+      #section-hazard .section-title { margin-bottom:3pt !important; padding-bottom:2pt !important; }
+      #section-hazard .checkbox-grid { grid-template-columns:repeat(4,1fr) !important; gap:0 !important; padding:1pt 3pt !important; }
+      #section-hazard .checkbox-item { gap:2pt !important; padding:0.5pt 1.5pt !important; }
+      #section-hazard .checkbox-label { font-size:8pt !important; line-height:1.15 !important; }
+      #section-hazard input[type="checkbox"] { width:8pt !important; height:8pt !important; margin-top:0.5pt !important; }
+
+      /* ─ Hazard prevention notes (above table) ─ */
+      .hazard-notes { border:none !important; background:transparent !important; border-radius:0 !important; padding:2pt 0 4pt !important; font-size:9pt !important; color:#000 !important; line-height:1.6 !important; margin-bottom:3pt !important; }
+      .hazard-notes p { margin:0 0 2pt !important; }
+      .hazard-notes strong { color:#000 !important; }
+
+      /* ─ Hazard prevention table ─ */
+      .hazard-table { width:100% !important; border-collapse:collapse !important; font-size:8.5pt !important; table-layout:fixed !important; }
+      /* box-sizing:content-box on th/td so padding is additive and does NOT consume content area */
+      .hazard-table th { box-sizing:content-box !important; background:#ddd !important; color:#000 !important; border:1px solid #000 !important; font-size:9pt !important; font-weight:bold !important; padding:5pt 4pt 8pt !important; text-align:center !important; line-height:2 !important; vertical-align:middle !important; }
+      .hazard-table td { box-sizing:content-box !important; border:1px solid #000 !important; color:#000 !important; padding:3pt 4pt 5pt !important; font-size:8.5pt !important; vertical-align:top !important; line-height:1.7 !important; word-wrap:break-word !important; }
+      .hazard-table .row-num { background:#f5f5f5 !important; color:#000 !important; text-align:center !important; width:28pt !important; }
+      .hazard-table .op-name { font-weight:bold !important; color:#000 !important; }
+      .hazard-table tr { page-break-inside:avoid !important; }
+      .hazard-mobile-toggle, .hazard-mobile-detail, .hazard-mobile-detail-row { display:none !important; }
+      .hazard-risk-text { display:inline !important; }
+      /* Measure numbered rows: number cell fixed width, text cell wraps */
+      .hazard-table td > div { display:table !important; width:100% !important; table-layout:fixed !important; }
+      .hazard-table td > div > span:first-child { display:table-cell !important; white-space:nowrap !important; width:18pt !important; vertical-align:top !important; padding-right:2pt !important; font-size:8.5pt !important; }
+      .hazard-table td > div > span:last-child { display:table-cell !important; vertical-align:top !important; font-size:8.5pt !important; word-break:break-all !important; }
+
+      /* ─ Commitment letter ─ */
+      #section-sig { display:none !important; }
+      /* Pledge section: flex column for ordering */
+      #section-pledge { display:flex !important; flex-direction:column !important; }
+      #section-pledge .section-title { order:0 !important; text-align:center !important; color:#000 !important; font-size:12.5pt !important; margin-bottom:3pt !important; }
+      #section-pledge .pledge-box { order:1 !important; }
+      /* pledge-zhi: left-aligned, 此致 on line 1, 農業部... on line 2 */
+      #section-pledge .pledge-zhi { order:2 !important; display:block !important; font-size:10pt !important; color:#000 !important; text-align:left !important; margin:2pt 0 1pt 0 !important; line-height:1.45 !important; }
+      /* Form-grid (name, address, tel, taxid, date) */
+      #pledge-form-grid { order:3 !important; }
+      /* Sig wrapper: right after form-grid */
+      #pledge-sig-wrapper { order:4 !important; margin-top:0 !important; }
+      /* Hide 備註事項 */
+      #section-pledge .form-field[style*="margin-top:16px"] { display:none !important; }
+      /* pledge-box styling */
+      .pledge-box { background:#fff !important; border:1.5px solid #000 !important; color:#000 !important; padding:6pt 9pt !important; font-size:10pt !important; line-height:1.65 !important; border-radius:0 !important; margin-bottom:2pt !important; }
+      .pledge-box p { margin-bottom:2pt !important; text-align:justify !important; }
+      .pledge-list-item { grid-template-columns:1.5em 1fr !important; column-gap:0.25em !important; }
+      .pledge-list-num { text-align:right !important; }
+      .pledge-list-text { min-width:0 !important; }
+      /* First paragraph of pledge: left-aligned (no number, intro sentence) */
+      .pledge-box p:first-child { text-align:left !important; }
+      .pledge-box p[style] { color:#000 !important; }
+      .pledge-box .form-input { display:inline !important; padding:0 3pt !important; border-top:none !important; border-left:none !important; border-right:none !important; border-bottom:1.5px solid #000 !important; border-radius:0 !important; background:transparent !important; font-size:10pt !important; color:#000 !important; min-width:80pt !important; }
+      .pledge-box .form-input.print-mirror-source { display:none !important; }
+      .pledge-box .print-input-value { border-bottom:1.5px solid #000 !important; min-width:80pt !important; }
+      .pledge-box #pledge-company + .print-input-value {
+        display:inline-block !important;
+        width:112pt !important;
+        min-width:112pt !important;
+        max-width:112pt !important;
+        text-align:center !important;
+        white-space:normal !important;
+        overflow-wrap:anywhere !important;
+        word-break:break-word !important;
+        vertical-align:baseline !important;
+        line-height:1.25 !important;
+      }
+      .pledge-box #pledge-project + .print-input-value {
+        display:inline-block !important;
+        width:138pt !important;
+        min-width:138pt !important;
+        max-width:138pt !important;
+        text-align:center !important;
+        white-space:normal !important;
+        overflow-wrap:anywhere !important;
+        word-break:break-word !important;
+        vertical-align:baseline !important;
+        line-height:1.25 !important;
+      }
+      /* Pledge info grid */
+      #pledge-form-grid { border-top:1px solid #000 !important; border-left:1px solid #000 !important; gap:0 !important; }
+      #section-pledge .form-field { border-right:1px solid #000 !important; border-bottom:1px solid #000 !important; padding:1.5pt 4pt !important; line-height:1.25 !important; min-height:0 !important; }
+      #section-pledge .form-label { line-height:1.25 !important; margin-right:2pt !important; }
+      /* Pledge sig inline (inside grid, below name) */
+      #pledge-ff-sig-inline { grid-column:1/-1 !important; border-right:1px solid #000 !important; border-bottom:1px solid #000 !important; padding:1.5pt 4pt !important; margin-bottom:0 !important; }
+      #pledge-ff-sig-inline .form-label { display:block !important; font-size:9pt !important; margin-bottom:1pt !important; }
+      #pledge-ff-sig-inline .sig-pad-wrap { min-height:30pt !important; width:55% !important; display:block !important; margin:1pt 0 !important; }
+      #pledge-ff-sig-inline .sig-print-img { max-height:34pt !important; margin:1pt auto !important; }
+      /* Pledge sig wrapper (old external wrapper) - hide since we moved it inline */
+      #pledge-sig-wrapper { display:none !important; }
+
+      .form-textarea { font-size:9pt !important; color:#000 !important; border:1px solid #000 !important; background:#fff !important; border-radius:0 !important; width:100% !important; padding:3pt !important; font-family:'標楷體','DFKai-SB',serif !important; }
+
+      @page { size:A4 portrait; margin:0.75cm 2.5cm 1cm 2.5cm; }
+    }
+
+    @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+    .sig-grid { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width:600px) { .sig-grid { grid-template-columns: 1fr; } }
+
+    /* PWA install button */
+    #pwa-install-btn {
+      display: none; align-items: center; gap: 6px;
+      background: linear-gradient(135deg, #3f9b72, #2f7d57);
+      color: #fff; border: none; border-radius: 8px;
+      padding: 7px 14px; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    #pwa-install-btn:hover { filter: brightness(1.15); transform: translateY(-1px); }
+    #pwa-install-btn.show { display: flex; }
+    /* iOS install hint banner */
+    #ios-install-hint {
+      display: none; position: fixed; bottom: 20px; left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.96); color: var(--text-primary);
+      padding: 14px 20px; border-radius: 14px;
+      font-size: 14px; line-height: 1.6; text-align: center;
+      z-index: 9999; box-shadow: 0 8px 32px rgba(31,95,65,0.18);
+      border: 1px solid rgba(47,125,87,0.24);
+      max-width: 320px; width: 90vw; animation: fadeIn 0.3s ease;
+    }
+    #ios-install-hint.show { display: block; }
+    #ios-install-hint button {
+      margin-top: 10px; background: rgba(47,125,87,0.1);
+      border: none; color: var(--primary-dark); border-radius: 6px;
+      padding: 6px 18px; cursor: pointer; font-size: 13px;
+    }
+    @media print { #pwa-install-btn, #ios-install-hint { display: none !important; } }
+  </style>
+
+</head>
+<body class="form-page hazard-page">
+
+  <div class="bg-animation">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
+
+  <nav class="form-topbar">
+    <a href="index.html" class="back-btn">← 返回首頁</a>
+    <span class="topbar-title">承攬作業環境危害告知單</span>
+    <div class="topbar-actions">
+      <button id="pwa-install-btn" onclick="triggerInstall()">📲 安裝 APP</button>
+      <button class="btn btn-ghost" onclick="clearForm()">🗑 清除</button>
+      <button class="btn btn-print" onclick="handlePrintExport()">🖨 列印 / 匯出PDF</button>
+      <button class="btn btn-primary" onclick="saveForm()">💾 暫存</button>
+    </div>
+  </nav>
+  <!-- iOS Safari install hint -->
+  <div id="ios-install-hint">
+    📱 安裝到手機主畫面：<br>
+    點擊瀏覽器底部分享鍵 <strong>⎋</strong>，選「加入至主畫面」
+    <br><button onclick="document.getElementById('ios-install-hint').classList.remove('show')">我明白了</button>
+  </div>
+
+  <!-- ── Fullscreen Signature Modal ── -->
+  <div id="sig-modal">
+    <div id="sig-modal-inner">
+      <div id="sig-modal-title">✍️ 請在下方空白處簽名</div>
+      <div id="sig-modal-canvas-wrap">
+        <canvas id="sig-modal-canvas"></canvas>
+        <div id="sig-modal-placeholder">← 用手指在此簽名 →</div>
+      </div>
+      <div id="sig-modal-bar">
+        <button id="sig-modal-clear" type="button">清除</button>
+        <button id="sig-modal-confirm" type="button">✓ 確定</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="form-container">
+
+    <div class="form-header">
+      <div class="form-org">農業部畜產試驗所</div>
+      <h1 class="form-title-main">農業部畜產試驗所承攬作業環境危害告知單</h1>
+      <p class="form-subtitle">版本日期：中華民國114年06月09日　｜　本表格依職業安全衛生法第26條規定辦理</p>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+    </div>
+
+    <!-- Section 1: 基本資料 -->
+    <div class="form-section">
+      <div class="section-title">基本資料</div>
+
+      <div class="form-grid" id="basic-info-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="form-field" id="ff-contractor">
+          <label class="form-label" for="contractor-name">承攬商名稱 <span class="required">*</span></label>
+          <input class="form-input" id="contractor-name" type="text" placeholder="請輸入承攬商名稱" oninput="syncPledge(); updateProgress()">
+        </div>
+        <div class="form-field" id="ff-taxid">
+          <label class="form-label" for="tax-id">統一編號</label>
+          <input class="form-input" id="tax-id" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="8碼統一編號" maxlength="8" oninput="syncPledge(); updateProgress()">
+        </div>
+        <!-- 負責人簽章 -->
+        <div class="form-field" id="ff-boss">
+          <label class="form-label">負責人簽章</label>
+          <div class="sig-pad-wrap" id="sig-boss">
+            <canvas class="sig-canvas" data-key="sig-boss"></canvas>
+            <div class="sig-actions">
+              <span class="sig-hint">✍️ 用手指在此簽名</span>
+              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-boss')">清除</button>
+            </div>
+            <img class="sig-print-img" id="sig-boss-img" src="" alt="簽章">
+          </div>
+        </div>
+
+        <div class="form-field" id="ff-tel">
+          <label class="form-label" for="emergency-tel">緊急連絡電話</label>
+          <input class="form-input" id="emergency-tel" type="tel" placeholder="例如：0912-345-678" oninput="syncPledge(); updateProgress()">
+        </div>
+        <!-- 現場主管簽章 -->
+        <div class="form-field" id="ff-supervisor">
+          <label class="form-label">現場主管簽章</label>
+          <div class="sig-pad-wrap" id="sig-supervisor">
+            <canvas class="sig-canvas" data-key="sig-supervisor"></canvas>
+            <div class="sig-actions">
+              <span class="sig-hint">✍️ 用手指在此簽名</span>
+              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-supervisor')">清除</button>
+            </div>
+            <img class="sig-print-img" id="sig-supervisor-img" src="" alt="簽章">
+          </div>
+        </div>
+
+        <div class="form-field" id="ff-purchase">
+          <label class="form-label" for="purchase-dept">請購單位</label>
+          <input class="form-input" id="purchase-dept" type="text" placeholder="請輸入請購單位" oninput="updateProgress()">
+        </div>
+        <!-- 承辦人簽章 -->
+        <div class="form-field" id="ff-handler">
+          <label class="form-label">承辦人簽章</label>
+          <div class="sig-pad-wrap" id="sig-handler">
+            <canvas class="sig-canvas" data-key="sig-handler"></canvas>
+            <div class="sig-actions">
+              <span class="sig-hint">✍️ 用手指在此簽名</span>
+              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-handler')">清除</button>
+            </div>
+            <img class="sig-print-img" id="sig-handler-img" src="" alt="簽章">
+          </div>
+        </div>
+        <!-- 單位主管簽章 -->
+        <div class="form-field" id="ff-depthead">
+          <label class="form-label">單位主管簽章</label>
+          <div class="sig-pad-wrap" id="sig-depthead">
+            <canvas class="sig-canvas" data-key="sig-depthead"></canvas>
+            <div class="sig-actions">
+              <span class="sig-hint">✍️ 用手指在此簽名</span>
+              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-depthead')">清除</button>
+            </div>
+            <img class="sig-print-img" id="sig-depthead-img" src="" alt="簽章">
+          </div>
+        </div>
+
+        <div class="form-field form-grid-full" id="ff-workname">
+          <label class="form-label" for="work-name">承攬作業名稱 <span class="required">*</span></label>
+          <input class="form-input" id="work-name" type="text" placeholder="請輸入承攬作業名稱" oninput="syncPledge(); updateProgress()">
+        </div>
+        <div class="form-field form-grid-full" id="ff-location">
+          <label class="form-label" for="work-location">承攬作業地點 <span class="required">*</span></label>
+          <input class="form-input" id="work-location" type="text" placeholder="請輸入作業地點" oninput="updateProgress()">
+        </div>
+        <!-- 作業期間（移入grid以便print排版） -->
+        <div class="form-field form-grid-full" id="ff-period" style="margin-top:0;">
+          <label class="form-label">承攬作業期間 <span class="required">*</span></label>
+          <div class="date-row">
+            <input class="date-input-sm" id="start-year" type="text" placeholder="年" maxlength="3" oninput="updateProgress()">
+            <label>年</label>
+            <input class="date-input-sm" id="start-month" type="text" placeholder="月" maxlength="2" style="width:55px" oninput="updateProgress()">
+            <label>月</label>
+            <input class="date-input-sm" id="start-day" type="text" placeholder="日" maxlength="2" style="width:55px" oninput="updateProgress()">
+            <label>日　至</label>
+            <input class="date-input-sm" id="end-year" type="text" placeholder="年" maxlength="3" oninput="updateProgress()">
+            <label>年</label>
+            <input class="date-input-sm" id="end-month" type="text" placeholder="月" maxlength="2" style="width:55px" oninput="updateProgress()">
+            <label>月</label>
+            <input class="date-input-sm" id="end-day" type="text" placeholder="日" maxlength="2" style="width:55px" oninput="updateProgress()">
+            <label>日</label>
+          </div>
+        </div>
+        <!-- 危害告知日期（移入grid以便print排版） -->
+        <div class="form-field form-grid-full" id="ff-notify">
+          <label class="form-label">危害告知日期 <span class="required">*</span></label>
+          <div class="date-row">
+            <input class="date-input-sm" id="notify-year" type="text" placeholder="年" maxlength="3" oninput="syncPledgeDate(); updateProgress()">
+            <label>年</label>
+            <input class="date-input-sm" id="notify-month" type="text" placeholder="月" maxlength="2" style="width:55px" oninput="syncPledgeDate(); updateProgress()">
+            <label>月</label>
+            <input class="date-input-sm" id="notify-day" type="text" placeholder="日" maxlength="2" style="width:55px" oninput="syncPledgeDate(); updateProgress()">
+            <label>日</label>
+            <span class="notify-note" style="margin-left:20px; font-size:12px; color:var(--text-muted);">※應於作業開始前將作業環境危害因素告知承攬商</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: 作業現場環境說明 -->
+    <div class="form-section" id="section-env">
+      <!-- Print-only ※ notice: flex order:-1 places it ABOVE section-title in print -->
+      <div class="env-notice-print" style="display:none;">※以下由承攬商與請購單位共同確認填寫，應說明工作環境狀況，包括設施、佈置及機械設備等，必要時以圖示說明。</div>
+      <!-- Screen-only notice (hidden in print) -->
+      <div class="notice-block">
+        ⚠️ 以下由承攬商與請購單位共同確認填寫，應說明工作環境狀況，包括設施、佈置及機械設備等，必要時以圖示說明。
+      </div>
+      <div class="section-title">一、承攬作業現場環境說明</div>
+      <div class="form-field">
+        <div class="env-check-grid" id="env-check-grid">
+          <!-- 由JS建立可選項目 -->
+        </div>
+      </div>
+    </div>
+    <!-- Section 3: 勾選作業項目 -->
+    <div class="form-section" id="section-work">
+      <!-- Print-only notice: flex order:-1 puts it ABOVE section-title in print -->
+      <div class="work-notice-print" style="display:none;">承攬商若有下列作業，應於施工前填寫該項作業之申請單，提交請購單位，並經核可後使得施工：（1）動火；（2）高架；（3）局限空間；（4）活線；（5）吊掛（如附件1~5）</div>
+      <div class="section-title">二、勾選作業項目</div>
+      <!-- Screen notice (hidden in print) -->
+      <div class="notice-block" style="background: rgba(63,143,199,0.08); border-color: rgba(63,143,199,0.2); color: #2f6f9f; margin-bottom:16px;">
+        承攬商若有下列作業，應於施工前填寫該項作業之申請單，提交請購單位，並經核可後使得施工：（1）動火；（2）高架；（3）局限空間；（4）活線；（5）吊掛（如附件1~5）
+      </div>
+      <div class="checkbox-grid" id="work-type-grid">
+        <!-- JS will populate -->
+      </div>
+    </div>
+
+    <!-- Section 4: 勾選可能危害 -->
+    <div class="form-section" id="section-hazard">
+      <div class="section-title">三、勾選可能危害</div>
+      <div class="checkbox-grid" id="hazard-grid">
+        <!-- JS will populate -->
+      </div>
+    </div>
+
+    <!-- Section 5: 危害防止對策 -->
+    <div class="form-section">
+      <div class="section-title">四、危害防止對策</div>
+      <div class="hazard-notes">
+        <p><strong>1.</strong> 承攬商仍應於作業前評估各項細部作業之可能危害，採取相應預防、保護措施，對所屬人員實施法定教育訓練與危害告知，可能危害及對應防護措施，並指派專人於現場指揮監督。</p>
+        <p><strong>2.</strong> 本危害告知單正本由請購單位及承攬商雙方各執一份，影本送秘書室留存，修改時並應再以書面為之，本危害告知單等相關文件依規定保存3年。</p>
+      </div>
+      <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+        <table class="hazard-table">
+          <thead>
+            <tr>
+              <th style="width:36px">項次</th>
+              <th style="width:130px">作業項目</th>
+              <th style="width:120px">潛在危害因素</th>
+              <th>危害防止對策</th>
+            </tr>
+          </thead>
+          <tbody id="hazard-table-body">
+            <!-- JS will populate -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <!-- Section 6: 安全衛生承諾書 -->
+    <div class="form-section" id="section-pledge" style="border-color: rgba(245,166,35,0.3);">
+      <div class="section-title" style="color: var(--accent); justify-content:center; text-align:center;">農業部畜產試驗所承攬作業安全衛生承諾書</div>
+
+      <div class="pledge-box">
+        <p>本公司（人）<input class="form-input" id="pledge-company" type="text" placeholder="承攬商名稱（自動帶入）" style="display:inline; width:200px; padding:4px 10px;"> 承攬農業部畜產試驗所（以下簡稱貴所）<input class="form-input" id="pledge-project" type="text" placeholder="承攬項目名稱（自動帶入）" style="display:inline; width:250px; padding:4px 10px;"> 案。</p>
+        <p class="pledge-list-item"><span class="pledge-list-num">1.</span><span class="pledge-list-text">貴所已告知本公司（人）有關工作場所環境危害因素，本公司承諾妥善規劃以避免災害發生，所屬人員進行作業時，全程使用符合職業安全衛生法暨相關規定之防護器具，並於作業期間指派<strong>工作場所負責人</strong>於現場指揮監督管理及負起雇主應負之一切責任，因作業產生之廢棄物應取得該場所管理人同意暫時堆放於指定區域，並於作業結束後，即盡速清理復原作業區域，若該場所管理人不同意暫時堆放情形，於作業當日立即清運離所。</span></p>
+        <p class="pledge-list-item"><span class="pledge-list-num">2.</span><span class="pledge-list-text">本公司若有再交付承攬時，本公司承諾會負起「職業安全衛生法」所定雇主之責任。</span></p>
+        <p class="pledge-list-item"><span class="pledge-list-num">3.</span><span class="pledge-list-text">本公司承諾作業開始前評估各項細部作業之可能危害，採取相應防護措施，對所屬人員實施法定教育訓練與危害告知，若貴所要求查證，本公司有提供人員教育訓練證明之義務。</span></p>
+        <p class="pledge-list-item"><span class="pledge-list-num">4.</span><span class="pledge-list-text">作業期間如遇颱風、大雨等預報時，本公司應提前採取預防措施。天然災害過後，應實施檢查確認安全無虞後始可復工。</span></p>
+        <p class="pledge-list-item"><span class="pledge-list-num">5.</span><span class="pledge-list-text">本公司承諾經貴所巡視發現本公司作業員工有違反法令規定情事，同意貴所要求下立即停止作業，通知本公司改善完成後才復工。</span></p>
+        <p class="pledge-list-item"><span class="pledge-list-num">6.</span><span class="pledge-list-text">本公司如違反職業安全衛生法暨相關規定，造成之災害，導致貴所損失，本公司願負起賠償責任。</span></p>
+      </div>
+
+      <div class="pledge-zhi">此致<br>農業部畜產試驗所</div>
+
+      <div id="pledge-form-grid" class="form-grid">
+        <div class="form-field form-grid-full" id="pledge-ff-name">
+          <label class="form-label" for="pledge-name">承攬商名稱
+            <span style="font-size:11px; font-weight:400; color:var(--primary-light); margin-left:6px;">↑ 自動帶入</span>
+          </label>
+          <input class="form-input" id="pledge-name" type="text" placeholder="承攬商名稱（自動帶入）">
+        </div>
+        <!-- 簽章欄移至承攬商名稱下方 -->
+        <div class="form-field form-grid-full" id="pledge-ff-sig-inline" style="margin-bottom:4px;">
+          <label class="form-label" style="margin-bottom:6px; display:block;">承攬商負責人（代理負責人）簽章</label>
+          <div class="sig-pad-wrap" id="sig-pledge">
+            <canvas class="sig-canvas" data-key="sig-pledge"></canvas>
+            <div class="sig-actions">
+              <span class="sig-hint">✍️ 用手指在此簽名</span>
+              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-pledge')">清除</button>
+            </div>
+            <img class="sig-print-img" id="sig-pledge-img" src="" alt="簽章">
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="pledge-address">地址</label>
+          <input class="form-input" id="pledge-address" type="text" placeholder="公司地址">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="pledge-tel">電話
+            <span style="font-size:11px; font-weight:400; color:var(--primary-light); margin-left:6px;">↑ 自動帶入</span>
+          </label>
+          <input class="form-input" id="pledge-tel" type="tel" placeholder="公司電話（自動帶入）">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="pledge-taxid">統一編號
+            <span style="font-size:11px; font-weight:400; color:var(--primary-light); margin-left:6px;">↑ 自動帶入</span>
+          </label>
+          <input class="form-input" id="pledge-taxid" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="8碼統一編號（自動帶入）" maxlength="8">
+        </div>
+        <div class="form-field">
+          <label class="form-label">簽署日期
+            <span style="font-size:11px; font-weight:400; color:var(--primary-light); margin-left:6px;">↑ 自動帶入（可修改）</span>
+          </label>
+          <div class="date-row">
+            <input class="date-input-sm" id="pledge-year" type="text" placeholder="年" maxlength="3">
+            <label>年</label>
+            <input class="date-input-sm" id="pledge-month" type="text" placeholder="月" maxlength="2" style="width:55px">
+            <label>月</label>
+            <input class="date-input-sm" id="pledge-day" type="text" placeholder="日" maxlength="2" style="width:55px">
+            <label>日</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 簽章已移至pledge-form-grid內 (pledge-ff-sig-inline) -->
+
+      <!-- 備注事項 -->
+      <div class="form-field" style="margin-top:16px;">
+        <label class="form-label" for="sig-remarks">備注事項</label>
+        <textarea class="form-textarea" id="sig-remarks" placeholder="如有補充事項請填寫..." style="min-height:60px;"></textarea>
+      </div>
+    </div>
+
+    <!-- Submit Area -->
+    <div class="submit-area" style="display: flex; gap:16px; justify-content: flex-end; margin-top: 8px;">
+      <button class="btn btn-ghost" onclick="clearForm()">🗑 清除表單</button>
+      <button class="btn btn-print" onclick="handlePrintExport()">🖨 列印 / 匯出PDF</button>
+      <button class="btn btn-primary" onclick="saveForm()">💾 暫存表單</button>
+    </div>
+
+  </div>
+
+  <footer class="site-footer">
+    <p>農業部畜產試驗所 &copy; 中華民國114年　｜　承攬作業環境危害告知單</p>
+  </footer>
+
+  <script>
+    // ---- Data ----
+    const WORK_TYPES = [
+      '1. 局限空間作業',
+      '2. 電焊、氬焊、氣焊、等作業',
+      '3. 高架作業（2公尺以上）',
+      '4. 吊裝、吊掛作業',
+      '5. 電氣、帶電作業',
+      '6. 廢棄物清運作業',
+      '7. 油漆、粉刷、打蠟作業',
+      '8. 地面清潔作業',
+      '9. 搬運作業',
+      '10. 環境清潔、消毒作業',
+      '11. 環境美化、園藝作業',
+      '12. 裝修作業',
+      '13. 拆除作業',
+      '14. 建物修繕作業',
+      '15. 其他（請說明）',
+    ];
+
+    const HAZARDS = [
+      '1. 墜落、滾落',
+      '2. 被撞',
+      '3. 物體倒塌、崩塌',
+      '4. 物體掉落（飛落）',
+      '5. 夾、捲、切割、衝（撞）擊、擦傷',
+      '6. 踏穿樓板、踩踏尖銳物',
+      '7. 跌（滑）倒',
+      '8. 火災、爆炸',
+      '9. 感電',
+      '10. 溺斃',
+      '11. 缺氧',
+      '12. 與有害物質等接觸',
+      '13. 與高低溫、輻射、噪音、震動、異常氣壓接觸',
+      '14. 交通事故',
+      '15. 肌肉骨骼傷害',
+      '16. 生物危害（蚊蟲咬傷）',
+      '17. 中毒',
+      '18. 其他（請說明）',
+    ];
+
+    const HAZARD_TABLE_DATA = [
+      {
+        num: 1,
+        op: '局限空間作業',
+        sub: '（例如下水道作業、人孔進出作業、水塔清洗作業、污水設施清洗作業等）',
+        risk: '缺氧、可燃性氣體',
+        measures: [
+          '機械通風。',
+          '個人防護器具（呼吸式防護具）及防護索。',
+          '實施氧氣及有毒氣體測定。',
+          '每2小時測定(O₂/可燃性氣體濃度)。',
+        ]
+      },
+      {
+        num: 2,
+        op: '電焊、氬焊、氣焊、等作業',
+        risk: '灼傷、燃燒、火災、爆炸、輻射危害',
+        measures: [
+          '個人防護器具（電焊/面罩/皮手套等）。',
+          '備乾粉滅火器/二氧化碳滅火器。',
+          '遮火圍幕。',
+          '電焊機金屬外殼接地，備電擊防止裝置。',
+          '鋼瓶直立固定。',
+          '附近若有易燃物須清除或備防火毯。',
+          '電線跨馬路須有過路橋裝置。',
+        ]
+      },
+      {
+        num: 3,
+        op: '高架作業（2公尺以上）',
+        sub: '（例如樹木截枝作業、建物屋頂從事拆除作業、大樓外牆清洗作業、空調維護保養作業等）',
+        risk: '墜落、施工架倒塌',
+        measures: [
+          '安全帶、索、安全帽、良好梯子。',
+          '施工架確實牢靠固定。',
+          '施工架頂層應設置90公分以上護欄，並應包括上欄杆、中欄杆。',
+          '酒醉或有酒醉之虞者、身體虛弱有安全顧慮者不得施工。',
+          '情緒不穩定，經醫師診斷認為身體狀況不良者不得施工。',
+          '施工架以鋼管、門型架構築，若用竹材應以鍍鋅鐵線紮結牢固。',
+          '大樓外牆清洗作業吊籠之構造，應符合吊籠安全檢查構造標準，使用足夠長度之捲揚用之鋼索。',
+          '高度超過1.5公尺以上之場所作業時，應設置能使勞工安全上下之設備。',
+          '於2公尺以上開口部分作業應設置護蓋或安全網等防護設備。',
+        ]
+      },
+      {
+        num: 4,
+        op: '吊裝、吊掛作業',
+        risk: '翻倒、吊桿彎曲、荷件掉落、觸電',
+        measures: [
+          '合格人員之操作。',
+          '吊車具合格證。',
+          '捆綁索檢點。',
+          '高壓線防護派人監視。',
+          '嚴禁人員待於吊裝物下方。',
+          '工作人員不得待在吊裝物上方。',
+        ]
+      },
+      {
+        num: 5,
+        op: '電氣、帶電作業',
+        risk: '感電',
+        measures: [
+          '備漏電斷路器。',
+          '電線架高。',
+          '禁經潮溼地。',
+          '須有漏電裝置檢測。',
+          '對電路之檢查、修理等活線作業時，應使該作業勞工戴用絕緣用防護具，或應使用活線作業用器具。',
+          '電氣作業應在斷電情況下作業，並將該電路開關上鎖或標示「禁止送電」、「停電作業中」或設置監視人員。',
+          '發電室、變電室或受電室，非工作人員不得任意進入。',
+        ]
+      },
+      {
+        num: 6,
+        op: '廢棄物清運作業',
+        risk: '墜落',
+        measures: [
+          '車輛於行駛中，禁止人員攀附於車廂或車頂外。',
+          '請按工作性質配戴口罩、手套，及戴反光帽、穿斑馬衣，著安全鞋等安全配備。',
+          '夜間或雨天作業，須加設警告燈號。',
+        ]
+      },
+      {
+        num: 7,
+        op: '油漆、粉刷、打蠟作業',
+        risk: '墜落、與有害物接觸',
+        measures: [
+          '利用合梯作業時，除應注意合梯之構造、材質及規格需符合規定外，使用時應將繫材確實扣牢，人員不得利用合梯行走。',
+          '勞工工作場所之通道、地板、階梯，應保持不致使勞工跌倒、滑倒、踩傷等之安全狀態，或採取必要之預防措施（例如放置警告標示）。',
+          '現場通風或配戴過濾口罩。',
+        ]
+      },
+      {
+        num: 8,
+        op: '地面清潔作業',
+        risk: '跌倒',
+        measures: [
+          '工作場所之通道、地板、階梯，應保持不致使勞工跌倒、滑倒、踩傷等之安全狀態。',
+          '臨時用電要裝設漏電斷路器。',
+        ]
+      },
+      {
+        num: 9,
+        op: '搬運作業（例如物品裝卸）',
+        risk: '物體倒塌、崩塌',
+        measures: [
+          '採取繩索捆綁護網、擋樁、限制高度或變更堆積等必要措施。',
+          '作業時佩戴安全帽、防護手套等。',
+        ]
+      },
+      {
+        num: 10,
+        op: '環境清潔、消毒作業',
+        risk: '與有害物接觸',
+        measures: [
+          '噴藥時，要穿著個人安全防護裝備安全帽、防護眼鏡、耳塞、防毒面具、手套、長袖衣袖、長統膠鞋。',
+          '噴藥完畢，立即沐浴更衣，並收妥藥劑空瓶以備回收。',
+          '操作消毒機應注意噴槍以防噴傷人員。',
+        ]
+      },
+      {
+        num: 11,
+        op: '環境美化、園藝作業',
+        sub: '（例如割草、修剪樹木等）',
+        risk: '夾、捲、切、割、擦傷、咬傷',
+        measures: [
+          '使用之機械，如有傳動帶、傳動輪、齒輪、轉軸等被捲、夾、擦傷之虞者，應設護罩或護欄。',
+          '作業時穿著長褲、長靴等，防範蚊蟲及蛇類咬傷。',
+          '作業時佩戴安全帽、防護手套等。',
+          '建立10公尺以上作業警戒區。',
+          '臨時用電要裝設漏電斷路器。',
+        ]
+      },
+      {
+        num: 12,
+        op: '裝修作業',
+        risk: '墜落、感電、夾捲切割擦傷、與有害物接觸',
+        measures: [
+          '合梯梯腳間繫材要扣牢。',
+          '進入工地要正確佩戴安全帽。',
+          '臨時用電要裝設漏電斷路器。',
+          '砂輪機、圓盤鋸等機具要設置護罩。',
+          '開口處要設置90公分高的護欄或安全網。',
+          '電焊切割作業，要移除易燃物，並設置滅火器。',
+          '油漆、防水作業，要保持空氣流通，並遠離火源。',
+          '2公尺以上作業要使用移動式施工架或高空工作車。',
+        ]
+      },
+      {
+        num: 13,
+        op: '拆除作業',
+        risk: '墜落、感電、夾捲切割擦傷、與有害物接觸',
+        measures: [
+          '進入工地要正確佩戴安全帽。',
+          '合梯梯腳間繫材要扣牢。',
+          '臨時用電要裝設漏電斷路器。',
+          '砂輪機、圓盤鋸等機具要設置護罩。',
+          '拆除應按序由外而內、由上而下，逐步拆除。',
+          '拆除配電設備及線路，應先切斷電源。',
+          '拆除可燃性氣體管線，應先將管中殘存氣體釋放。',
+          '2公尺以上作業要使用移動式施工架或高空工作車。',
+          '屋頂拆除，應設置適當強度且寬度在30公分以上的踏板或裝設安全護網，並使勞工佩掛安全帶。',
+          '拆除區域應設置圍柵或標示，並選任專人於現場指揮監督。',
+        ]
+      },
+      {
+        num: 14,
+        op: '建物修繕作業',
+        risk: '墜落、感電、夾捲切割擦傷',
+        measures: [
+          '進入工地要正確佩戴安全帽，有墜落之虞使勞工佩掛安全帶。',
+          '搭設施工架：內外兩側要設置交叉拉桿及下拉桿；於適當之垂直、水平距離處以壁連桿與構造物妥實連接；構件之連接部分應以適當插銷連接固定穩固；板料應設金屬扣鎖及防脫落鉤；底部之立架，應使用可調型基腳座版。',
+          '施工架基礎地面應平整，且夯實緊密，並襯以適當材質之墊材。',
+          '懸臂式施工架或高度超過5公尺以上施工架之構築，要專人妥為安全設計並簽章確認強度計算書。',
+          '以捲揚機吊運物料，安裝前須核對並確認設計資料及強度計算書。',
+          '颱風來臨前，受風面積過大的防塵網及帆布，應先予以拆卸固定。',
+          '臨時用電要裝設漏電斷路器。',
+          '合梯梯腳間繫材要扣牢。',
+          '拆除應按序由外而內、由上而下，逐步拆除。',
+          '拆除區域應設置圍柵或標示，並選任專人於現場指揮監督。',
+        ]
+      },
+    ];
+
+    // ---- Env Description Options ----
+    const ENV_OPTIONS = [
+      '場地通風良好',
+      '場地通風不良，需機械通風',
+      '現場設有電力設施，需注意感電危害',
+      '現場設有燃氣管線，需注意火災危害',
+      '作業區域有高架平台，需佩戴安全帶',
+      '包含局限空間（如人孔、水塔、水溝等）',
+      '現場有下水道或積水區域，存在溺水危害',
+      '包含吊掛、吊裝作業區域',
+      '現場有機械設備運轉中，需注意夾捲危害',
+      '地面濕滑或不平整，需注意跌倒危害',
+      '包含化學品或有害物質存放區域',
+      '噪音小於80分貝，環境噪音不高',
+      '噪音超過80分貝，需配戴耳塞',
+      '作業區域於居民或辦公區域附近，需注意降低噪音影響',
+      '室外作業，需注意天候變化及日曬防護',
+      '夏季作業，需注意高溫熱傷害防護',
+    ];
+
+    function renderEnvCheckboxes() {
+      const container = document.getElementById('env-check-grid');
+      container.innerHTML = '';
+      ENV_OPTIONS.forEach((item, i) => {
+        const label = document.createElement('label');
+        label.className = 'env-check-item';
+        label.htmlFor = 'env-opt-' + i;
+        label.innerHTML = `
+          <input type="checkbox" id="env-opt-${i}" onchange="this.closest('.env-check-item').classList.toggle('checked', this.checked); updateProgress()">
+          <span class="env-check-label">${item}</span>
+        `;
+        container.appendChild(label);
+      });
+    }
+
+    // ---- Render Checkboxes (column-first / vertical order) ----
+    function renderCheckboxes(containerId, items) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      const cols = 3;
+      const rows = Math.ceil(items.length / cols);
+      // Set grid to flow column-first
+      container.style.gridTemplateRows = `repeat(${rows}, auto)`;
+      container.style.gridAutoFlow = 'column';
+      items.forEach((item, i) => {
+        const div = document.createElement('label');
+        div.className = 'checkbox-item';
+        div.htmlFor = containerId + '-' + i;
+        div.innerHTML = `
+          <input type="checkbox" id="${containerId}-${i}" onchange="this.closest('.checkbox-item').classList.toggle('checked', this.checked); updateProgress()">
+          <span class="checkbox-label">${item}</span>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // ---- Render Hazard Table ----
+    function renderHazardTable() {
+      const tbody = document.getElementById('hazard-table-body');
+      tbody.innerHTML = HAZARD_TABLE_DATA.map(row => {
+        // Numbered list with hanging indent for each measure
+        const measureHtml = row.measures.map((m, idx) =>
+          `<div style="display:table; width:100%;"><span style="display:table-cell; white-space:nowrap; padding-right:4px;">${idx+1}.</span><span style="display:table-cell;">${m}</span></div>`
+        ).join('');
+        return `<tr class="hazard-row">
+          <td class="row-num">${row.num}</td>
+          <td class="hazard-op-cell">
+            <span class="op-name">${row.op}</span>${row.sub ? `<br><small style="color:var(--text-muted)">${row.sub}</small>` : ''}
+          </td>
+          <td class="hazard-risk-cell">
+            <span class="hazard-risk-text">${row.risk}</span>
+            <button class="hazard-mobile-toggle" type="button" aria-label="展開${row.op}" aria-expanded="false">▾</button>
+          </td>
+          <td class="hazard-measures-cell">${measureHtml}</td>
+        </tr>
+        <tr class="hazard-mobile-detail-row">
+          <td class="hazard-mobile-detail-cell" colspan="3">
+            <div class="hazard-mobile-detail">
+              <span class="hazard-mobile-detail-title">潛在危害因素</span>
+              <div>${row.risk}</div>
+              <span class="hazard-mobile-detail-title">危害防止對策</span>
+              <div class="hazard-mobile-measures">${measureHtml}</div>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    document.addEventListener('click', event => {
+      const toggle = event.target.closest('.hazard-mobile-toggle');
+      if (!toggle) return;
+      const row = toggle.closest('.hazard-row');
+      if (!row) return;
+      const expanded = row.classList.toggle('expanded');
+      row.nextElementSibling?.classList.toggle('expanded', expanded);
+      toggle.setAttribute('aria-expanded', String(expanded));
+    });
+
+    // ---- Auto-sync to Pledge Section ----
+    function syncPledge() {
+      const name = document.getElementById('contractor-name').value;
+      const work = document.getElementById('work-name').value;
+      const taxid = document.getElementById('tax-id').value;
+      const tel = document.getElementById('emergency-tel').value;
+
+      const pc = document.getElementById('pledge-company');
+      const pn = document.getElementById('pledge-name');
+      const pp = document.getElementById('pledge-project');
+      const pt = document.getElementById('pledge-taxid');
+      const ptel = document.getElementById('pledge-tel');
+
+      if (!pc.dataset.manualEdit) pc.value = name;
+      if (!pn.dataset.manualEdit) pn.value = name;
+      if (!pp.dataset.manualEdit) pp.value = work;
+      if (!pt.dataset.manualEdit) pt.value = taxid;
+      if (!ptel.dataset.manualEdit) ptel.value = tel;
+    }
+
+    function syncPledgeDate() {
+      const y = document.getElementById('notify-year').value;
+      const m = document.getElementById('notify-month').value;
+      const d = document.getElementById('notify-day').value;
+      const py = document.getElementById('pledge-year');
+      const pm = document.getElementById('pledge-month');
+      const pd = document.getElementById('pledge-day');
+      if (!py.dataset.manualEdit) py.value = y;
+      if (!pm.dataset.manualEdit) pm.value = m;
+      if (!pd.dataset.manualEdit) pd.value = d;
+    }
+
+    // Mark pledge fields as manually edited if user types in them
+    ['pledge-company','pledge-name','pledge-project','pledge-taxid','pledge-tel',
+     'pledge-year','pledge-month','pledge-day'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', () => { el.dataset.manualEdit = '1'; });
+    });
+
+    function syncPrintInputValues() {
+      document.querySelectorAll('.print-input-value').forEach(mirror => mirror.remove());
+      document.querySelectorAll('.form-input').forEach(input => {
+        if (!['text', 'tel'].includes(input.type)) return;
+        input.classList.add('print-mirror-source');
+        const mirror = document.createElement('span');
+        mirror.className = 'print-input-value';
+        mirror.setAttribute('aria-hidden', 'true');
+        input.insertAdjacentElement('afterend', mirror);
+        mirror.textContent = input.value || '\u00a0';
+      });
+    }
+
+    window.addEventListener('beforeprint', syncPrintInputValues);
+    window.addEventListener('afterprint', () => {
+      document.querySelectorAll('.print-input-value').forEach(mirror => mirror.remove());
+      document.querySelectorAll('.print-mirror-source').forEach(input => input.classList.remove('print-mirror-source'));
+    });
+
+    function isMobileDevice() {
+      return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth <= 768;
+    }
+
+    function printForm() {
+      syncPrintInputValues();
+      window.print();
+    }
+
+    function exportPdfForm() {
+      syncPrintInputValues();
+      setTimeout(() => window.print(), 80);
+    }
+
+    function closePrintChoice() {
+      const modal = document.getElementById('print-choice-modal');
+      if (modal) modal.remove();
+    }
+
+    function showPrintChoice() {
+      closePrintChoice();
+      const modal = document.createElement('div');
+      modal.id = 'print-choice-modal';
+      modal.innerHTML = `
+        <div class="print-choice-panel" role="dialog" aria-modal="true" aria-label="列印或匯出PDF">
+          <div class="print-choice-title">列印 / 匯出PDF</div>
+          <div class="print-choice-actions">
+            <button type="button" class="btn btn-ghost" id="print-choice-print">列印</button>
+            <button type="button" class="btn btn-print" id="print-choice-pdf">匯出PDF</button>
+            <button type="button" class="btn btn-ghost" id="print-choice-cancel">取消</button>
+          </div>
+        </div>`;
+      Object.assign(modal.style, {
+        position: 'fixed', inset: '0', zIndex: '100000',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'rgba(20,32,25,0.42)', padding: '18px'
+      });
+      document.body.appendChild(modal);
+      const panel = modal.querySelector('.print-choice-panel');
+      Object.assign(panel.style, {
+        width: 'min(360px, 100%)', background: '#fff', borderRadius: '12px',
+        padding: '18px', boxShadow: '0 18px 48px rgba(0,0,0,0.2)',
+        border: '1px solid rgba(47,125,87,0.24)'
+      });
+      Object.assign(modal.querySelector('.print-choice-title').style, {
+        fontSize: '16px', fontWeight: '700', marginBottom: '14px', color: '#1d2b24'
+      });
+      Object.assign(modal.querySelector('.print-choice-actions').style, {
+        display: 'grid', gap: '10px'
+      });
+      modal.querySelector('#print-choice-print').addEventListener('click', () => { closePrintChoice(); printForm(); });
+      modal.querySelector('#print-choice-pdf').addEventListener('click', () => { closePrintChoice(); exportPdfForm(); });
+      modal.querySelector('#print-choice-cancel').addEventListener('click', closePrintChoice);
+      modal.addEventListener('click', event => { if (event.target === modal) closePrintChoice(); });
+    }
+
+    function handlePrintExport() {
+      if (isMobileDevice()) {
+        exportPdfForm();
+        return;
+      }
+      showPrintChoice();
+    }
+    window.handlePrintExport = handlePrintExport;
+    window.exportPdfForm = exportPdfForm;
+    window.printForm = printForm;
+
+    function resetNewFormState() {
+      if (currentDraftId) return;
+      document.querySelectorAll('.form-input, .form-textarea').forEach(el => { el.value = ''; delete el.dataset.manualEdit; });
+      document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+        el.checked = false;
+        el.closest('.checkbox-item')?.classList.remove('checked');
+        el.closest('.env-check-item')?.classList.remove('checked');
+      });
+      localStorage.removeItem('hazard-form-data');
+      HAZARD_SIGNATURE_KEYS.forEach(key => localStorage.removeItem('hazard_' + key));
+    }
+
+    function setDateNumericInputMode() {
+      document.querySelectorAll('.date-input-sm').forEach(input => {
+        input.setAttribute('inputmode', 'numeric');
+        input.setAttribute('pattern', '[0-9]*');
+      });
+    }
+
+    // ---- Progress ----
+    function updateProgress() {
+      const fields = document.querySelectorAll('.form-input, .form-textarea');
+      let filled = 0;
+      fields.forEach(f => { if (f.value.trim()) filled++; });
+      const pct = Math.min(100, Math.round((filled / fields.length) * 100));
+      document.getElementById('progress-fill').style.width = pct + '%';
+    }
+
+    const DRAFT_INDEX_KEY = 'admin-form-drafts';
+    const DRAFT_RECORD_PREFIX = 'admin-form-draft:';
+    const HAZARD_SIGNATURE_KEYS = ['sig-boss', 'sig-supervisor', 'sig-handler', 'sig-depthead', 'sig-pledge'];
+    let currentDraftId = new URLSearchParams(window.location.search).get('draft') || '';
+
+    function getDraftIndex() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(DRAFT_INDEX_KEY) || '[]');
+        return Array.isArray(saved) ? saved : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function setDraftIndex(items) {
+      localStorage.setItem(DRAFT_INDEX_KEY, JSON.stringify(items));
+    }
+
+    function collectFormData() {
+      const data = {};
+      document.querySelectorAll('[id]').forEach(el => {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
+          data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+        }
+      });
+      data._signatures = {};
+      HAZARD_SIGNATURE_KEYS.forEach(key => {
+        data._signatures[key] = localStorage.getItem('hazard_' + key) || '';
+      });
+      return data;
+    }
+
+    function makeDraftTitle() {
+      const contractor = document.getElementById('contractor-name').value.trim();
+      const work = document.getElementById('work-name').value.trim();
+      return [contractor, work].filter(Boolean).join(' / ') || '未命名危害告知單';
+    }
+
+    // ---- Draft to localStorage ----
+    function saveForm() {
+      const now = new Date().toISOString();
+      if (!currentDraftId) {
+        currentDraftId = 'hazard-' + Date.now();
+        const url = new URL(window.location.href);
+        url.searchParams.set('draft', currentDraftId);
+        window.history.replaceState({}, '', url);
+      }
+
+      const record = {
+        id: currentDraftId,
+        type: 'hazard',
+        typeLabel: '承攬作業環境危害告知單',
+        title: makeDraftTitle(),
+        url: 'hazard-form.html?draft=' + encodeURIComponent(currentDraftId),
+        createdAt: now,
+        updatedAt: now,
+        data: collectFormData()
+      };
+
+      const existingRaw = localStorage.getItem(DRAFT_RECORD_PREFIX + currentDraftId);
+      if (existingRaw) {
+        try {
+          const existing = JSON.parse(existingRaw);
+          record.createdAt = existing.createdAt || now;
+        } catch (e) {}
+      }
+
+      localStorage.setItem(DRAFT_RECORD_PREFIX + currentDraftId, JSON.stringify(record));
+      localStorage.setItem('hazard-form-data', JSON.stringify(record.data));
+
+      const index = getDraftIndex().filter(item => item.id !== currentDraftId);
+      index.push({
+        id: record.id,
+        type: record.type,
+        typeLabel: record.typeLabel,
+        title: record.title,
+        url: record.url,
+        createdAt: record.createdAt,
+        updatedAt: record.updatedAt
+      });
+      setDraftIndex(index);
+      showToast('✅ 表單已暫存，可回首頁清冊繼續修改');
+    }
+
+    function loadForm() {
+      let saved = '';
+      if (currentDraftId) {
+        const recordRaw = localStorage.getItem(DRAFT_RECORD_PREFIX + currentDraftId);
+        if (recordRaw) {
+          try {
+            const record = JSON.parse(recordRaw);
+            saved = JSON.stringify(record.data || {});
+          } catch (e) {}
+        }
+      }
+      if (!saved) return;
+      const data = JSON.parse(saved);
+      Object.entries(data).forEach(([id, val]) => {
+        if (id === '_signatures') return;
+        const el = document.getElementById(id);
+        if (el) {
+          if (el.type === 'checkbox') {
+            el.checked = val;
+            el.closest('.checkbox-item')?.classList.toggle('checked', val);
+            el.closest('.env-check-item')?.classList.toggle('checked', val);
+          } else {
+            el.value = val;
+          }
+        }
+      });
+      if (data._signatures) {
+        HAZARD_SIGNATURE_KEYS.forEach(key => {
+          const value = data._signatures[key] || '';
+          if (value) localStorage.setItem('hazard_' + key, value);
+          else localStorage.removeItem('hazard_' + key);
+        });
+      }
+      updateProgress();
+    }
+
+    function clearForm() {
+      if (!confirm('確定要清除所有填寫內容嗎？')) return;
+      document.querySelectorAll('.form-input, .form-textarea').forEach(el => el.value = '');
+      document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+        el.checked = false;
+        el.closest('.checkbox-item')?.classList.remove('checked');
+        el.closest('.env-check-item')?.classList.remove('checked');
+      });
+      localStorage.removeItem('hazard-form-data');
+      updateProgress();
+      showToast('🗑 表單已清除');
+    }
+
+    function showToast(msg) {
+      const toast = document.createElement('div');
+      toast.textContent = msg;
+      Object.assign(toast.style, {
+        position: 'fixed', bottom: '32px', right: '32px',
+        background: 'rgba(255,255,255,0.97)', border: '1px solid rgba(47,125,87,0.28)',
+        color: '#1d2b24', padding: '14px 24px', borderRadius: '12px',
+        fontSize: '14px', fontWeight: '600', zIndex: '9999',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+        animation: 'fadeIn .3s ease', backdropFilter: 'blur(20px)'
+      });
+      document.body.appendChild(toast);
+      setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = '.4s'; setTimeout(() => toast.remove(), 400); }, 3000);
+    }
+
+    // Set today's date (ROC calendar)
+    function setTodayROC() {
+      const now = new Date();
+      const roc = now.getFullYear() - 1911;
+      const m = now.getMonth() + 1;
+      const d = now.getDate();
+      document.getElementById('notify-year').value = roc;
+      document.getElementById('notify-month').value = m;
+      document.getElementById('notify-day').value = d;
+      document.getElementById('pledge-year').value = roc;
+      document.getElementById('pledge-month').value = m;
+      document.getElementById('pledge-day').value = d;
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      renderEnvCheckboxes();
+      renderCheckboxes('work-type-grid', WORK_TYPES);
+      renderCheckboxes('hazard-grid', HAZARDS);
+      renderHazardTable();
+      setDateNumericInputMode();
+      resetNewFormState();
+      setTodayROC();
+      loadForm();
+      updateProgress();
+    });
+  </script>
+
+
+<script>
+// ════════════════════════════════════════════
+//   SIGNATURE PAD — Fullscreen Modal System
+// ════════════════════════════════════════════
+const SIG_KEYS = ['sig-boss', 'sig-supervisor', 'sig-handler', 'sig-depthead', 'sig-pledge'];
+
+// Label map for modal title
+const SIG_LABELS = {
+  'sig-boss':       '負責人簽章',
+  'sig-supervisor': '現場主管簽章',
+  'sig-handler':    '承辦人簽章',
+  'sig-depthead':   '單位主管簽章',
+  'sig-pledge':     '承攬商負責人簽章',
+};
+
+// ── Modal elements ──
+const modal        = document.getElementById('sig-modal');
+const modalTitle   = document.getElementById('sig-modal-title');
+const modalCanvas  = document.getElementById('sig-modal-canvas');
+const modalPlaceholder = document.getElementById('sig-modal-placeholder');
+const modalClear   = document.getElementById('sig-modal-clear');
+const modalConfirm = document.getElementById('sig-modal-confirm');
+const modalCtx     = modalCanvas.getContext('2d');
+
+let activeKey    = null;   // which pad is being signed
+let modalDrawing = false;
+let modalLastX   = 0;
+let modalLastY   = 0;
+let modalHasDraw = false;
+
+// ── Init modal canvas (high-DPR) ──
+function initModalCanvas() {
+  const wrap = document.getElementById('sig-modal-canvas-wrap');
+  const rect  = wrap.getBoundingClientRect();
+  const dpr   = window.devicePixelRatio || 1;
+  const w     = rect.width  || 340;
+  const h     = rect.height || 240;
+  modalCanvas.width  = w * dpr;
+  modalCanvas.height = h * dpr;
+  modalCanvas.style.width  = w + 'px';
+  modalCanvas.style.height = h + 'px';
+  modalCtx.scale(dpr, dpr);
+  modalCtx.strokeStyle = '#111';
+  modalCtx.lineWidth   = 2.8;
+  modalCtx.lineCap     = 'round';
+  modalCtx.lineJoin    = 'round';
+}
+
+// ── Open modal ──
+function openSigModal(key) {
+  activeKey    = key;
+  modalHasDraw = false;
+  modalTitle.textContent = '✍️ ' + (SIG_LABELS[key] || '簽名');
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // Wait for layout then init canvas
+  requestAnimationFrame(() => {
+    initModalCanvas();
+    // Pre-load existing signature if any
+    const saved = localStorage.getItem('hazard_' + key);
+    if (saved && saved.length > 10) {
+      const img = new Image();
+      img.onload = () => {
+        const dpr = window.devicePixelRatio || 1;
+        const w   = modalCanvas.width  / dpr;
+        const h   = modalCanvas.height / dpr;
+        modalCtx.drawImage(img, 0, 0, w, h);
+        modalHasDraw = true;
+        modalPlaceholder.classList.add('hidden');
+      };
+      img.src = saved;
+    } else {
+      modalPlaceholder.classList.remove('hidden');
+    }
+  });
+}
+
+// ── Close modal ──
+function closeSigModal() {
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+  activeKey = null;
+}
+
+// ── Draw on modal canvas ──
+function modalDraw(x1, y1, x2, y2) {
+  modalCtx.beginPath();
+  modalCtx.moveTo(x1, y1);
+  modalCtx.lineTo(x2, y2);
+  modalCtx.stroke();
+  if (!modalHasDraw) {
+    modalHasDraw = true;
+    modalPlaceholder.classList.add('hidden');
+  }
+}
+
+// Touch helpers
+function getTouchPos(canvas, touch) {
+  const r = canvas.getBoundingClientRect();
+  return { x: touch.clientX - r.left, y: touch.clientY - r.top };
+}
+
+// ── Modal touch events ──
+modalCanvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const pos = getTouchPos(modalCanvas, e.changedTouches[0]);
+  modalDrawing = true;
+  modalLastX = pos.x; modalLastY = pos.y;
+}, { passive: false });
+
+modalCanvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (!modalDrawing) return;
+  const pos = getTouchPos(modalCanvas, e.changedTouches[0]);
+  modalDraw(modalLastX, modalLastY, pos.x, pos.y);
+  modalLastX = pos.x; modalLastY = pos.y;
+}, { passive: false });
+
+modalCanvas.addEventListener('touchend', e => {
+  e.preventDefault();
+  modalDrawing = false;
+}, { passive: false });
+
+// ── Modal mouse events (desktop) ──
+modalCanvas.addEventListener('mousedown', e => {
+  const r = modalCanvas.getBoundingClientRect();
+  modalDrawing = true;
+  modalLastX = e.clientX - r.left;
+  modalLastY = e.clientY - r.top;
+});
+modalCanvas.addEventListener('mousemove', e => {
+  if (!modalDrawing) return;
+  const r = modalCanvas.getBoundingClientRect();
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+  modalDraw(modalLastX, modalLastY, x, y);
+  modalLastX = x; modalLastY = y;
+});
+modalCanvas.addEventListener('mouseup',    () => { modalDrawing = false; });
+modalCanvas.addEventListener('mouseleave', () => { modalDrawing = false; });
+
+// ── Clear modal canvas ──
+modalClear.addEventListener('click', () => {
+  const dpr = window.devicePixelRatio || 1;
+  modalCtx.clearRect(0, 0, modalCanvas.width / dpr, modalCanvas.height / dpr);
+  modalHasDraw = false;
+  modalPlaceholder.classList.remove('hidden');
+});
+
+// ── Confirm: copy to mini preview + save ──
+modalConfirm.addEventListener('click', () => {
+  if (!activeKey) { closeSigModal(); return; }
+
+  const data = modalCanvas.toDataURL('image/png');
+
+  // Save to localStorage
+  try { localStorage.setItem('hazard_' + activeKey, data); } catch(e) {}
+
+  // Copy to mini preview canvas
+  const wrap   = document.getElementById(activeKey);
+  const canvas = wrap ? wrap.querySelector('.sig-canvas') : null;
+  if (canvas) {
+    const ctx  = canvas.getContext('2d');
+    const dpr  = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width  = rect.width  * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+    const img = new Image();
+    img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height);
+    img.src = data;
+    wrap.classList.toggle('has-sig', modalHasDraw);
+  }
+
+  // Update print image
+  const printImg = document.getElementById(activeKey + '-img');
+  if (printImg) printImg.src = modalHasDraw ? data : '';
+
+  closeSigModal();
+});
+
+// ── Click on any sig-pad-wrap opens modal ──
+function initSignaturePads() {
+  SIG_KEYS.forEach(key => {
+    const wrap = document.getElementById(key);
+    if (!wrap) return;
+
+    // Tap anywhere on the pad to open modal
+    wrap.addEventListener('click', () => openSigModal(key));
+    wrap.addEventListener('touchend', e => {
+      e.preventDefault();
+      openSigModal(key);
+    }, { passive: false });
+
+    // Load saved signature into mini canvas
+    const saved = localStorage.getItem('hazard_' + key);
+    if (saved && saved.length > 10) {
+      const canvas = wrap.querySelector('.sig-canvas');
+      const ctx    = canvas ? canvas.getContext('2d') : null;
+      if (ctx) {
+        const img = new Image();
+        img.onload = () => {
+          const dpr  = window.devicePixelRatio || 1;
+          const rect = canvas.getBoundingClientRect();
+          canvas.width  = (rect.width  || 200) * dpr;
+          canvas.height = (rect.height || 90)  * dpr;
+          ctx.scale(dpr, dpr);
+          ctx.drawImage(img, 0, 0, rect.width || 200, rect.height || 90);
+          wrap.classList.add('has-sig');
+        };
+        img.src = saved;
+      }
+      const printImg = document.getElementById(key + '-img');
+      if (printImg) printImg.src = saved;
+    }
+  });
+}
+
+// ── Update hint text in mini pad after confirm ──
+function clearSig(key) {
+  try { localStorage.removeItem('hazard_' + key); } catch(e) {}
+  const wrap = document.getElementById(key);
+  if (wrap) {
+    const canvas = wrap.querySelector('.sig-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    wrap.classList.remove('has-sig');
+  }
+  const printImg = document.getElementById(key + '-img');
+  if (printImg) printImg.src = '';
+}
+
+// Extend clearForm to also clear all signatures
+const _origClearForm = typeof clearForm === 'function' ? clearForm : null;
+window.clearForm = function() {
+  if (_origClearForm) _origClearForm();
+  SIG_KEYS.forEach(k => clearSig(k));
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(initSignaturePads, 150);
+});
+</script>
+
+
+<script>
+  let deferredInstallPrompt = null;
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(reg => console.log('[PWA] Service Worker 已註冊:', reg.scope))
+        .catch(err => console.warn('[PWA] Service Worker 註冊失敗:', err));
+    });
+  }
+
+  // ── Android：偵測安裝提示事件 ──
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    document.getElementById('pwa-install-btn').classList.add('show');
+  });
+
+  // ── 點擊「安裝 APP」按鈕 ──
+  function triggerInstall() {
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    const isInStandaloneMode = window.navigator.standalone === true;
+
+    if (isIOS && !isInStandaloneMode) {
+      // iOS：顯示手動安裝說明
+      document.getElementById('ios-install-hint').classList.add('show');
+    } else if (deferredInstallPrompt) {
+      // Android：觸發系統安裝對話框
+      deferredInstallPrompt.prompt();
+      deferredInstallPrompt.userChoice.then((result) => {
+        console.log('[PWA] 使用者選擇:', result.outcome);
+        if (result.outcome === 'accepted') {
+          document.getElementById('pwa-install-btn').classList.remove('show');
+        }
+        deferredInstallPrompt = null;
+      });
+    }
+  }
+
+  // ── 安裝完成後隱藏按鈕 ──
+  window.addEventListener('appinstalled', () => {
+    document.getElementById('pwa-install-btn').classList.remove('show');
+    console.log('[PWA] APP 安裝完成！');
+  });
+
+  // ── iOS：頁面載入時自動偵測並顯示提示 ──
+  window.addEventListener('DOMContentLoaded', () => {
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    const isInStandaloneMode = window.navigator.standalone === true;
+    if (isIOS && !isInStandaloneMode) {
+      // iOS 上顯示安裝按鈕（點擊後顯示說明）
+      document.getElementById('pwa-install-btn').classList.add('show');
+    }
+  });
+</script>
+</body>
+</html>

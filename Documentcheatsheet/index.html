@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="description" content="農業部畜產試驗所行政資料大補帖 - 線上填寫承攬作業環境危害告知單及巡檢表">
+  <title>行政資料大補帖 | 農業部畜產試驗所</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2f7d57">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="行政大補帖">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+</head>
+<body>
+  <div class="bg-animation">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo-area">
+        <div class="logo-icon">🌾</div>
+        <div class="logo-text">
+          <span class="org-name">農業部畜產試驗所</span>
+          <span class="dept-name">行政管理系統</span>
+        </div>
+      </div>
+      <div class="header-badge">
+        <span class="badge-dot"></span>
+        <span>線上填寫</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="hero">
+      <div class="hero-eyebrow">
+        <span class="tag">ADMIN PORTAL</span>
+      </div>
+      <h1 class="hero-title">行政資料<span class="gradient-text">大補帖</span></h1>
+      <p class="hero-subtitle">承攬作業管理 · 快速填表 · 數位簽章</p>
+    </section>
+
+    <section class="cards-section">
+      <div class="section-label">請選擇表單類型</div>
+      <div class="cards-grid">
+
+        <!-- Card 1: 危害告知單 -->
+        <a href="hazard-form.html" class="card card-hazard" id="card-hazard">
+          <div class="card-glow"></div>
+          <div class="card-badge">承攬作業</div>
+          <div class="card-icon-wrap">
+            <div class="card-icon">⚠️</div>
+          </div>
+          <div class="card-body">
+            <h2 class="card-title">承攬作業環境<br>危害告知單</h2>
+            <p class="card-desc">包含危害告知、作業環境說明、安全衛生承諾書，依職業安全衛生法規定辦理</p>
+            <div class="card-meta">
+              <span class="meta-item">📋 表單 114-06-09</span>
+              <span class="meta-item">🏛️ 農業部畜產試驗所</span>
+            </div>
+          </div>
+          <div class="card-arrow">→</div>
+        </a>
+
+        <!-- Card 2: 巡檢表 -->
+        <a href="inspection-form.html" class="card card-inspect" id="card-inspect">
+          <div class="card-glow"></div>
+          <div class="card-badge">定期巡查</div>
+          <div class="card-icon-wrap">
+            <div class="card-icon">🔍</div>
+          </div>
+          <div class="card-body">
+            <h2 class="card-title">承攬作業<br>巡檢表</h2>
+            <p class="card-desc">定期現場巡視、安全設施查核、違規紀錄及改善追蹤，確保作業安全</p>
+            <div class="card-meta">
+              <span class="meta-item">📋 定期巡檢</span>
+              <span class="meta-item">🏛️ 農業部畜產試驗所</span>
+            </div>
+          </div>
+          <div class="card-arrow">→</div>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="drafts-section">
+      <div class="section-label">暫存表單清冊</div>
+      <div class="draft-list" id="draft-list">
+        <div class="draft-empty">目前沒有暫存表單</div>
+      </div>
+    </section>
+
+    <section class="info-strip">
+      <div class="info-item">
+        <div class="info-icon">📌</div>
+        <div class="info-text">
+          <strong>作業前告知</strong>
+          <span>承攬商須於作業前確認</span>
+        </div>
+      </div>
+      <div class="info-divider"></div>
+      <div class="info-item">
+        <div class="info-icon">📄</div>
+        <div class="info-text">
+          <strong>保存年限</strong>
+          <span>相關文件依規定保存3年</span>
+        </div>
+      </div>
+      <div class="info-divider"></div>
+      <div class="info-item">
+        <div class="info-icon">📅</div>
+        <div class="info-text">
+          <strong>版本日期</strong>
+          <span>民國114年06月09日</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>農業部畜產試驗所 &copy; 中華民國114年　行政資料大補帖</p>
+  </footer>
+
+  <script>
+    function formatDraftTime(value) {
+      if (!value) return '';
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return '';
+      const pad = n => String(n).padStart(2, '0');
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function escapeHtml(value) {
+      return String(value || '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+    }
+
+    function renderDraftList() {
+      const list = document.getElementById('draft-list');
+      let drafts = [];
+      try {
+        drafts = JSON.parse(localStorage.getItem('admin-form-drafts') || '[]');
+      } catch (e) {
+        drafts = [];
+      }
+
+      if (!Array.isArray(drafts) || drafts.length === 0) {
+        list.innerHTML = '<div class="draft-empty">目前沒有暫存表單</div>';
+        return;
+      }
+
+      drafts = drafts
+        .slice()
+        .sort((a, b) => new Date(b.createdAt || b.updatedAt || 0) - new Date(a.createdAt || a.updatedAt || 0));
+
+      list.innerHTML = drafts.map(item => `
+        <a class="draft-item" href="${escapeHtml(item.url)}">
+          <div class="draft-main">
+            <span class="draft-type">${escapeHtml(item.typeLabel || '表單')}</span>
+            <strong>${escapeHtml(item.title || '未命名表單')}</strong>
+          </div>
+          <div class="draft-time">
+            <span>建立：${formatDraftTime(item.createdAt)}</span>
+            <span>更新：${formatDraftTime(item.updatedAt)}</span>
+          </div>
+          <button class="draft-delete" type="button" data-draft-id="${escapeHtml(item.id)}">刪除</button>
+        </a>
+      `).join('');
+    }
+
+    function deleteDraft(id) {
+      let drafts = [];
+      try {
+        drafts = JSON.parse(localStorage.getItem('admin-form-drafts') || '[]');
+      } catch (e) {
+        drafts = [];
+      }
+      localStorage.removeItem('admin-form-draft:' + id);
+      localStorage.setItem('admin-form-drafts', JSON.stringify(drafts.filter(item => item.id !== id)));
+      renderDraftList();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const cards = document.querySelectorAll('.card');
+      cards.forEach((card, i) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        setTimeout(() => {
+          card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 200 + i * 150);
+      });
+      renderDraftList();
+      document.getElementById('draft-list').addEventListener('click', event => {
+        const button = event.target.closest('.draft-delete');
+        if (!button) return;
+        event.preventDefault();
+        event.stopPropagation();
+        deleteDraft(button.dataset.draftId);
+      });
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+      }
+    });
+  </script>
+</body>
+</html>
