@@ -348,7 +348,7 @@
         border-bottom:1.5px solid #000 !important;
         padding:2pt 4pt !important;
         margin:0 !important;
-        overflow:hidden !important;
+        overflow:visible !important;
       }
       /* ─ Row 1: 承攬商名稱(col1-3) | 統一編號(col4-6) ─ */
       #ff-contractor { grid-column:1/4 !important; grid-row:1 !important; }
@@ -383,8 +383,24 @@
       .form-input { border:none !important; border-bottom:1px solid #888 !important; background:transparent !important; color:#000 !important; font-size:10pt !important; font-family:'標楷體','DFKai-SB',serif !important; padding:0 2pt !important; min-width:70pt !important; display:inline !important; border-radius:0 !important; width:auto !important; }
       .date-row { display:inline-flex !important; align-items:center !important; gap:2pt !important; flex-wrap:wrap !important; }
       /* Times New Roman for all numeric inputs */
-      .date-input-sm, input[type="text"], input[type="tel"] { border:none !important; border-bottom:1px solid #888 !important; background:transparent !important; color:#000 !important; font-size:10pt !important; padding:0 2pt !important; width:26pt !important; border-radius:0 !important; font-family:'Times New Roman',Times,serif !important; }
+      .date-input-sm { border:none !important; border-bottom:1px solid #888 !important; background:transparent !important; color:#000 !important; font-size:10pt !important; padding:0 2pt !important; width:26pt !important; border-radius:0 !important; font-family:'Times New Roman',Times,serif !important; }
       .date-row label { font-size:10pt !important; color:#000 !important; margin:0 1pt !important; font-family:'Times New Roman',Times,serif !important; }
+      .print-mirror-source { display:none !important; }
+      .print-input-value {
+        display:inline !important;
+        min-width:70pt !important;
+        max-width:100% !important;
+        border-bottom:1px solid #888 !important;
+        color:#000 !important;
+        font-family:'標楷體','DFKai-SB',serif !important;
+        font-size:10pt !important;
+        line-height:1.45 !important;
+        padding:0 2pt !important;
+        white-space:normal !important;
+        overflow-wrap:anywhere !important;
+        word-break:break-word !important;
+        vertical-align:baseline !important;
+      }
 
       /* ─ Sig pads in print: hide canvas, show saved image ─ */
       .sig-pad-wrap { border:1px solid #aaa !important; background:#fff !important; border-radius:0 !important; overflow:visible !important; display:block !important; min-height:38pt !important; touch-action:auto !important; }
@@ -434,10 +450,10 @@
       #section-sig { display:none !important; }
       /* Pledge section: flex column for ordering */
       #section-pledge { display:flex !important; flex-direction:column !important; }
-      #section-pledge .section-title { order:0 !important; text-align:center !important; color:#000 !important; font-size:13pt !important; }
+      #section-pledge .section-title { order:0 !important; text-align:center !important; color:#000 !important; font-size:12.5pt !important; margin-bottom:3pt !important; }
       #section-pledge .pledge-box { order:1 !important; }
       /* pledge-zhi: left-aligned, 此致 on line 1, 農業部... on line 2 */
-      #section-pledge .pledge-zhi { order:2 !important; display:block !important; font-size:10pt !important; color:#000 !important; text-align:left !important; margin:4pt 0 2pt 0 !important; line-height:1.8 !important; }
+      #section-pledge .pledge-zhi { order:2 !important; display:block !important; font-size:10pt !important; color:#000 !important; text-align:left !important; margin:2pt 0 1pt 0 !important; line-height:1.45 !important; }
       /* Form-grid (name, address, tel, taxid, date) */
       #pledge-form-grid { order:3 !important; }
       /* Sig wrapper: right after form-grid */
@@ -445,19 +461,22 @@
       /* Hide 備註事項 */
       #section-pledge .form-field[style*="margin-top:16px"] { display:none !important; }
       /* pledge-box styling */
-      .pledge-box { background:#fff !important; border:1.5px solid #000 !important; color:#000 !important; padding:8pt 10pt !important; font-size:10pt !important; line-height:1.85 !important; border-radius:0 !important; margin-bottom:3pt !important; }
-      .pledge-box p { margin-bottom:3pt !important; text-align:justify !important; }
+      .pledge-box { background:#fff !important; border:1.5px solid #000 !important; color:#000 !important; padding:6pt 9pt !important; font-size:10pt !important; line-height:1.65 !important; border-radius:0 !important; margin-bottom:2pt !important; }
+      .pledge-box p { margin-bottom:2pt !important; text-align:justify !important; }
       /* First paragraph of pledge: left-aligned (no number, intro sentence) */
       .pledge-box p:first-child { text-align:left !important; }
       .pledge-box p[style] { color:#000 !important; }
       .pledge-box .form-input { display:inline !important; padding:0 3pt !important; border-top:none !important; border-left:none !important; border-right:none !important; border-bottom:1.5px solid #000 !important; border-radius:0 !important; background:transparent !important; font-size:10pt !important; color:#000 !important; min-width:80pt !important; }
+      .pledge-box .print-input-value { border-bottom:1.5px solid #000 !important; min-width:80pt !important; }
       /* Pledge info grid */
-      #pledge-form-grid { border-top:1px solid #000 !important; border-left:1px solid #000 !important; }
-      #section-pledge .form-field { border-right:1px solid #000 !important; border-bottom:1px solid #000 !important; padding:3pt 5pt !important; }
+      #pledge-form-grid { border-top:1px solid #000 !important; border-left:1px solid #000 !important; gap:0 !important; }
+      #section-pledge .form-field { border-right:1px solid #000 !important; border-bottom:1px solid #000 !important; padding:1.5pt 4pt !important; line-height:1.25 !important; min-height:0 !important; }
+      #section-pledge .form-label { line-height:1.25 !important; margin-right:2pt !important; }
       /* Pledge sig inline (inside grid, below name) */
-      #pledge-ff-sig-inline { grid-column:1/-1 !important; border-right:1px solid #000 !important; border-bottom:1px solid #000 !important; padding:3pt 5pt !important; }
-      #pledge-ff-sig-inline .form-label { display:block !important; font-size:9pt !important; margin-bottom:2pt !important; }
-      #pledge-ff-sig-inline .sig-blank-box { min-height:52pt !important; border:1.5px solid #000 !important; width:55% !important; display:block !important; margin:2pt 0 !important; }
+      #pledge-ff-sig-inline { grid-column:1/-1 !important; border-right:1px solid #000 !important; border-bottom:1px solid #000 !important; padding:1.5pt 4pt !important; margin-bottom:0 !important; }
+      #pledge-ff-sig-inline .form-label { display:block !important; font-size:9pt !important; margin-bottom:1pt !important; }
+      #pledge-ff-sig-inline .sig-pad-wrap { min-height:30pt !important; width:55% !important; display:block !important; margin:1pt 0 !important; }
+      #pledge-ff-sig-inline .sig-print-img { max-height:34pt !important; margin:1pt auto !important; }
       /* Pledge sig wrapper (old external wrapper) - hide since we moved it inline */
       #pledge-sig-wrapper { display:none !important; }
 
@@ -1154,6 +1173,28 @@
       if (el) el.addEventListener('input', () => { el.dataset.manualEdit = '1'; });
     });
 
+    function syncPrintInputValues() {
+      document.querySelectorAll('.form-input').forEach(input => {
+        if (!['text', 'tel'].includes(input.type)) return;
+        input.classList.add('print-mirror-source');
+        let mirror = input.nextElementSibling;
+        if (!mirror || !mirror.classList.contains('print-input-value')) {
+          mirror = document.createElement('span');
+          mirror.className = 'print-input-value';
+          mirror.setAttribute('aria-hidden', 'true');
+          input.insertAdjacentElement('afterend', mirror);
+        }
+        mirror.textContent = input.value || '\u00a0';
+      });
+    }
+
+    window.addEventListener('beforeprint', syncPrintInputValues);
+    document.addEventListener('input', e => {
+      if (e.target && e.target.classList && e.target.classList.contains('form-input')) {
+        syncPrintInputValues();
+      }
+    });
+
     // ---- Progress ----
     function updateProgress() {
       const fields = document.querySelectorAll('.form-input, .form-textarea');
@@ -1333,6 +1374,7 @@
       renderHazardTable();
       setTodayROC();
       loadForm();
+      syncPrintInputValues();
       updateProgress();
     });
   </script>
