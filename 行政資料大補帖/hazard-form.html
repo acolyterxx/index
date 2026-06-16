@@ -257,6 +257,10 @@
       display: table-cell;
       vertical-align: top;
     }
+    .hazard-mobile-toggle,
+    .hazard-mobile-detail {
+      display: none;
+    }
 
     /* ──── Pledge section title – centered on screen ──── */
     #section-pledge > .section-title { justify-content: center; text-align: center; }
@@ -287,7 +291,76 @@
     .date-input-sm, input[type="number"] {
       font-family: 'Times New Roman', Times, serif;
     }
+    #pledge-company,
+    #pledge-project {
+      text-align: center;
+    }
     .print-input-value { display: none; }
+
+    @media (max-width: 700px) {
+      .hazard-table {
+        table-layout: fixed;
+      }
+      .hazard-table thead th:nth-child(3),
+      .hazard-table thead th:nth-child(4),
+      .hazard-table .hazard-risk-cell,
+      .hazard-table .hazard-measures-cell {
+        display: none;
+      }
+      .hazard-table thead th:first-child {
+        width: 54px !important;
+      }
+      .hazard-table thead th:nth-child(2) {
+        width: auto !important;
+      }
+      .hazard-table .hazard-op-cell {
+        position: relative;
+        padding-right: 42px;
+      }
+      .hazard-mobile-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        width: 30px;
+        height: 30px;
+        transform: translateY(-50%);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: rgba(255,255,255,0.9);
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 1;
+        cursor: pointer;
+      }
+      .hazard-row.expanded .hazard-mobile-toggle {
+        transform: translateY(-50%) rotate(180deg);
+      }
+      .hazard-mobile-detail {
+        display: none;
+        margin-top: 10px;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: rgba(255,255,255,0.78);
+        color: var(--text-secondary);
+        line-height: 1.65;
+      }
+      .hazard-row.expanded .hazard-mobile-detail {
+        display: block;
+      }
+      .hazard-mobile-detail-title {
+        display: block;
+        margin: 8px 0 4px;
+        color: var(--text-primary);
+        font-weight: 700;
+      }
+      .hazard-mobile-detail-title:first-child {
+        margin-top: 0;
+      }
+    }
     @media print {
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box !important; }
       body { background:#fff !important; color:#000 !important; font-family:'標楷體','DFKai-SB',serif !important; font-size:11pt !important; margin:0 !important; }
@@ -476,6 +549,7 @@
       .hazard-table .row-num { background:#f5f5f5 !important; color:#000 !important; text-align:center !important; width:28pt !important; }
       .hazard-table .op-name { font-weight:bold !important; color:#000 !important; }
       .hazard-table tr { page-break-inside:avoid !important; }
+      .hazard-mobile-toggle, .hazard-mobile-detail { display:none !important; }
       /* Measure numbered rows: number cell fixed width, text cell wraps */
       .hazard-table td > div { display:table !important; width:100% !important; table-layout:fixed !important; }
       .hazard-table td > div > span:first-child { display:table-cell !important; white-space:nowrap !important; width:18pt !important; vertical-align:top !important; padding-right:2pt !important; font-size:8.5pt !important; }
@@ -512,6 +586,7 @@
         width:112pt !important;
         min-width:112pt !important;
         max-width:112pt !important;
+        text-align:center !important;
         white-space:normal !important;
         overflow-wrap:anywhere !important;
         word-break:break-word !important;
@@ -523,6 +598,7 @@
         width:138pt !important;
         min-width:138pt !important;
         max-width:138pt !important;
+        text-align:center !important;
         white-space:normal !important;
         overflow-wrap:anywhere !important;
         word-break:break-word !important;
@@ -1186,14 +1262,32 @@
         const measureHtml = row.measures.map((m, idx) =>
           `<div style="display:table; width:100%;"><span style="display:table-cell; white-space:nowrap; padding-right:4px;">${idx+1}.</span><span style="display:table-cell;">${m}</span></div>`
         ).join('');
-        return `<tr>
+        return `<tr class="hazard-row">
           <td class="row-num">${row.num}</td>
-          <td><span class="op-name">${row.op}</span>${row.sub ? `<br><small style="color:var(--text-muted)">${row.sub}</small>` : ''}</td>
-          <td>${row.risk}</td>
-          <td>${measureHtml}</td>
+          <td class="hazard-op-cell">
+            <span class="op-name">${row.op}</span>${row.sub ? `<br><small style="color:var(--text-muted)">${row.sub}</small>` : ''}
+            <button class="hazard-mobile-toggle" type="button" aria-label="展開${row.op}" aria-expanded="false">▾</button>
+            <div class="hazard-mobile-detail">
+              <span class="hazard-mobile-detail-title">潛在危害因素</span>
+              <div>${row.risk}</div>
+              <span class="hazard-mobile-detail-title">危害防止對策</span>
+              <div>${measureHtml}</div>
+            </div>
+          </td>
+          <td class="hazard-risk-cell">${row.risk}</td>
+          <td class="hazard-measures-cell">${measureHtml}</td>
         </tr>`;
       }).join('');
     }
+
+    document.addEventListener('click', event => {
+      const toggle = event.target.closest('.hazard-mobile-toggle');
+      if (!toggle) return;
+      const row = toggle.closest('.hazard-row');
+      if (!row) return;
+      const expanded = row.classList.toggle('expanded');
+      toggle.setAttribute('aria-expanded', String(expanded));
+    });
 
     // ---- Auto-sync to Pledge Section ----
     function syncPledge() {
@@ -1331,6 +1425,13 @@
       });
       localStorage.removeItem('hazard-form-data');
       HAZARD_SIGNATURE_KEYS.forEach(key => localStorage.removeItem('hazard_' + key));
+    }
+
+    function setDateNumericInputMode() {
+      document.querySelectorAll('.date-input-sm').forEach(input => {
+        input.setAttribute('inputmode', 'numeric');
+        input.setAttribute('pattern', '[0-9]*');
+      });
     }
 
     // ---- Progress ----
@@ -1510,6 +1611,7 @@
       renderCheckboxes('work-type-grid', WORK_TYPES);
       renderCheckboxes('hazard-grid', HAZARDS);
       renderHazardTable();
+      setDateNumericInputMode();
       resetNewFormState();
       setTodayROC();
       loadForm();
