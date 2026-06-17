@@ -72,14 +72,14 @@
         </a>
 
         <!-- Card 2: 巡檢表 -->
-        <a href="inspection-form.html" class="card card-inspect" id="card-inspect">
+        <a href="inspection-form.html?v=2" class="card card-inspect" id="card-inspect">
           <div class="card-glow"></div>
           <div class="card-badge">定期巡查</div>
           <div class="card-icon-wrap">
             <div class="card-icon">🔍</div>
           </div>
           <div class="card-body">
-            <h2 class="card-title">承攬作業<br>巡檢表</h2>
+            <h2 class="card-title">作業<br>巡檢表</h2>
             <p class="card-desc">定期現場巡視、安全設施查核、違規紀錄及改善追蹤，確保作業安全</p>
             <div class="card-meta">
               <span class="meta-item">📋 定期巡檢</span>
@@ -192,6 +192,11 @@
       localStorage.removeItem('admin-form-draft:' + id);
       localStorage.setItem('admin-form-drafts', JSON.stringify(drafts.filter(item => item.id !== id)));
       renderDraftList();
+      window.addEventListener('pageshow', renderDraftList);
+      window.addEventListener('focus', renderDraftList);
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) renderDraftList();
+      });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -214,7 +219,9 @@
         deleteDraft(button.dataset.draftId);
       });
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+        navigator.serviceWorker.register('./service-worker.js')
+          .then(registration => registration.update())
+          .catch(() => {});
       }
     });
   </script>

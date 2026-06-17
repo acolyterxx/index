@@ -3,122 +3,258 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-  <meta name="description" content="農業部畜產試驗所承攬作業巡檢表 - 線上填寫版">
-  <title>承攬作業巡檢表 | 農業部畜產試驗所</title>
+  <meta name="description" content="農業部畜產試驗所作業巡檢表 - 線上填寫版">
+  <title>作業巡檢表 | 農業部畜產試驗所</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
-    .inspect-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      margin-top: 12px;
+    .form-container { max-width: 1180px; }
+    .form-header { padding: 22px 24px; margin-bottom: 16px; }
+    .form-title-main { font-size: clamp(26px, 3.4vw, 42px); line-height: 1.15; }
+    .compact-section { padding: 18px; margin-bottom: 14px; }
+    .type-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 10px; }
+    .type-card {
+      min-height: 88px; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.035); color: var(--text-secondary); text-align: left; cursor: pointer;
+      transition: border-color .2s ease, background .2s ease, transform .2s ease; font-family: var(--font-sans);
     }
+    .type-card:hover, .type-card.active { border-color: #60a5fa; background: rgba(59,130,246,0.12); transform: translateY(-2px); }
+    .type-card strong { display: block; color: var(--text-primary); font-size: 14px; line-height: 1.35; margin-bottom: 6px; }
+    .type-card span { display: block; font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+    .form-note {
+      margin-top: 10px; padding: 10px 12px; border: 1px solid rgba(96,165,250,0.24); border-radius: var(--radius-sm);
+      color: var(--text-secondary); background: rgba(59,130,246,0.06); font-size: 12px; line-height: 1.55;
+    }
+    .basic-grid { display: grid; grid-template-columns: 1fr 1fr 1.25fr; gap: 14px; align-items: end; }
+    .calendar-panel { margin-top: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: rgba(255,255,255,0.025); }
+    .calendar-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px;
+      background: rgba(59,130,246,0.12); border-bottom: 1px solid var(--border);
+    }
+    .calendar-title { color: var(--text-primary); font-weight: 800; font-size: 15px; }
+    .calendar-legend { display: flex; gap: 12px; color: var(--text-muted); font-size: 12px; flex-wrap: wrap; }
+    .calendar-legend span { display: inline-flex; align-items: center; gap: 5px; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
+    .legend-work { background: rgba(74,222,128,0.9); }
+    .legend-selected { background: #60a5fa; }
+    .legend-locked { background: #f9a8d4; }
+    .month-calendar { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
+    .month-calendar th {
+      padding: 7px 4px; color: #93c5fd; background: rgba(255,255,255,0.04); border: 1px solid var(--border); font-weight: 700;
+    }
+    .month-calendar td { height: 48px; padding: 0; border: 1px solid var(--border); vertical-align: top; background: rgba(255,255,255,0.025); }
+    .calendar-day {
+      width: 100%; height: 48px; border: 0; background: transparent; color: var(--text-secondary); font: inherit;
+      cursor: pointer; display: grid; grid-template-rows: auto 1fr; align-items: start; justify-items: start;
+      padding: 5px 6px; text-align: left;
+    }
+    .calendar-day:hover:not(:disabled) { background: rgba(96,165,250,0.14); }
+    .calendar-day.selected { background: rgba(96,165,250,0.28); color: var(--text-primary); box-shadow: inset 0 0 0 2px rgba(96,165,250,0.85); }
+    .calendar-day.locked { background: rgba(249,168,212,0.16); color: #f9a8d4; cursor: not-allowed; }
+    .calendar-day.blank { cursor: default; background: rgba(255,255,255,0.01); }
+    .day-num { font-weight: 800; font-size: 13px; line-height: 1; }
+    .day-note { align-self: end; font-size: 10px; color: var(--text-muted); line-height: 1.2; margin-top: 4px; }
+    .calendar-day.locked .day-note { color: #f9a8d4; }
+    .selected-dates { padding: 9px 12px; border-top: 1px solid var(--border); color: var(--text-secondary); font-size: 12px; line-height: 1.5; min-height: 36px; }
+    .inspect-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; margin-top: 10px; }
     .inspect-table th {
-      background: rgba(59, 130, 246, 0.15);
-      color: #93c5fd;
-      font-weight: 600;
-      padding: 12px 14px;
-      text-align: center;
-      border: 1px solid var(--border);
-      font-size: 13px;
-      letter-spacing: 0.03em;
+      background: rgba(59,130,246,0.15); color: #93c5fd; font-weight: 700; padding: 8px 10px;
+      text-align: center; border: 1px solid var(--border); line-height: 1.35;
     }
-    .inspect-table td {
-      padding: 10px 14px;
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      vertical-align: middle;
-    }
-    .inspect-table tr:hover td {
-      background: rgba(59, 130, 246, 0.04);
-    }
-    .inspect-table .cat-header td {
-      background: rgba(45, 157, 90, 0.1);
-      color: var(--primary-light);
-      font-weight: 700;
-      font-size: 14px;
-    }
-    .radio-group {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-    }
+    .inspect-table td { padding: 7px 9px; border: 1px solid var(--border); color: var(--text-secondary); vertical-align: middle; line-height: 1.45; }
+    .inspect-table tr:hover td { background: rgba(59,130,246,0.04); }
+    .part-col { width: 18%; color: var(--text-primary); font-weight: 600; text-align: center; }
+    .content-col { width: 52%; }
+    .result-col { width: 30%; }
+    .improvement-box { min-height: 92px; resize: vertical; }
+    .radio-group { display: grid; grid-template-columns: repeat(4, max-content); gap: 8px; justify-content: center; align-items: center; }
     .radio-group label {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 13px;
-      color: var(--text-secondary);
-      cursor: pointer;
+      display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-secondary); cursor: pointer; white-space: nowrap;
     }
-    .radio-group input[type="radio"] {
-      accent-color: var(--primary-light);
-      cursor: pointer;
-    }
-    .result-ok { color: #4ade80; }
-    .result-fail { color: #f87171; }
-    .result-na { color: var(--text-muted); }
-    .issue-input {
-      width: 100%;
-      padding: 6px 10px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text-primary);
-      font-size: 12px;
-      font-family: var(--font-sans);
-      outline: none;
-      min-width: 100px;
-    }
-    .issue-input:focus {
-      border-color: var(--primary-light);
-      box-shadow: 0 0 0 2px rgba(45,157,90,0.1);
-    }
-    .stat-bar {
-      display: flex;
-      gap: 20px;
-      padding: 20px;
-      background: rgba(10, 30, 18, 0.6);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
-    .stat-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-    .stat-num {
-      font-size: 28px;
-      font-weight: 900;
-    }
-    .stat-label {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
+    .radio-group input[type="radio"] { accent-color: var(--primary-light); cursor: pointer; width: 13px; height: 13px; }
     .stat-ok { color: #4ade80; }
+    .stat-maintain { color: #fbbf24; }
     .stat-fail { color: #f87171; }
     .stat-na { color: #94a3b8; }
-    .overall-result {
-      padding: 20px;
-      border-radius: var(--radius-sm);
-      text-align: center;
-      font-size: 16px;
-      font-weight: 700;
-      margin-top: 16px;
+    .signature-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 10px; }
+    .signature-box { border: 1px solid var(--border); border-radius: var(--radius-sm); background: rgba(255,255,255,0.035); overflow: hidden; }
+    .signature-title { padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--text-primary); font-weight: 700; font-size: 13px; text-align: center; }
+    .signature-pad { display: block; width: 100%; height: 112px; background: rgba(255,255,255,0.96); touch-action: none; cursor: crosshair; }
+    .signature-actions { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 7px 9px; color: var(--text-muted); font-size: 11px; }
+    .signature-clear {
+      border: 1px solid var(--border); border-radius: 6px; background: rgba(255,255,255,0.04); color: var(--text-secondary);
+      padding: 4px 8px; font: inherit; cursor: pointer;
     }
-    .result-pass { background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; }
-    .result-fail-box { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.3); color: #f87171; }
-    @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+    .signature-clear:hover { border-color: #60a5fa; color: var(--text-primary); }
+    .print-sheet { display: none; }
+
+    @media (max-width: 960px) {
+      .type-grid, .signature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .basic-grid { grid-template-columns: 1fr; }
+      .radio-group { grid-template-columns: repeat(2, max-content); }
+    }
+    @media (max-width: 560px) {
+      .type-grid, .signature-grid { grid-template-columns: 1fr; }
+      .inspect-table { font-size: 11px; }
+      .radio-group { justify-content: start; }
+    }
+    @media print {
+      @page { size: A4 landscape; margin: 10mm 7mm; }
+      html, body {
+        width: 283mm; min-height: 0; margin: 0 !important; padding: 0 !important;
+        background: #fff !important; color: #000 !important; overflow: visible !important;
+      }
+      body > *:not(.print-sheet) { display: none !important; }
+      .print-sheet, .print-sheet * { visibility: visible !important; }
+      .print-sheet {
+        display: block !important; position: relative; width: 283mm; max-width: 283mm; min-height: 0;
+        margin: 0 !important; padding: 0; color: #000 !important; box-sizing: border-box;
+        font-family: "標楷體", "DFKai-SB", "BiauKai", serif; font-size: 14pt; font-weight: 400 !important;
+        overflow: visible !important; break-after: avoid; page-break-after: avoid;
+      }
+      .print-sheet * { box-sizing: border-box; font-family: "標楷體", "DFKai-SB", "BiauKai", serif; font-weight: 400 !important; }
+      .print-num { font-family: "Times New Roman", Times, serif !important; font-weight: 400 !important; }
+      .print-retention {
+        position: absolute; top: 0; right: 0; border: 1px solid #000; padding: 2px 7px;
+        font-size: 14pt; line-height: 1.2; background: #fff !important;
+      }
+      .print-title-org { text-align: center; font-size: 20pt; line-height: 1.35; padding-top: 1mm; }
+      .print-title-main { text-align: center; font-size: 20pt; line-height: 1.35; margin-top: 0; padding-bottom: 1mm; }
+      .print-meta {
+        display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin: 4px 0 4px; font-size: 14pt; line-height: 1.65;
+        width: 100%;
+      }
+      .print-meta div { text-align: left; padding: 1px 8px 2px 0; }
+      .print-meta div:nth-child(2) { text-align: center; padding-left: 4px; padding-right: 4px; }
+      .print-meta div:nth-child(3) { text-align: right; padding-left: 8px; padding-right: 0; }
+      .print-table {
+        width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12pt; line-height: 1.12; page-break-inside: auto;
+      }
+      .print-table thead { display: table-header-group; }
+      .print-table tfoot { display: table-footer-group; }
+      .print-table th, .print-table td {
+        border: 1px solid #000; padding: 2.2px 1.8px; color: #000 !important; background: #fff !important;
+        vertical-align: middle; text-align: center; overflow-wrap: anywhere;
+      }
+      .print-table thead th { background: #e6e6e6 !important; }
+      .print-table tr { break-inside: avoid; page-break-inside: avoid; }
+      .print-table .print-part { width: 24mm; }
+      .print-table .print-content { width: 44mm; text-align: left; }
+      .print-table .print-day { width: 6.45mm; font-size: 12pt; padding: 1px; }
+      .print-table .print-mark { font-size: 12pt; padding: 0; }
+      .print-electric-cart .print-meta { line-height: 1.3; transform: translateY(-0.8mm); padding-bottom: 0.8mm; }
+      .print-electric-cart .print-meta div { font-family: "標楷體", "DFKai-SB", "BiauKai", serif; padding-bottom: 1.2mm; }
+      .print-electric-cart .print-table tbody .print-part {
+        width: 39mm;
+        text-align: left !important;
+        white-space: normal;
+        word-break: keep-all;
+        overflow-wrap: anywhere;
+        padding-left: 4px;
+      }
+      .print-electric-cart .print-table thead .print-part { width: 39mm; text-align: center !important; }
+      .print-electric-cart .print-table .print-content { width: 27mm; text-align: center; }
+      .print-electric-cart .print-plate-value { font-family: "Times New Roman", Times, serif !important; }
+      .print-electric-cart .print-signatures { margin-top: 3px; }
+      .print-electric-cart .print-sign-box { height: 16mm; grid-template-rows: 4.8mm 1fr; }
+      .print-electric-cart .print-sign-title { font-size: 12pt; line-height: 4.8mm; }
+      .print-protective-equipment .print-table { font-size: 11pt; line-height: 1.08; }
+      .print-protective-equipment .print-table th,
+      .print-protective-equipment .print-table td { padding: 1.8px 1.5px; }
+      .print-protective-equipment .print-meta { line-height: 1.3; transform: translateY(-0.8mm); padding-bottom: 0.8mm; }
+      .print-protective-equipment .print-meta div { font-family: "標楷體", "DFKai-SB", "BiauKai", serif; padding-bottom: 1.2mm; }
+      .print-protective-equipment .print-table .print-part { width: 20mm; white-space: nowrap; word-break: keep-all; }
+      .print-protective-equipment .print-table thead th { text-align: center !important; }
+      .print-protective-equipment .print-table tbody .print-content {
+        width: 50mm;
+        text-align: left !important;
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: anywhere;
+      }
+      .print-protective-equipment .print-table thead .print-content { width: 50mm; text-align: center !important; }
+      .print-protective-equipment .print-content-inner {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.12;
+      }
+      .print-protective-equipment .print-table .print-day { width: 6.65mm; font-size: 11pt; padding: 0.6px; }
+      .print-protective-equipment .print-table .print-mark { font-size: 11pt; }
+      .print-protective-equipment .print-improve-row { height: 7mm; }
+      .print-protective-equipment .print-improve-cell { white-space: nowrap; overflow: hidden; text-overflow: clip; line-height: 1.2; padding: 2px 5px !important; }
+      .print-protective-equipment .print-note { font-size: 9.6pt; line-height: 1.02; padding: 1.5px 4px !important; }
+      .print-protective-equipment .print-note-title { margin-bottom: 0; line-height: 1.02; }
+      .print-protective-equipment .print-note-lines li { line-height: 1.02; }
+      .print-protective-equipment .print-sign-box { height: 17mm; grid-template-rows: 5mm 1fr; }
+      .print-protective-equipment .print-sign-title { font-size: 12pt; line-height: 5mm; }
+      .print-electric-machinery .print-meta { line-height: 1.3; transform: translateY(-0.8mm); padding-bottom: 0.8mm; margin-bottom: 4px; }
+      .print-electric-machinery .print-meta div { font-family: "標楷體", "DFKai-SB", "BiauKai", serif; padding-bottom: 1.2mm; }
+      .print-electric-machinery .print-table { border-collapse: collapse; border-spacing: 0; }
+      .print-electric-machinery .print-table th,
+      .print-electric-machinery .print-table td { border: 1px solid #000; }
+      .print-electric-machinery .print-table thead th {
+        text-align: center !important;
+        border: 1px solid #000;
+        border-bottom: 1px solid #000 !important;
+      }
+      .print-electric-machinery .print-table th:first-child,
+      .print-electric-machinery .print-table td:first-child { border-left: 1px solid #000; }
+      .print-electric-machinery .print-table tr:last-child td { border-bottom: 1px solid #000; }
+      .print-electric-machinery .print-table {
+        outline: none;
+      }
+      .print-electric-machinery .print-table-continued {
+        break-before: page;
+        page-break-before: always;
+        margin-top: 0;
+      }
+      .print-electric-machinery .print-part {
+        text-align: center !important;
+        vertical-align: middle !important;
+        display: table-cell;
+        line-height: 1.25;
+      }
+      .print-monthly-workplace .print-meta { line-height: 1.3; transform: translateY(-0.8mm); padding-bottom: 0.8mm; margin-bottom: 4px; }
+      .print-monthly-workplace .print-meta div { font-family: "標楷體", "DFKai-SB", "BiauKai", serif; padding-bottom: 1.2mm; }
+      .print-monthly-workplace .print-table thead th { text-align: center !important; }
+      .print-monthly-workplace .print-table .print-part { width: 28mm; white-space: normal; word-break: keep-all; }
+      .print-monthly-workplace .print-table .print-content {
+        width: 171mm;
+        text-align: left;
+        word-break: keep-all;
+        line-height: 1.15;
+      }
+      .print-monthly-workplace .print-content-inner {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .print-monthly-workplace .print-table .print-day { width: 6.9mm; font-size: 12pt; }
+      .print-improve-row { height: 12mm; }
+      .print-improve-cell { text-align: left !important; vertical-align: top !important; white-space: pre-wrap; line-height: 1.35; padding: 3px 5px !important; }
+      .print-note { text-align: left !important; vertical-align: top !important; font-size: 11pt; line-height: 1.32; padding: 3px 5px !important; overflow: hidden; }
+      .print-note-title { margin-bottom: 1px; }
+      .print-note-lines { margin: 0; padding-left: 0; list-style: none; }
+      .print-note-lines li { margin: 0; padding: 0; line-height: 1.32; }
+      .print-signatures {
+        display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 5px; border: 1px solid #000; border-right: 0; break-inside: avoid;
+        break-after: avoid;
+        page-break-after: avoid;
+      }
+      .print-sign-box { border-right: 1px solid #000; height: 20mm; display: grid; grid-template-rows: 5.5mm 1fr; }
+      .print-sign-title { text-align: center; border-bottom: 1px solid #000; font-size: 14pt; line-height: 5.5mm; }
+      .print-sign-body { display: flex; align-items: center; justify-content: center; }
+      .print-sign-body img { max-width: 95%; max-height: 13mm; }
+      .print-signatures + * { display: none !important; }
+    }
   </style>
 </head>
 <body class="form-page">
-
   <div class="bg-animation">
     <div class="orb orb-1" style="background:radial-gradient(circle,#1e40af,transparent)"></div>
     <div class="orb orb-2" style="background:radial-gradient(circle,#1a6b3c,transparent)"></div>
@@ -126,136 +262,88 @@
 
   <nav class="form-topbar">
     <a href="index.html" class="back-btn">← 返回首頁</a>
-    <span class="topbar-title">承攬作業巡檢表</span>
+    <span class="topbar-title">作業巡檢表</span>
     <div class="topbar-actions">
-      <button class="btn btn-ghost" onclick="clearForm()">🗑 清除</button>
-      <button class="btn btn-print" onclick="window.print()">🖨 列印</button>
-      <button class="btn btn-primary" onclick="saveForm()">💾 儲存</button>
+      <button class="btn btn-ghost" onclick="clearForm()">清除</button>
+      <button class="btn btn-print" onclick="printForm()">列印/匯出PDF檔</button>
+      <button class="btn btn-primary" onclick="saveForm()">暫存</button>
     </div>
   </nav>
 
   <div class="form-container">
-
     <div class="form-header" style="border-color: rgba(59,130,246,0.3);">
       <div class="form-org">農業部畜產試驗所</div>
-      <h1 class="form-title-main">承攬作業<span style="background:linear-gradient(135deg,#60a5fa,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">巡檢表</span></h1>
-      <p class="form-subtitle">承攬作業安全衛生現場巡視查核紀錄</p>
+      <h1 class="form-title-main"><span id="current-title">作業巡檢表</span></h1>
+      <p class="form-subtitle" id="current-subtitle">請選擇表單類型</p>
     </div>
 
     <div class="progress-bar">
       <div class="progress-fill" id="progress-fill" style="width: 0%; background: linear-gradient(90deg, #60a5fa, #3b82f6);"></div>
     </div>
 
-    <!-- 基本資料 -->
-    <div class="form-section">
+    <div class="form-section compact-section">
       <div class="section-title" style="color:#60a5fa;">
         <span class="section-num" style="background:#3b82f6;">1</span>
-        基本資料
+        選擇表單類型
       </div>
-      <div class="form-grid">
-        <div class="form-field">
-          <label class="form-label" for="insp-date">巡檢日期 <span class="required">*</span></label>
-          <div class="date-row">
-            <input class="date-input-sm" id="insp-year" type="text" placeholder="年" maxlength="3" oninput="updateProgress()">
-            <label>年</label>
-            <input class="date-input-sm" id="insp-month" type="text" placeholder="月" maxlength="2" style="width:55px" oninput="updateProgress()">
-            <label>月</label>
-            <input class="date-input-sm" id="insp-day" type="text" placeholder="日" maxlength="2" style="width:55px" oninput="updateProgress()">
-            <label>日</label>
-          </div>
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="insp-time">巡檢時間</label>
-          <input class="form-input" id="insp-time" type="text" placeholder="例如：09:00 ~ 10:00" oninput="updateProgress()">
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="insp-contractor">承攬商名稱 <span class="required">*</span></label>
-          <input class="form-input" id="insp-contractor" type="text" placeholder="請輸入承攬商名稱" oninput="updateProgress()">
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="insp-work">作業名稱 <span class="required">*</span></label>
-          <input class="form-input" id="insp-work" type="text" placeholder="請輸入作業項目" oninput="updateProgress()">
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="insp-location">作業地點 <span class="required">*</span></label>
-          <input class="form-input" id="insp-location" type="text" placeholder="請輸入作業地點" oninput="updateProgress()">
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="insp-workers">在場作業人數</label>
-          <input class="form-input" id="insp-workers" type="number" placeholder="人數" min="0" oninput="updateProgress()">
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="insp-site-person">現場負責人</label>
-          <input class="form-input" id="insp-site-person" type="text" placeholder="現場負責人姓名" oninput="updateProgress()">
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="insp-inspector">巡檢人員 <span class="required">*</span></label>
-          <input class="form-input" id="insp-inspector" type="text" placeholder="巡檢人員姓名" oninput="updateProgress()">
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="insp-weather">當日天氣</label>
-          <select class="form-select" id="insp-weather" oninput="updateProgress()">
-            <option value="">-- 請選擇 --</option>
-            <option>☀️ 晴天</option>
-            <option>⛅ 多雲</option>
-            <option>🌧️ 雨天</option>
-            <option>⛈️ 雷雨</option>
-            <option>🌬️ 強風</option>
-          </select>
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="insp-temp">氣溫（℃）</label>
-          <input class="form-input" id="insp-temp" type="text" placeholder="例如：28℃" oninput="updateProgress()">
-        </div>
-      </div>
+      <div class="type-grid" id="type-grid"></div>
+      <div class="form-note" id="form-note"></div>
     </div>
 
-    <!-- 巡檢統計 -->
-    <div id="stats-container" class="form-section" style="display:none; border-color: rgba(59,130,246,0.3);">
-      <div class="section-title" style="color:#60a5fa;">
-        <span class="section-num" style="background:#3b82f6;">📊</span>
-        巡檢統計
-      </div>
-      <div class="stat-bar">
-        <div class="stat-item">
-          <span class="stat-num" id="stat-total" style="color:var(--text-primary)">0</span>
-          <span class="stat-label">總項目</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-num stat-ok" id="stat-ok">0</span>
-          <span class="stat-label">✅ 符合</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-num stat-fail" id="stat-fail">0</span>
-          <span class="stat-label">❌ 不符合</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-num stat-na" id="stat-na">0</span>
-          <span class="stat-label">➖ 不適用</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-num" style="color:#fbbf24" id="stat-pct">0%</span>
-          <span class="stat-label">符合率</span>
-        </div>
-      </div>
-      <div class="overall-result" id="overall-result"></div>
-    </div>
-
-    <!-- 巡檢查核表 -->
-    <div class="form-section">
+    <div class="form-section compact-section">
       <div class="section-title" style="color:#60a5fa;">
         <span class="section-num" style="background:#3b82f6;">2</span>
-        安全衛生查核項目
-        <span style="font-size:12px; font-weight:400; color:var(--text-muted); margin-left:8px;">（✅=符合　❌=不符合　➖=不適用）</span>
+        基本資料與月份
+      </div>
+      <div class="basic-grid">
+        <div class="form-field">
+          <label class="form-label" for="unit">單位 <span class="required">*</span></label>
+          <input class="form-input" id="unit" type="text" value="畜產加工組" oninput="updateProgress()">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="place" id="place-label">作業場所 <span class="required">*</span></label>
+          <input class="form-input" id="place" type="text" value="加工館" oninput="updateProgress()">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="roc-year">檢查月份 <span class="required">*</span></label>
+          <div class="date-row">
+            <input class="date-input-sm" id="roc-year" type="text" maxlength="3" oninput="handleMonthInput()">
+            <label>年</label>
+            <input class="date-input-sm" id="month" type="text" maxlength="2" style="width:55px" oninput="handleMonthInput()">
+            <label>月</label>
+          </div>
+        </div>
+      </div>
+      <div class="calendar-panel">
+        <div class="calendar-head">
+          <div class="calendar-title" id="calendar-title">月份行事曆</div>
+          <div class="calendar-legend">
+            <span><i class="legend-dot legend-work"></i>可點選</span>
+            <span><i class="legend-dot legend-selected"></i>已選</span>
+            <span><i class="legend-dot legend-locked"></i>週末 / 國定假日</span>
+          </div>
+        </div>
+        <table class="month-calendar" aria-label="月份行事曆">
+          <thead><tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr></thead>
+          <tbody id="calendar-body"></tbody>
+        </table>
+        <div class="selected-dates" id="selected-dates">尚未選擇巡檢日期</div>
+      </div>
+    </div>
+
+    <div class="form-section compact-section">
+      <div class="section-title" style="color:#60a5fa;">
+        <span class="section-num" style="background:#3b82f6;">3</span>
+        檢點項目
+        <span style="font-size:12px; font-weight:400; color:var(--text-muted); margin-left:8px;">正常(ˇ)　需保養(Δ)　異常/改善(×)　無此項(–)</span>
       </div>
       <div style="overflow-x:auto; -webkit-overflow-scrolling:touch;">
         <table class="inspect-table">
           <thead>
             <tr>
-              <th style="width:40px">項次</th>
-              <th style="min-width:220px">查核項目</th>
-              <th style="width:150px">查核結果</th>
-              <th style="min-width:140px">缺失描述 / 改善追蹤</th>
+              <th class="part-col" id="part-heading">檢點部分</th>
+              <th class="content-col">檢點內容 / 檢查方法</th>
+              <th class="result-col">檢查結果</th>
             </tr>
           </thead>
           <tbody id="inspect-tbody"></tbody>
@@ -263,319 +351,756 @@
       </div>
     </div>
 
-    <!-- 缺失改善追蹤 -->
-    <div class="form-section">
-      <div class="section-title" style="color:#60a5fa;">
-        <span class="section-num" style="background:#3b82f6;">3</span>
-        缺失改善追蹤
-      </div>
-      <div class="form-field">
-        <label class="form-label" for="issues-summary">本次巡檢發現之主要缺失</label>
-        <textarea class="form-textarea" id="issues-summary" rows="4" placeholder="請描述本次巡檢發現之主要缺失及問題..." oninput="updateProgress()"></textarea>
-      </div>
-      <div class="form-grid">
-        <div class="form-field">
-          <label class="form-label" for="corrective-actions">要求改善事項</label>
-          <textarea class="form-textarea" id="corrective-actions" rows="4" placeholder="請列出要求承攬商改善之項目..." oninput="updateProgress()"></textarea>
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="improvement-deadline">改善期限</label>
-          <div class="date-row" style="margin-bottom:8px;">
-            <input class="date-input-sm" id="improve-year" type="text" placeholder="年" maxlength="3">
-            <label>年</label>
-            <input class="date-input-sm" id="improve-month" type="text" placeholder="月" maxlength="2" style="width:55px">
-            <label>月</label>
-            <input class="date-input-sm" id="improve-day" type="text" placeholder="日" maxlength="2" style="width:55px">
-            <label>日前</label>
-          </div>
-          <label class="form-label" for="follow-up-result" style="margin-top:12px;">改善結果確認</label>
-          <textarea class="form-textarea" id="follow-up-result" rows="3" placeholder="後續確認改善情形..."></textarea>
-        </div>
-      </div>
-    </div>
-
-    <!-- 停工命令 -->
-    <div class="form-section" style="border-color: rgba(239,68,68,0.2);">
-      <div class="section-title" style="color:#f87171;">
-        <span class="section-num" style="background:#ef4444;">⚠</span>
-        停工記錄
-      </div>
-      <div class="form-field" style="margin-bottom:16px;">
-        <label class="form-label">本次巡檢是否有要求停工？</label>
-        <div style="display:flex;gap:16px;margin-top:8px;">
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--text-secondary);">
-            <input type="radio" name="stop-work" id="stop-yes" value="yes" style="accent-color:#f87171;" onchange="toggleStopWork(true)"> 是，已要求停工
-          </label>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--text-secondary);">
-            <input type="radio" name="stop-work" id="stop-no" value="no" style="accent-color:#4ade80;" onchange="toggleStopWork(false)"> 否
-          </label>
-        </div>
-      </div>
-      <div id="stop-work-detail" style="display:none;">
-        <div class="form-field">
-          <label class="form-label" for="stop-reason">停工原因</label>
-          <textarea class="form-textarea" id="stop-reason" rows="3" placeholder="請說明要求停工之原因..."></textarea>
-        </div>
-        <div class="form-field" style="margin-top:12px;">
-          <label class="form-label" for="resume-condition">復工條件</label>
-          <textarea class="form-textarea" id="resume-condition" rows="2" placeholder="請說明復工所需滿足之條件..."></textarea>
-        </div>
-      </div>
-    </div>
-
-    <!-- 巡檢人員簽章 -->
-    <div class="form-section">
+    <div class="form-section compact-section">
       <div class="section-title" style="color:#60a5fa;">
         <span class="section-num" style="background:#3b82f6;">4</span>
-        簽章欄
+        建議改善事項
       </div>
-      <div class="sig-grid" style="grid-template-columns: repeat(3, 1fr);">
-        <div class="sig-box">
-          <div class="sig-title">巡檢人員<br>簽章</div>
-          <div class="sig-area" style="height:70px;"></div>
-          <div class="sig-hint">簽名</div>
-        </div>
-        <div class="sig-box">
-          <div class="sig-title">單位主管<br>簽章</div>
-          <div class="sig-area" style="height:70px;"></div>
-          <div class="sig-hint">簽名／蓋章</div>
-        </div>
-        <div class="sig-box">
-          <div class="sig-title">承攬商現場負責人<br>簽章（確認知悉）</div>
-          <div class="sig-area" style="height:70px;"></div>
-          <div class="sig-hint">簽名</div>
-        </div>
-      </div>
-      <div class="form-field" style="margin-top:16px;">
-        <label class="form-label" for="insp-remarks">其他備注</label>
-        <textarea class="form-textarea" id="insp-remarks" rows="3" placeholder="其他備注事項..."></textarea>
+      <div class="form-field">
+        <label class="form-label" for="improvement-summary">本月檢點建議改善事項</label>
+        <textarea class="form-textarea improvement-box" id="improvement-summary" rows="4" placeholder="請彙整本月檢點需改善、保養或送修事項..." oninput="updateProgress()"></textarea>
       </div>
     </div>
 
-    <!-- Submit -->
+    <div class="form-section compact-section">
+      <div class="section-title" style="color:#60a5fa;">
+        <span class="section-num" style="background:#3b82f6;">5</span>
+        簽核
+      </div>
+      <div class="signature-grid" id="signature-grid"></div>
+    </div>
+
     <div style="display:flex;gap:16px;justify-content:flex-end;margin-top:8px;">
-      <button class="btn btn-ghost" onclick="clearForm()">🗑 清除表單</button>
-      <button class="btn btn-print" onclick="window.print()">🖨 列印 / 匯出PDF</button>
-      <button class="btn btn-primary" onclick="saveForm()">💾 儲存資料</button>
+      <button class="btn btn-ghost" onclick="clearForm()">清除表單</button>
+      <button class="btn btn-print" onclick="printForm()">列印/匯出PDF檔</button>
+      <button class="btn btn-primary" onclick="saveForm()">暫存</button>
     </div>
-
   </div>
 
+  <div class="print-sheet" id="print-sheet"></div>
+
   <footer class="site-footer">
-    <p>農業部畜產試驗所 &copy; 中華民國114年　｜　承攬作業巡檢表</p>
+    <p>農業部畜產試驗所 &copy; 中華民國114年　｜　作業巡檢表</p>
   </footer>
 
   <script>
-    const INSPECT_ITEMS = [
-      { cat: '一、個人防護設備', items: [
-        '作業人員佩戴安全帽',
-        '作業人員穿著安全鞋',
-        '作業人員穿著適當工作服',
-        '高架作業人員佩掛安全帶及安全索',
-        '電氣作業人員穿著絕緣防護具',
-        '其他必要防護具（護目鏡、耳塞、口罩等）依規定配戴',
-      ]},
-      { cat: '二、作業環境安全', items: [
-        '作業區域設置適當圍柵或警告標示',
-        '通道及緊急出口保持暢通',
-        '作業現場照明充足',
-        '地面乾燥、無積水或油污滑倒危害',
-        '有害物品或廢棄物妥善存放',
-        '作業場所通風良好',
-      ]},
-      { cat: '三、高架作業安全', items: [
-        '施工架搭設符合規定（護欄高度≥90公分）',
-        '施工架穩固，無搖晃鬆動現象',
-        '梯子設置安全，角度適當，固定良好',
-        '開口部分設置護蓋或安全網',
-        '2公尺以上作業確實佩掛安全帶',
-        '施工架腳底部設置防滑及固定措施',
-      ]},
-      { cat: '四、電氣作業安全', items: [
-        '臨時用電裝設漏電斷路器',
-        '電線架設離地，避免被車輛輾壓',
-        '電氣設備外殼接地',
-        '帶電作業有明確標示及隔離',
-        '操作人員具有相關資格或執照',
-        '電氣設備外觀良好，無破損或異常',
-      ]},
-      { cat: '五、動火作業安全', items: [
-        '動火作業已取得施工許可',
-        '作業現場備有滅火設備',
-        '動火作業區域清除易燃物品',
-        '使用遮火圍幕或防火毯',
-        '鋼瓶固定良好，直立存放',
-        '作業結束後確認無遺留火種',
-      ]},
-      { cat: '六、局限空間作業', items: [
-        '進入局限空間前已實施氣體測定',
-        '作業現場備有機械通風設備',
-        '作業人員配戴適當呼吸防護具',
-        '設置監視人員在外監看',
-        '準備救援器材（防護索、呼吸器等）',
-        '每2小時重新確認氣體濃度',
-      ]},
-      { cat: '七、吊裝作業安全', items: [
-        '吊車/吊機具有合格檢驗證',
-        '操作人員具備合格資格',
-        '吊掛物下方嚴禁人員停留',
-        '吊裝前確認捆綁索具狀況',
-        '高壓線附近設置安全距離管制',
-        '吊裝指揮人員明確且通訊順暢',
-      ]},
-      { cat: '八、一般作業管理', items: [
-        '作業人員均已接受危害告知教育訓練',
-        '承攬作業範圍與合約一致',
-        '作業時間符合規定，無延誤或提前',
-        '廢棄物依規定分類及暫存',
-        '承攬商自行配備急救器材',
-        '緊急聯絡機制建立，通訊暢通',
-        '作業記錄填寫完整',
-      ]},
+    const FORM_TYPES = [
+      {
+        id: 'electric-cart',
+        title: '電氣機車作業檢點表',
+        printTitle: '電氣機車作業檢點表（每日作業前）',
+        subtitle: '每日作業前',
+        metaLabel: '車牌號碼',
+        metaDefault: 'QAS-3381',
+        ruleArticle: '第50條',
+        partHeading: '檢點部分',
+        items: [
+          ['前後輪胎壓檢查', '操作'],
+          ['方向燈、前後煞車狀況檢查', '操作'],
+          ['連結裝置有無異常', '操作'],
+          ['制動器有無異常', '操作'],
+          ['蓄電池有無異常', '操作'],
+          ['配線有無異常', '操作'],
+          ['控制裝置之有無異常', '操作'],
+          ['其他：', '操作 / 目視']
+        ]
+      },
+      {
+        id: 'protective-equipment',
+        title: '防護用具作業檢點表',
+        printTitle: '防護用具作業檢點表（每日作業前）',
+        subtitle: '每日作業前',
+        metaLabel: '作業場所',
+        metaDefault: '加工館',
+        ruleArticle: '第77條',
+        partHeading: '檢點部分',
+        items: [
+          ['安全帽', '帽殼、金屬配件及衝擊吸收墊片是否無污垢、裂痕及損傷'],
+          ['耳栓／耳罩', '是否具適當強度及彈性'],
+          ['耳栓／耳罩', '使用時是否無不適感覺'],
+          ['防護眼鏡及面具', '透鏡是否無污垢及傷痕'],
+          ['防護眼鏡及面具', '鏡框螺絲是否無生鏽、鬆懈及龜裂'],
+          ['防毒口罩', '濾材是否乾燥，無污穢、破損及變形'],
+          ['防毒口罩', '繫帶是否有彈性、長度適當、無破損'],
+          ['防毒口罩', '排氣閥是否無龜裂及附著異物'],
+          ['防毒口罩', '是否定期更換保持其可用性'],
+          ['防護手套', '手套是否無破損、具有彈性、易穿脫、不易滑'],
+          ['防護衣', '防護衣是否無破損、污穢'],
+          ['防護衣', '接縫部份是否耐拉扯'],
+          ['防護衣', '穿著後是否容易活動'],
+          ['急救箱', '藥品是否未過期'],
+          ['其他：', '其他：']
+        ]
+      },
+      {
+        id: 'electric-machinery',
+        title: '電氣機械器具作業檢點表',
+        printTitle: '電氣機械器具作業檢點表（每日作業前）',
+        subtitle: '每日作業前',
+        metaLabel: '作業場所',
+        metaDefault: '加工館',
+        ruleArticle: '第77條',
+        partHeading: '檢點部分',
+        items: [
+          ['電器安全', '水源、電源供應是否正常'],
+          ['電器安全', '電氣設備運轉是否正常'],
+          ['電器安全', '電氣設備是否依標準操作流程運作'],
+          ['電器安全', '電氣設備是否依使用程序關閉'],
+          ['電器安全', '電源插座是否完整無破損'],
+          ['電器安全', '電源插座是否標示電壓（標示電壓為110V或220V，220V需以紅字標示）'],
+          ['電器安全', '電線絕緣包覆是否完整無裸露情形'],
+          ['電器安全', '配電盤是否有過負載斷路器或接地裝置'],
+          ['電器安全', '配電箱是否設有內盤，無裸露端子'],
+          ['電器安全', '電氣設備電線及插頭是否完整'],
+          ['電器安全', '電氣設備使用時，電氣設備插頭與電源插座是否固定緊密'],
+          ['電器安全', '電線相接處是否銜接良好、包覆緊密'],
+          ['電器安全', '電氣設備是否設有漏電斷路器或接地（如製冰機、超音波洗滌器、冰箱、飲水機、冷氣機或220V之儀器設備）'],
+          ['電器安全', '水源及電源插座是否設有安全距離或擋板'],
+          ['電器安全', '穩壓設備是否運作正常'],
+          ['電器安全', '是否依規定不可使用延長線'],
+          ['機械防護', '護罩、護欄或擋板是否定位（如：轉動皮帶之護欄不可移走）'],
+          ['機械防護', '安全連鎖裝置功能是否正常'],
+          ['機械防護', '自動停止裝置是否正常'],
+          ['其他：', '其他：']
+        ]
+      },
+      {
+        id: 'monthly-workplace',
+        title: '一般工作場所每月定期檢查表',
+        printTitle: '一般工作場所每月定期檢查表',
+        subtitle: '每月定期檢查',
+        metaLabel: '作業場所',
+        metaDefault: '加工館',
+        ruleArticle: '',
+        partHeading: '檢查項目',
+        items: [
+          ['空間', '堆置、懸掛物件是否有傾倒掉落之虞（目視）'],
+          ['平面圖', '是否繪製工作場所平面圖並張貼告示於明顯處，空間如有變更是否已完成更新（目視）'],
+          ['照明', '照明是否適當（一般辦公場所應介於300-800米燭光）（量測）'],
+          ['通道', '不得堆置物品影響通行、逃生出口不得上鎖（目視）'],
+          ['地面', '避免積水、油漬造成溼滑、地面不平、階梯級距過高等造成人員跌倒之危險（目視）'],
+          ['用電', '延長線使用不得超過負載，電器電線是否妥善固定，電線不得壓迫、橫越尖銳面導致破損（目視）'],
+          ['用電', '潮濕場所用電是否已裝設漏電斷路器（目視）'],
+          ['熱源', '發熱、產熱設備是否於安全設計下使用，避免熱源接近易燃物質（目視）'],
+          ['其他：', '操作 / 目視']
+        ]
+      }
     ];
 
-    function renderInspectTable() {
-      const tbody = document.getElementById('inspect-tbody');
-      let html = '';
-      let itemIndex = 0;
+    const SIGNERS = ['檢點人員', '場所負責人', '單位主管', '秘書室（保管）'];
+    const RESULT_MARKS = { ok: 'ˇ', maintain: 'Δ', fail: '×', na: '–' };
+    const HOLIDAY_NAMES_2026 = {
+      '2026-01-01': '元旦',
+      '2026-02-16': '春節',
+      '2026-02-17': '春節',
+      '2026-02-18': '春節',
+      '2026-02-19': '春節',
+      '2026-02-20': '春節',
+      '2026-02-27': '和平紀念日補假',
+      '2026-04-03': '兒童節補假',
+      '2026-04-06': '清明節補假',
+      '2026-05-01': '勞動節',
+      '2026-06-19': '端午節',
+      '2026-09-25': '中秋節',
+      '2026-09-28': '教師節',
+      '2026-10-09': '國慶日補假',
+      '2026-10-26': '光復節補假',
+      '2026-12-25': '行憲紀念日'
+    };
 
-      INSPECT_ITEMS.forEach(cat => {
-        html += `<tr class="cat-header">
-          <td colspan="4">${cat.cat}</td>
-        </tr>`;
-        cat.items.forEach(item => {
-          const idx = itemIndex++;
-          html += `<tr>
-            <td style="text-align:center; color:var(--text-muted); font-size:12px;">${idx + 1}</td>
-            <td>${item}</td>
-            <td>
-              <div class="radio-group">
-                <label><input type="radio" name="insp-${idx}" value="ok" onchange="updateStats(); updateProgress()"> <span class="result-ok">✅</span></label>
-                <label><input type="radio" name="insp-${idx}" value="fail" onchange="updateStats(); updateProgress()"> <span class="result-fail">❌</span></label>
-                <label><input type="radio" name="insp-${idx}" value="na" onchange="updateStats(); updateProgress()"> <span class="result-na">➖</span></label>
-              </div>
-            </td>
-            <td><input class="issue-input" type="text" id="issue-${idx}" placeholder="缺失描述..." onchange="updateProgress()"></td>
-          </tr>`;
-        });
-      });
+    let currentTypeId = FORM_TYPES[0].id;
+    let selectedInspectionDates = new Set();
+    const signaturePads = new Map();
+    const DRAFT_INDEX_KEY = 'admin-form-drafts';
+    const DRAFT_RECORD_PREFIX = 'admin-form-draft:';
+    let currentDraftId = new URLSearchParams(window.location.search).get('draft') || '';
 
-      tbody.innerHTML = html;
+    function escapeHtml(value) {
+      return String(value || '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[char]));
     }
 
-    function updateStats() {
-      const totalItems = document.querySelectorAll('[name^="insp-"]').length / 3;
-      let ok = 0, fail = 0, na = 0;
+    function printText(value) {
+      return escapeHtml(value).replace(/(\d+)/g, '<span class="print-num">$1</span>');
+    }
 
-      for (let i = 0; i < totalItems; i++) {
-        const checked = document.querySelector(`[name="insp-${i}"]:checked`);
-        if (checked) {
-          if (checked.value === 'ok') ok++;
-          else if (checked.value === 'fail') fail++;
-          else if (checked.value === 'na') na++;
+    function printTextWithBreaks(value) {
+      return printText(value).replace(/&lt;br&gt;/g, '<br>');
+    }
+
+    function printPlateValue(value) {
+      return escapeHtml(value).replace(/([A-Za-z0-9-]+)/g, '<span class="print-plate-value">$1</span>');
+    }
+
+    function currentForm() {
+      return FORM_TYPES.find(item => item.id === currentTypeId) || FORM_TYPES[0];
+    }
+
+    function storageKey() {
+      return `inspection-form-data:${currentTypeId}`;
+    }
+
+    function getDraftIndex() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(DRAFT_INDEX_KEY) || '[]');
+        return Array.isArray(saved) ? saved : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function setDraftIndex(items) {
+      localStorage.setItem(DRAFT_INDEX_KEY, JSON.stringify(items));
+    }
+
+    function readCurrentDraftData() {
+      if (!currentDraftId) return null;
+      const recordRaw = localStorage.getItem(DRAFT_RECORD_PREFIX + currentDraftId);
+      if (!recordRaw) return null;
+      try {
+        const record = JSON.parse(recordRaw);
+        return record.data || null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function renderTypeCards() {
+      const grid = document.getElementById('type-grid');
+      grid.innerHTML = FORM_TYPES.map(type => `
+        <button type="button" class="type-card ${type.id === currentTypeId ? 'active' : ''}" onclick="switchType('${type.id}')">
+          <strong>${escapeHtml(type.title)}</strong>
+          <span>${escapeHtml(type.subtitle)}</span>
+        </button>
+      `).join('');
+    }
+
+    function renderInspectTable() {
+      const form = currentForm();
+      document.title = `${form.title} | 農業部畜產試驗所`;
+      document.getElementById('current-title').textContent = form.title;
+      document.getElementById('current-subtitle').textContent = form.subtitle;
+      document.getElementById('form-note').textContent = `${sourceNote(form)} 本表為建議檢點項目，使用單位得依實際情況進行增修訂。`;
+      document.getElementById('part-heading').textContent = form.partHeading || '檢點部分';
+      document.getElementById('place-label').innerHTML = `${form.metaLabel} <span class="required">*</span>`;
+      const place = document.getElementById('place');
+      if (!place.value || FORM_TYPES.some(item => item.metaDefault === place.value)) place.value = form.metaDefault;
+
+      const tbody = document.getElementById('inspect-tbody');
+      tbody.innerHTML = form.items.map((item, idx) => `
+        <tr>
+          <td class="part-col">${escapeHtml(item[0])}</td>
+          <td class="content-col">${escapeHtml(item[1])}</td>
+          <td class="result-col">
+            <div class="radio-group">
+              <label><input type="radio" name="result-${idx}" value="ok" onchange="onFormChange()"> <span class="stat-ok">ˇ 正常</span></label>
+              <label><input type="radio" name="result-${idx}" value="maintain" onchange="onFormChange()"> <span class="stat-maintain">Δ 保養</span></label>
+              <label><input type="radio" name="result-${idx}" value="fail" onchange="onFormChange()"> <span class="stat-fail">× 異常</span></label>
+              <label><input type="radio" name="result-${idx}" value="na" onchange="onFormChange()"> <span class="stat-na">– 無此項</span></label>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+      buildPrintSheet();
+    }
+
+    function sourceNote(form) {
+      if (!form.ruleArticle) return '檢查結果欄：正常(ˇ)，有必要加以特別保養(Δ)，異常須送修或改善(×)，無此項(–)。';
+      return `依「職業安全衛生管理辦法」${form.ruleArticle}規定，每日作業前實施作業檢點。`;
+    }
+
+    function printInstructions(form) {
+      return [
+        form.ruleArticle ? `依「職業安全衛生管理辦法」${form.ruleArticle}規定，每日作業前實施作業檢點。` : '每月定期實施檢查。',
+        '檢查結果欄︰正常(ˇ)，有必要加以特別保養(Δ)，異常須送修或改善(×)，無此項(–)。',
+        '本表為建議檢點項目，使用單位得依實際情況進行增/修訂。'
+      ];
+    }
+
+    function pad2(value) {
+      return String(value).padStart(2, '0');
+    }
+
+    function selectedYearMonth() {
+      const rocYear = Number(document.getElementById('roc-year').value);
+      const month = Number(document.getElementById('month').value);
+      const year = rocYear ? rocYear + 1911 : new Date().getFullYear();
+      return { rocYear: year - 1911, year, month: month >= 1 && month <= 12 ? month : new Date().getMonth() + 1 };
+    }
+
+    function dateKey(year, month, day) {
+      return `${year}-${pad2(month)}-${pad2(day)}`;
+    }
+
+    function holidayName(key) {
+      return HOLIDAY_NAMES_2026[key] || '';
+    }
+
+    function isLockedDate(date, key) {
+      const day = date.getDay();
+      return day === 0 || day === 6 || Boolean(holidayName(key));
+    }
+
+    function renderCalendar() {
+      const { rocYear, year, month } = selectedYearMonth();
+      const body = document.getElementById('calendar-body');
+      const title = document.getElementById('calendar-title');
+      const first = new Date(year, month - 1, 1);
+      const daysInMonth = new Date(year, month, 0).getDate();
+      const startDay = first.getDay();
+      const validPrefix = `${year}-${pad2(month)}-`;
+      selectedInspectionDates = new Set([...selectedInspectionDates].filter(key => key.startsWith(validPrefix)));
+
+      title.textContent = `民國 ${rocYear} 年 ${month} 月行事曆`;
+      let html = '';
+      let day = 1;
+      for (let week = 0; week < 6; week++) {
+        html += '<tr>';
+        for (let dow = 0; dow < 7; dow++) {
+          if ((week === 0 && dow < startDay) || day > daysInMonth) {
+            html += '<td><button type="button" class="calendar-day blank" tabindex="-1" disabled></button></td>';
+            continue;
+          }
+          const key = dateKey(year, month, day);
+          const date = new Date(year, month - 1, day);
+          const locked = isLockedDate(date, key);
+          const selected = selectedInspectionDates.has(key);
+          const note = locked ? (holidayName(key) || '週末') : '工作日';
+          html += `<td>
+            <button type="button" class="calendar-day ${locked ? 'locked' : ''} ${selected ? 'selected' : ''}" data-date="${key}" ${locked ? 'disabled' : ''} onclick="toggleInspectionDate('${key}')">
+              <span class="day-num">${day}</span>
+              <span class="day-note">${escapeHtml(note)}</span>
+            </button>
+          </td>`;
+          day++;
         }
+        html += '</tr>';
+        if (day > daysInMonth) break;
       }
+      body.innerHTML = html;
+      renderSelectedDates();
+      buildPrintSheet();
+    }
 
-      const answered = ok + fail + na;
-      const pct = (ok + na > 0 && answered > 0) ? Math.round((ok / (ok + fail)) * 100) : 0;
+    function renderSelectedDates() {
+      const target = document.getElementById('selected-dates');
+      const dates = [...selectedInspectionDates].sort();
+      target.textContent = dates.length ? `已選巡檢日期：${dates.map(key => key.slice(5).replace('-', '/')).join('、')}` : '尚未選擇巡檢日期';
+    }
 
-      document.getElementById('stat-total').textContent = Math.round(totalItems);
-      document.getElementById('stat-ok').textContent = ok;
-      document.getElementById('stat-fail').textContent = fail;
-      document.getElementById('stat-na').textContent = na;
-      document.getElementById('stat-pct').textContent = fail === 0 && ok > 0 ? '100%' : (ok + fail > 0 ? pct + '%' : '-');
+    function toggleInspectionDate(key) {
+      if (selectedInspectionDates.has(key)) selectedInspectionDates.delete(key);
+      else selectedInspectionDates.add(key);
+      renderCalendar();
+      onFormChange();
+    }
 
-      const container = document.getElementById('stats-container');
-      const overallEl = document.getElementById('overall-result');
-      container.style.display = 'block';
+    function handleMonthInput() {
+      renderCalendar();
+      onFormChange();
+    }
 
-      if (answered === 0) {
-        overallEl.className = 'overall-result';
-        overallEl.textContent = '';
-      } else if (fail === 0) {
-        overallEl.className = 'overall-result result-pass';
-        overallEl.textContent = '✅ 本次巡檢結果：全部符合，無缺失';
-      } else {
-        overallEl.className = 'overall-result result-fail-box';
-        overallEl.textContent = `❌ 本次巡檢結果：發現 ${fail} 項缺失，請要求承攬商立即改善`;
+    function renderSignaturePads() {
+      const grid = document.getElementById('signature-grid');
+      grid.innerHTML = SIGNERS.map((label, idx) => `
+        <div class="signature-box">
+          <div class="signature-title">${escapeHtml(label)}</div>
+          <canvas class="signature-pad" id="signature-${idx}" aria-label="${escapeHtml(label)}簽名"></canvas>
+          <div class="signature-actions">
+            <span>感應簽名</span>
+            <button type="button" class="signature-clear" onclick="clearSignature(${idx})">清除</button>
+          </div>
+        </div>
+      `).join('');
+      setupSignaturePads();
+    }
+
+    function resizeCanvas(canvas, keepImage = true) {
+      const oldImage = keepImage ? canvas.toDataURL('image/png') : '';
+      const rect = canvas.getBoundingClientRect();
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = Math.max(1, Math.round(rect.width * ratio));
+      canvas.height = Math.max(1, Math.round(rect.height * ratio));
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = 2.4;
+      ctx.strokeStyle = '#111827';
+      if (oldImage && oldImage.length > 100) {
+        const img = new Image();
+        img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height);
+        img.src = oldImage;
       }
+    }
+
+    function setupSignaturePads() {
+      signaturePads.clear();
+      document.querySelectorAll('.signature-pad').forEach(canvas => {
+        resizeCanvas(canvas, false);
+        const ctx = canvas.getContext('2d');
+        const state = { drawing: false, dirty: false, lastX: 0, lastY: 0 };
+        signaturePads.set(canvas.id, state);
+
+        const point = event => {
+          const rect = canvas.getBoundingClientRect();
+          return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+        };
+        const start = event => {
+          event.preventDefault();
+          canvas.setPointerCapture(event.pointerId);
+          const p = point(event);
+          state.drawing = true;
+          state.dirty = true;
+          state.lastX = p.x;
+          state.lastY = p.y;
+        };
+        const move = event => {
+          if (!state.drawing) return;
+          event.preventDefault();
+          const p = point(event);
+          ctx.beginPath();
+          ctx.moveTo(state.lastX, state.lastY);
+          ctx.lineTo(p.x, p.y);
+          ctx.stroke();
+          state.lastX = p.x;
+          state.lastY = p.y;
+          onFormChange();
+        };
+        const stop = event => {
+          if (!state.drawing) return;
+          event.preventDefault();
+          state.drawing = false;
+          onFormChange();
+        };
+        canvas.addEventListener('pointerdown', start);
+        canvas.addEventListener('pointermove', move);
+        canvas.addEventListener('pointerup', stop);
+        canvas.addEventListener('pointercancel', stop);
+        canvas.addEventListener('pointerleave', stop);
+      });
+    }
+
+    function clearSignature(idx) {
+      const canvas = document.getElementById(`signature-${idx}`);
+      if (!canvas) return;
+      canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+      const state = signaturePads.get(canvas.id);
+      if (state) state.dirty = false;
+      onFormChange();
+    }
+
+    function clearAllSignatures() {
+      document.querySelectorAll('.signature-pad').forEach(canvas => {
+        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+        const state = signaturePads.get(canvas.id);
+        if (state) state.dirty = false;
+      });
+    }
+
+    function resetFormFields() {
+      document.querySelectorAll('.form-input, .form-textarea, .date-input-sm').forEach(el => { el.value = ''; });
+      document.querySelectorAll('input[type="radio"]').forEach(el => { el.checked = false; });
+      selectedInspectionDates = new Set();
+      clearAllSignatures();
+      document.getElementById('unit').value = '畜產加工組';
+      setDefaultDate();
+      renderInspectTable();
+      renderCalendar();
+      updateProgress();
+      buildPrintSheet();
+    }
+
+    function switchType(id) {
+      if (currentDraftId) {
+        currentDraftId = '';
+        const url = new URL(window.location.href);
+        url.searchParams.delete('draft');
+        window.history.replaceState({}, '', url);
+      }
+      currentTypeId = id;
+      renderTypeCards();
+      resetFormFields();
+    }
+
+    function selectedResult(idx) {
+      const checked = document.querySelector(`[name="result-${idx}"]:checked`);
+      return checked ? checked.value : '';
+    }
+
+    function selectedDaySet() {
+      const { year, month } = selectedYearMonth();
+      return new Set([...selectedInspectionDates].filter(key => key.startsWith(`${year}-${pad2(month)}-`)).map(key => Number(key.slice(8, 10))));
+    }
+
+    function buildPrintSheet() {
+      const sheet = document.getElementById('print-sheet');
+      if (!sheet) return;
+      const form = currentForm();
+      sheet.className = `print-sheet print-${form.id}`;
+      const { rocYear, month } = selectedYearMonth();
+      const selectedDays = selectedDaySet();
+      const improvement = document.getElementById('improvement-summary')?.value || '';
+      const isMonthly = form.id === 'monthly-workplace';
+      const periodCount = isMonthly ? 12 : 31;
+      const selectedPeriods = isMonthly ? new Set([month]) : selectedDays;
+      const dayHeaders = Array.from({ length: periodCount }, (_, i) => `<th class="print-day"><span class="print-num">${i + 1}</span></th>`).join('');
+      const contentHeading = form.id === 'electric-cart'
+        ? '檢查方法'
+        : (form.id === 'protective-equipment' ? '檢點內容' : '檢點內容 / 檢查方法');
+      const noteLabels = ['一、', '二、', '三、'];
+      const noteLines = printInstructions(form).map((line, idx) => `<li>${noteLabels[idx] || ''}${printText(line)}</li>`).join('');
+      const metaValue = document.getElementById('place').value;
+      const middleMeta = form.id === 'electric-cart'
+        ? `${printText(form.metaLabel)}：${printPlateValue(metaValue)}`
+        : `${printText(form.metaLabel)}：${printText(metaValue)}`;
+      const tableHead = `
+        <thead>
+          <tr>
+            <th class="print-part">${printText(form.partHeading || '檢點部分')}</th>
+            <th class="print-content">${printText(contentHeading)}</th>
+            ${dayHeaders}
+          </tr>
+        </thead>`;
+      const renderRows = (items, startIdx = 0) => {
+        const partSpans = items.map((item, idx, sectionItems) => {
+          if (idx > 0 && item[0] === sectionItems[idx - 1][0]) return 0;
+          let count = 1;
+          while (idx + count < sectionItems.length && sectionItems[idx + count][0] === item[0]) count++;
+          return count;
+        });
+        return items.map((item, idx) => {
+          const itemIndex = startIdx + idx;
+          const mark = RESULT_MARKS[selectedResult(itemIndex)] || '';
+          const marks = Array.from({ length: periodCount }, (_, i) => `<td class="print-mark">${selectedPeriods.has(i + 1) ? mark : ''}</td>`).join('');
+          const trimOtherColonForms = new Set(['electric-cart', 'protective-equipment', 'electric-machinery', 'monthly-workplace']);
+          let partText = trimOtherColonForms.has(form.id) ? item[0].replace(/：$/, '') : item[0];
+          if (form.id === 'protective-equipment') partText = partText.replace(/／/g, '/');
+          if (form.id === 'electric-machinery' && partText === '電器安全') partText = '電氣安全';
+          let contentText = ((form.id === 'protective-equipment' || form.id === 'electric-machinery') && item[0].replace(/：$/, '') === '其他') ? '' : item[1];
+          const spanAttr = partSpans[idx] > 1 ? ` rowspan="${partSpans[idx]}"` : '';
+          const partCell = partSpans[idx] > 0 ? `<td class="print-part"${spanAttr}>${printText(partText)}</td>` : '';
+          return `<tr>
+            ${partCell}
+            <td class="print-content"><span class="print-content-inner">${printTextWithBreaks(contentText)}</span></td>
+            ${marks}
+          </tr>`;
+        }).join('');
+      };
+      const rows = renderRows(form.items);
+      const electricMachineryTables = () => {
+        const splitIndex = 12;
+        const firstRows = renderRows(form.items.slice(0, splitIndex), 0);
+        const secondRows = renderRows(form.items.slice(splitIndex), splitIndex);
+        return `
+          <table class="print-table">
+            ${tableHead}
+            <tbody>${firstRows}</tbody>
+          </table>
+          <table class="print-table print-table-continued">
+            ${tableHead}
+            <tbody>
+              ${secondRows}
+              <tr class="print-improve-row">
+                <td class="print-improve-cell" colspan="${periodCount + 2}"><span class="print-improve-title">建議改善事項：</span>${printText(improvement)}</td>
+              </tr>
+              <tr>
+                <td class="print-note" colspan="${periodCount + 2}">
+                  <div class="print-note-title">說明：</div>
+                  <ol class="print-note-lines">${noteLines}</ol>
+                </td>
+              </tr>
+            </tbody>
+          </table>`;
+      };
+      const printTable = form.id === 'electric-machinery' ? electricMachineryTables() : `
+        <table class="print-table">
+          ${tableHead}
+          <tbody>
+            ${rows}
+            <tr class="print-improve-row">
+              <td class="print-improve-cell" colspan="${periodCount + 2}"><span class="print-improve-title">建議改善事項：</span>${printText(improvement)}</td>
+            </tr>
+            <tr>
+              <td class="print-note" colspan="${periodCount + 2}">
+                <div class="print-note-title">說明：</div>
+                <ol class="print-note-lines">${noteLines}</ol>
+              </td>
+            </tr>
+          </tbody>
+        </table>`;
+      const signatures = SIGNERS.map((label, idx) => {
+        const canvas = document.getElementById(`signature-${idx}`);
+        const state = canvas ? signaturePads.get(canvas.id) : null;
+        const image = canvas && state && state.dirty ? `<img src="${canvas.toDataURL('image/png')}" alt="${escapeHtml(label)}簽名">` : '';
+        return `<div class="print-sign-box"><div class="print-sign-title">${printText(label)}</div><div class="print-sign-body">${image}</div></div>`;
+      }).join('');
+      sheet.innerHTML = `
+        <div class="print-retention">保存年限：<span class="print-num">3</span>年</div>
+        <div class="print-title-org">農業部畜產試驗所</div>
+        <div class="print-title-main">${printText(form.printTitle)}</div>
+        <div class="print-meta">
+          <div>單位：${printText(document.getElementById('unit').value)}</div>
+          <div>${middleMeta}</div>
+          <div>檢查日期：<span class="print-num">${rocYear}</span> 年 <span class="print-num">${month}</span> 月</div>
+        </div>
+        ${printTable}
+        <div class="print-signatures">${signatures}</div>
+      `;
+    }
+
+    function printForm() {
+      buildPrintSheet();
+      window.print();
+    }
+
+    function onFormChange() {
+      updateProgress();
+      buildPrintSheet();
     }
 
     function updateProgress() {
+      const totalItems = currentForm().items.length;
       const inputs = document.querySelectorAll('.form-input, .form-textarea, .date-input-sm');
-      const radios = document.querySelectorAll('[name^="insp-"]');
       let filled = 0;
-      inputs.forEach(f => { if (f.value.trim()) filled++; });
-      const totalItems = radios.length / 3;
+      inputs.forEach(input => { if (input.value.trim()) filled++; });
       for (let i = 0; i < totalItems; i++) {
-        if (document.querySelector(`[name="insp-${i}"]:checked`)) filled++;
+        if (document.querySelector(`[name="result-${i}"]:checked`)) filled++;
       }
-      const total = inputs.length + totalItems;
+      signaturePads.forEach(state => { if (state.dirty) filled++; });
+      if (selectedInspectionDates.size > 0) filled++;
+      const total = inputs.length + totalItems + signaturePads.size + 1;
       const pct = total > 0 ? Math.round((filled / total) * 100) : 0;
       document.getElementById('progress-fill').style.width = Math.min(100, pct) + '%';
     }
 
-    function toggleStopWork(show) {
-      document.getElementById('stop-work-detail').style.display = show ? 'block' : 'none';
+    function collectData() {
+      const data = { typeId: currentTypeId, signatures: {}, selectedDates: [...selectedInspectionDates].sort() };
+      document.querySelectorAll('.form-input, .form-textarea, .date-input-sm').forEach(el => { data[el.id] = el.value; });
+      currentForm().items.forEach((_, idx) => { data[`result-${idx}`] = selectedResult(idx); });
+      document.querySelectorAll('.signature-pad').forEach(canvas => {
+        const state = signaturePads.get(canvas.id);
+        data.signatures[canvas.id] = state && state.dirty ? canvas.toDataURL('image/png') : '';
+      });
+      return data;
+    }
+
+    function makeDraftTitle() {
+      const form = currentForm();
+      const unit = document.getElementById('unit').value.trim();
+      const place = document.getElementById('place').value.trim();
+      const { rocYear, month } = selectedYearMonth();
+      return [form.title, unit, place, `${rocYear}年${month}月`].filter(Boolean).join(' / ');
     }
 
     function saveForm() {
-      const data = {};
-      document.querySelectorAll('[id]').forEach(el => {
-        if (el.tagName === 'INPUT' && el.type === 'radio') return;
-        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
-          data[el.id] = el.value;
-        }
-      });
-      // Save radio states
-      const totalItems = document.querySelectorAll('[name^="insp-"]').length / 3;
-      for (let i = 0; i < totalItems; i++) {
-        const checked = document.querySelector(`[name="insp-${i}"]:checked`);
-        data[`insp-radio-${i}`] = checked ? checked.value : '';
+      const now = new Date().toISOString();
+      if (!currentDraftId) {
+        currentDraftId = 'inspection-' + Date.now();
+        const url = new URL(window.location.href);
+        url.searchParams.set('draft', currentDraftId);
+        window.history.replaceState({}, '', url);
       }
-      const sw = document.querySelector('[name="stop-work"]:checked');
-      data['stop-work-val'] = sw ? sw.value : '';
-      localStorage.setItem('inspect-form-data', JSON.stringify(data));
-      showToast('✅ 巡檢表資料已儲存！');
+
+      const record = {
+        id: currentDraftId,
+        type: 'inspection',
+        typeLabel: '作業巡檢表',
+        title: makeDraftTitle(),
+        url: 'inspection-form.html?draft=' + encodeURIComponent(currentDraftId),
+        createdAt: now,
+        updatedAt: now,
+        data: collectData()
+      };
+
+      const existingRaw = localStorage.getItem(DRAFT_RECORD_PREFIX + currentDraftId);
+      if (existingRaw) {
+        try {
+          const existing = JSON.parse(existingRaw);
+          record.createdAt = existing.createdAt || now;
+        } catch (e) {}
+      }
+
+      localStorage.setItem(DRAFT_RECORD_PREFIX + currentDraftId, JSON.stringify(record));
+      const index = getDraftIndex().filter(item => item.id !== currentDraftId);
+      index.push({
+        id: record.id,
+        type: record.type,
+        typeLabel: record.typeLabel,
+        title: record.title,
+        url: record.url,
+        createdAt: record.createdAt,
+        updatedAt: record.updatedAt
+      });
+      setDraftIndex(index);
+      const backLink = document.querySelector('.back-btn');
+      if (backLink) backLink.href = 'index.html?drafts=' + encodeURIComponent(currentDraftId) + '&t=' + Date.now();
+      showToast('作業巡檢表已暫存，可回首頁清冊繼續修改');
     }
 
     function loadForm() {
-      const saved = localStorage.getItem('inspect-form-data');
-      if (!saved) return;
-      const data = JSON.parse(saved);
-      Object.entries(data).forEach(([id, val]) => {
-        if (id.startsWith('insp-radio-')) {
-          const idx = id.replace('insp-radio-', '');
-          if (val) {
-            const radio = document.querySelector(`[name="insp-${idx}"][value="${val}"]`);
-            if (radio) radio.checked = true;
-          }
-          return;
-        }
-        if (id === 'stop-work-val') {
-          if (val) {
-            const radio = document.querySelector(`[name="stop-work"][value="${val}"]`);
-            if (radio) { radio.checked = true; toggleStopWork(val === 'yes'); }
-          }
+      if (!currentDraftId) return;
+      const recordRaw = localStorage.getItem(DRAFT_RECORD_PREFIX + currentDraftId);
+      if (!recordRaw) return;
+      let data = {};
+      try {
+        const record = JSON.parse(recordRaw);
+        data = record.data || {};
+      } catch (e) {
+        return;
+      }
+      Object.entries(data).forEach(([id, value]) => {
+        if (id === 'typeId' || id === 'signatures' || id === 'selectedDates') return;
+        if (id.startsWith('result-')) {
+          const radio = document.querySelector(`[name="${id}"][value="${value}"]`);
+          if (radio) radio.checked = true;
           return;
         }
         const el = document.getElementById(id);
-        if (el) el.value = val;
+        if (el) el.value = value;
       });
-      updateStats();
-      updateProgress();
+      if (currentForm().id === 'electric-cart' && document.getElementById('place').value === '加工館') {
+        document.getElementById('place').value = 'QAS-3381';
+      }
+      selectedInspectionDates = new Set(Array.isArray(data.selectedDates) ? data.selectedDates : []);
+      renderCalendar();
+      clearAllSignatures();
+      if (data.signatures) {
+        Object.entries(data.signatures).forEach(([id, image]) => {
+          if (!image) return;
+          const canvas = document.getElementById(id);
+          if (!canvas) return;
+          const ctx = canvas.getContext('2d');
+          const img = new Image();
+          img.onload = () => {
+            const rect = canvas.getBoundingClientRect();
+            ctx.drawImage(img, 0, 0, rect.width, rect.height);
+            const state = signaturePads.get(id);
+            if (state) state.dirty = true;
+            updateProgress();
+            buildPrintSheet();
+          };
+          img.src = image;
+        });
+      }
+      buildPrintSheet();
     }
 
     function clearForm() {
-      if (!confirm('確定要清除所有填寫內容嗎？')) return;
+      if (!confirm('確定要清除目前表單內容嗎？')) return;
       document.querySelectorAll('.form-input, .form-textarea, .date-input-sm').forEach(el => el.value = '');
       document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
-      document.querySelectorAll('.issue-input').forEach(el => el.value = '');
-      document.getElementById('stop-work-detail').style.display = 'none';
-      localStorage.removeItem('inspect-form-data');
-      updateStats();
+      clearAllSignatures();
+      selectedInspectionDates = new Set();
+      localStorage.removeItem(storageKey());
+      document.getElementById('unit').value = '畜產加工組';
+      setDefaultDate();
+      renderInspectTable();
+      renderCalendar();
       updateProgress();
-      showToast('🗑 表單已清除');
+      buildPrintSheet();
+      showToast('表單已清除');
     }
 
     function showToast(msg) {
@@ -590,22 +1115,37 @@
         animation: 'fadeIn .3s ease', backdropFilter: 'blur(20px)'
       });
       document.body.appendChild(toast);
-      setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = '.4s'; setTimeout(() => toast.remove(), 400); }, 3000);
+      setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = '.4s'; setTimeout(() => toast.remove(), 400); }, 2600);
     }
 
-    function setTodayROC() {
+    function setDefaultDate() {
       const now = new Date();
-      const roc = now.getFullYear() - 1911;
-      document.getElementById('insp-year').value = roc;
-      document.getElementById('insp-month').value = now.getMonth() + 1;
-      document.getElementById('insp-day').value = now.getDate();
+      if (!document.getElementById('roc-year').value) document.getElementById('roc-year').value = now.getFullYear() - 1911;
+      if (!document.getElementById('month').value) document.getElementById('month').value = now.getMonth() + 1;
     }
+
+    window.addEventListener('resize', () => {
+      document.querySelectorAll('.signature-pad').forEach(canvas => resizeCanvas(canvas));
+      buildPrintSheet();
+    });
+
+    window.addEventListener('beforeprint', buildPrintSheet);
 
     document.addEventListener('DOMContentLoaded', () => {
+      const draftData = readCurrentDraftData();
+      if (draftData?.typeId && FORM_TYPES.some(item => item.id === draftData.typeId)) currentTypeId = draftData.typeId;
+      renderTypeCards();
       renderInspectTable();
-      setTodayROC();
+      renderSignaturePads();
+      setDefaultDate();
+      renderCalendar();
       loadForm();
       updateProgress();
+      buildPrintSheet();
+    });
+
+    window.addEventListener('beforeunload', () => {
+      localStorage.setItem('inspection-form-current-type', currentTypeId);
     });
   </script>
 </body>

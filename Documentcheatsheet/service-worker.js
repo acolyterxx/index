@@ -1,5 +1,5 @@
 // 行政資料大補帖 Service Worker
-const CACHE_VERSION = 'hazard-v1.8';
+const CACHE_VERSION = 'hazard-v2.0';
 
 const CACHE_FILES = [
   './',
@@ -45,6 +45,25 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
+  const requestUrl = new URL(event.request.url);
+  const isDocument = event.request.mode === 'navigate' || event.request.destination === 'document';
+
+  if (isDocument || requestUrl.pathname.endsWith('.html')) {
+    event.respondWith(
+      fetch(event.request).then(networkResponse => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_VERSION).then(cache => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return networkResponse;
+      }).catch(() => {
+        return caches.match(event.request).then(cachedResponse => cachedResponse || caches.match('./index.html'));
+      })
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(event.request).then(cachedResponse => {
