@@ -37,7 +37,6 @@
     .calendar-legend { display: flex; gap: 12px; color: var(--text-muted); font-size: 12px; flex-wrap: wrap; }
     .calendar-legend span { display: inline-flex; align-items: center; gap: 5px; }
     .legend-dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
-    .legend-work { background: rgba(74,222,128,0.9); }
     .legend-selected { background: #60a5fa; }
     .legend-locked { background: #f9a8d4; }
     .month-calendar { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
@@ -52,6 +51,7 @@
     }
     .calendar-day:hover:not(:disabled) { background: rgba(96,165,250,0.14); }
     .calendar-day.selected { background: rgba(96,165,250,0.28); color: var(--text-primary); box-shadow: inset 0 0 0 2px rgba(96,165,250,0.85); }
+    .calendar-day.active { box-shadow: inset 0 0 0 2px rgba(96,165,250,0.95), 0 0 0 2px rgba(255,255,255,0.45); }
     .calendar-day.locked { background: rgba(249,168,212,0.16); color: #f9a8d4; cursor: not-allowed; }
     .calendar-day.blank { cursor: default; background: rgba(255,255,255,0.01); }
     .day-num { font-weight: 800; font-size: 13px; line-height: 1; }
@@ -318,8 +318,7 @@
         <div class="calendar-head">
           <div class="calendar-title" id="calendar-title">月份行事曆</div>
           <div class="calendar-legend">
-            <span><i class="legend-dot legend-work"></i>可點選</span>
-            <span><i class="legend-dot legend-selected"></i>已選</span>
+            <span><i class="legend-dot legend-selected"></i>巡檢日</span>
             <span><i class="legend-dot legend-locked"></i>週末 / 國定假日</span>
           </div>
         </div>
@@ -402,7 +401,7 @@
           ['蓄電池有無異常', '操作'],
           ['配線有無異常', '操作'],
           ['控制裝置之有無異常', '操作'],
-          ['其他：', '操作 / 目視']
+          ['其他', '操作 / 目視']
         ]
       },
       {
@@ -429,7 +428,7 @@
           ['防護衣', '接縫部份是否耐拉扯'],
           ['防護衣', '穿著後是否容易活動'],
           ['急救箱', '藥品是否未過期'],
-          ['其他：', '其他：']
+          ['其他', '']
         ]
       },
       {
@@ -461,7 +460,7 @@
           ['機械防護', '護罩、護欄或擋板是否定位（如：轉動皮帶之護欄不可移走）'],
           ['機械防護', '安全連鎖裝置功能是否正常'],
           ['機械防護', '自動停止裝置是否正常'],
-          ['其他：', '其他：']
+          ['其他', '']
         ]
       },
       {
@@ -482,7 +481,7 @@
           ['用電', '延長線使用不得超過負載，電器電線是否妥善固定，電線不得壓迫、橫越尖銳面導致破損（目視）'],
           ['用電', '潮濕場所用電是否已裝設漏電斷路器（目視）'],
           ['熱源', '發熱、產熱設備是否於安全設計下使用，避免熱源接近易燃物質（目視）'],
-          ['其他：', '操作 / 目視']
+          ['其他', '操作 / 目視']
         ]
       }
     ];
@@ -510,6 +509,8 @@
 
     let currentTypeId = FORM_TYPES[0].id;
     let selectedInspectionDates = new Set();
+    let activeInspectionDate = '';
+    let inspectionResultsByDate = {};
     const signaturePads = new Map();
     const DRAFT_INDEX_KEY = 'admin-form-drafts';
     const DRAFT_RECORD_PREFIX = 'admin-form-draft:';
@@ -594,14 +595,15 @@
           <td class="content-col">${escapeHtml(item[1])}</td>
           <td class="result-col">
             <div class="radio-group">
-              <label><input type="radio" name="result-${idx}" value="ok" onchange="onFormChange()"> <span class="stat-ok">ˇ 正常</span></label>
-              <label><input type="radio" name="result-${idx}" value="maintain" onchange="onFormChange()"> <span class="stat-maintain">Δ 保養</span></label>
-              <label><input type="radio" name="result-${idx}" value="fail" onchange="onFormChange()"> <span class="stat-fail">× 異常</span></label>
-              <label><input type="radio" name="result-${idx}" value="na" onchange="onFormChange()"> <span class="stat-na">– 無此項</span></label>
+              <label><input type="radio" name="result-${idx}" value="ok" onchange="onResultChange(${idx})"> <span class="stat-ok">ˇ 正常</span></label>
+              <label><input type="radio" name="result-${idx}" value="maintain" onchange="onResultChange(${idx})"> <span class="stat-maintain">Δ 保養</span></label>
+              <label><input type="radio" name="result-${idx}" value="fail" onchange="onResultChange(${idx})"> <span class="stat-fail">× 異常</span></label>
+              <label><input type="radio" name="result-${idx}" value="na" onchange="onResultChange(${idx})"> <span class="stat-na">– 無此項</span></label>
             </div>
           </td>
         </tr>
       `).join('');
+      syncResultInputs();
       buildPrintSheet();
     }
 
@@ -642,6 +644,55 @@
       return day === 0 || day === 6 || Boolean(holidayName(key));
     }
 
+    function resultBucketForDate(key, create = false) {
+      if (!key) return null;
+      if (!inspectionResultsByDate[key] && create) inspectionResultsByDate[key] = {};
+      return inspectionResultsByDate[key] || null;
+    }
+
+    function selectedResult(idx, key = activeInspectionDate) {
+      const bucket = resultBucketForDate(key);
+      return bucket ? (bucket[idx] || '') : '';
+    }
+
+    function pruneResultsToSelectedDates() {
+      Object.keys(inspectionResultsByDate).forEach(key => {
+        if (!selectedInspectionDates.has(key)) delete inspectionResultsByDate[key];
+      });
+      if (!selectedInspectionDates.has(activeInspectionDate)) {
+        activeInspectionDate = [...selectedInspectionDates].sort()[0] || '';
+      }
+    }
+
+    function syncResultInputs() {
+      const hasActiveDate = Boolean(activeInspectionDate);
+      currentForm().items.forEach((_, idx) => {
+        const value = selectedResult(idx);
+        document.querySelectorAll(`[name="result-${idx}"]`).forEach(input => {
+          input.disabled = !hasActiveDate;
+          input.checked = hasActiveDate && input.value === value;
+        });
+      });
+    }
+
+    function onResultChange(idx) {
+      if (!activeInspectionDate) {
+        syncResultInputs();
+        return;
+      }
+      const checked = document.querySelector(`[name="result-${idx}"]:checked`);
+      const bucket = resultBucketForDate(activeInspectionDate, true);
+      if (checked) bucket[idx] = checked.value;
+      onFormChange();
+    }
+
+    function setDefaultNormalResults(key) {
+      const bucket = resultBucketForDate(key, true);
+      currentForm().items.forEach((_, idx) => {
+        if (!bucket[idx]) bucket[idx] = 'ok';
+      });
+    }
+
     function renderCalendar() {
       const { rocYear, year, month } = selectedYearMonth();
       const body = document.getElementById('calendar-body');
@@ -651,6 +702,7 @@
       const startDay = first.getDay();
       const validPrefix = `${year}-${pad2(month)}-`;
       selectedInspectionDates = new Set([...selectedInspectionDates].filter(key => key.startsWith(validPrefix)));
+      pruneResultsToSelectedDates();
 
       title.textContent = `民國 ${rocYear} 年 ${month} 月行事曆`;
       let html = '';
@@ -666,9 +718,10 @@
           const date = new Date(year, month - 1, day);
           const locked = isLockedDate(date, key);
           const selected = selectedInspectionDates.has(key);
+          const active = activeInspectionDate === key;
           const note = locked ? (holidayName(key) || '週末') : '工作日';
           html += `<td>
-            <button type="button" class="calendar-day ${locked ? 'locked' : ''} ${selected ? 'selected' : ''}" data-date="${key}" ${locked ? 'disabled' : ''} onclick="toggleInspectionDate('${key}')">
+            <button type="button" class="calendar-day ${locked ? 'locked' : ''} ${selected ? 'selected' : ''} ${active ? 'active' : ''}" data-date="${key}" ${locked ? 'disabled' : ''} onclick="toggleInspectionDate('${key}')">
               <span class="day-num">${day}</span>
               <span class="day-note">${escapeHtml(note)}</span>
             </button>
@@ -680,6 +733,7 @@
       }
       body.innerHTML = html;
       renderSelectedDates();
+      syncResultInputs();
       buildPrintSheet();
     }
 
@@ -690,8 +744,17 @@
     }
 
     function toggleInspectionDate(key) {
-      if (selectedInspectionDates.has(key)) selectedInspectionDates.delete(key);
-      else selectedInspectionDates.add(key);
+      if (selectedInspectionDates.has(key) && activeInspectionDate === key) {
+        selectedInspectionDates.delete(key);
+        delete inspectionResultsByDate[key];
+        if (activeInspectionDate === key) activeInspectionDate = [...selectedInspectionDates].sort()[0] || '';
+      } else if (selectedInspectionDates.has(key)) {
+        activeInspectionDate = key;
+      } else {
+        selectedInspectionDates.add(key);
+        activeInspectionDate = key;
+        setDefaultNormalResults(key);
+      }
       renderCalendar();
       onFormChange();
     }
@@ -803,6 +866,8 @@
       document.querySelectorAll('.form-input, .form-textarea, .date-input-sm').forEach(el => { el.value = ''; });
       document.querySelectorAll('input[type="radio"]').forEach(el => { el.checked = false; });
       selectedInspectionDates = new Set();
+      activeInspectionDate = '';
+      inspectionResultsByDate = {};
       clearAllSignatures();
       document.getElementById('unit').value = '畜產加工組';
       setDefaultDate();
@@ -824,14 +889,17 @@
       resetFormFields();
     }
 
-    function selectedResult(idx) {
-      const checked = document.querySelector(`[name="result-${idx}"]:checked`);
-      return checked ? checked.value : '';
-    }
-
     function selectedDaySet() {
       const { year, month } = selectedYearMonth();
       return new Set([...selectedInspectionDates].filter(key => key.startsWith(`${year}-${pad2(month)}-`)).map(key => Number(key.slice(8, 10))));
+    }
+
+    function resultDateKeyForPeriod(period, isMonthly) {
+      const { year, month } = selectedYearMonth();
+      if (!isMonthly) return dateKey(year, month, period);
+      const prefix = `${year}-${pad2(period)}-`;
+      if (activeInspectionDate.startsWith(prefix)) return activeInspectionDate;
+      return [...selectedInspectionDates].sort().find(key => key.startsWith(prefix)) || '';
     }
 
     function buildPrintSheet() {
@@ -872,15 +940,20 @@
         });
         return items.map((item, idx) => {
           const itemIndex = startIdx + idx;
-          const mark = RESULT_MARKS[selectedResult(itemIndex)] || '';
-          const marks = Array.from({ length: periodCount }, (_, i) => `<td class="print-mark">${selectedPeriods.has(i + 1) ? mark : ''}</td>`).join('');
+          const marks = Array.from({ length: periodCount }, (_, i) => {
+            const period = i + 1;
+            const resultKey = resultDateKeyForPeriod(period, isMonthly);
+            const mark = selectedPeriods.has(period) ? (RESULT_MARKS[selectedResult(itemIndex, resultKey)] || '') : '';
+            return `<td class="print-mark">${mark}</td>`;
+          }).join('');
           const trimOtherColonForms = new Set(['electric-cart', 'protective-equipment', 'electric-machinery', 'monthly-workplace']);
           let partText = trimOtherColonForms.has(form.id) ? item[0].replace(/：$/, '') : item[0];
           if (form.id === 'protective-equipment') partText = partText.replace(/／/g, '/');
+          if (form.id === 'protective-equipment' && partText === '防護眼鏡及面具') partText = '防護眼鏡<br>及面具';
           if (form.id === 'electric-machinery' && partText === '電器安全') partText = '電氣安全';
           let contentText = ((form.id === 'protective-equipment' || form.id === 'electric-machinery') && item[0].replace(/：$/, '') === '其他') ? '' : item[1];
           const spanAttr = partSpans[idx] > 1 ? ` rowspan="${partSpans[idx]}"` : '';
-          const partCell = partSpans[idx] > 0 ? `<td class="print-part"${spanAttr}>${printText(partText)}</td>` : '';
+          const partCell = partSpans[idx] > 0 ? `<td class="print-part"${spanAttr}>${printTextWithBreaks(partText)}</td>` : '';
           return `<tr>
             ${partCell}
             <td class="print-content"><span class="print-content-inner">${printTextWithBreaks(contentText)}</span></td>
@@ -965,20 +1038,29 @@
       const inputs = document.querySelectorAll('.form-input, .form-textarea, .date-input-sm');
       let filled = 0;
       inputs.forEach(input => { if (input.value.trim()) filled++; });
-      for (let i = 0; i < totalItems; i++) {
-        if (document.querySelector(`[name="result-${i}"]:checked`)) filled++;
-      }
+      [...selectedInspectionDates].forEach(key => {
+        for (let i = 0; i < totalItems; i++) {
+          if (selectedResult(i, key)) filled++;
+        }
+      });
       signaturePads.forEach(state => { if (state.dirty) filled++; });
       if (selectedInspectionDates.size > 0) filled++;
-      const total = inputs.length + totalItems + signaturePads.size + 1;
+      const resultTotal = Math.max(1, selectedInspectionDates.size) * totalItems;
+      const total = inputs.length + resultTotal + signaturePads.size + 1;
       const pct = total > 0 ? Math.round((filled / total) * 100) : 0;
       document.getElementById('progress-fill').style.width = Math.min(100, pct) + '%';
     }
 
     function collectData() {
-      const data = { typeId: currentTypeId, signatures: {}, selectedDates: [...selectedInspectionDates].sort() };
+      pruneResultsToSelectedDates();
+      const data = {
+        typeId: currentTypeId,
+        signatures: {},
+        selectedDates: [...selectedInspectionDates].sort(),
+        activeDate: activeInspectionDate,
+        resultsByDate: JSON.parse(JSON.stringify(inspectionResultsByDate))
+      };
       document.querySelectorAll('.form-input, .form-textarea, .date-input-sm').forEach(el => { data[el.id] = el.value; });
-      currentForm().items.forEach((_, idx) => { data[`result-${idx}`] = selectedResult(idx); });
       document.querySelectorAll('.signature-pad').forEach(canvas => {
         const state = signaturePads.get(canvas.id);
         data.signatures[canvas.id] = state && state.dirty ? canvas.toDataURL('image/png') : '';
@@ -1050,11 +1132,11 @@
       } catch (e) {
         return;
       }
+      const legacyResults = {};
       Object.entries(data).forEach(([id, value]) => {
-        if (id === 'typeId' || id === 'signatures' || id === 'selectedDates') return;
+        if (id === 'typeId' || id === 'signatures' || id === 'selectedDates' || id === 'activeDate' || id === 'resultsByDate') return;
         if (id.startsWith('result-')) {
-          const radio = document.querySelector(`[name="${id}"][value="${value}"]`);
-          if (radio) radio.checked = true;
+          legacyResults[id.replace('result-', '')] = value;
           return;
         }
         const el = document.getElementById(id);
@@ -1064,6 +1146,11 @@
         document.getElementById('place').value = 'QAS-3381';
       }
       selectedInspectionDates = new Set(Array.isArray(data.selectedDates) ? data.selectedDates : []);
+      inspectionResultsByDate = data.resultsByDate && typeof data.resultsByDate === 'object' ? data.resultsByDate : {};
+      if (!Object.keys(inspectionResultsByDate).length && Object.keys(legacyResults).length && selectedInspectionDates.size) {
+        inspectionResultsByDate[[...selectedInspectionDates].sort()[0]] = legacyResults;
+      }
+      activeInspectionDate = selectedInspectionDates.has(data.activeDate) ? data.activeDate : ([...selectedInspectionDates].sort()[0] || '');
       renderCalendar();
       clearAllSignatures();
       if (data.signatures) {
@@ -1093,6 +1180,8 @@
       document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
       clearAllSignatures();
       selectedInspectionDates = new Set();
+      activeInspectionDate = '';
+      inspectionResultsByDate = {};
       localStorage.removeItem(storageKey());
       document.getElementById('unit').value = '畜產加工組';
       setDefaultDate();
