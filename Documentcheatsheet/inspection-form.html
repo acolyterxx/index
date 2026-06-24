@@ -922,8 +922,57 @@
       const ctx = canvas.getContext('2d');
       const rect = canvas.getBoundingClientRect();
       const img = new Image();
-      img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height);
+      img.onload = () => {
+        const scale = Math.min(rect.width / img.width, rect.height / img.height);
+        const width = img.width * scale;
+        const height = img.height * scale;
+        const x = (rect.width - width) / 2;
+        const y = (rect.height - height) / 2;
+        ctx.drawImage(img, x, y, width, height);
+      };
       img.src = dataUrl;
+    }
+
+    function copySignatureContent(sourceCanvas, targetCanvas) {
+      const sourceCtx = sourceCanvas.getContext('2d');
+      const targetCtx = targetCanvas.getContext('2d');
+      const sourceImage = sourceCtx.getImageData(0, 0, sourceCanvas.width, sourceCanvas.height);
+      const data = sourceImage.data;
+      let minX = sourceCanvas.width;
+      let minY = sourceCanvas.height;
+      let maxX = -1;
+      let maxY = -1;
+      for (let y = 0; y < sourceCanvas.height; y++) {
+        for (let x = 0; x < sourceCanvas.width; x++) {
+          const alpha = data[(y * sourceCanvas.width + x) * 4 + 3];
+          if (alpha > 8) {
+            if (x < minX) minX = x;
+            if (y < minY) minY = y;
+            if (x > maxX) maxX = x;
+            if (y > maxY) maxY = y;
+          }
+        }
+      }
+      targetCtx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
+      if (maxX < minX || maxY < minY) return false;
+      const ratio = window.devicePixelRatio || 1;
+      const padding = Math.max(8, Math.round(10 * ratio));
+      minX = Math.max(0, minX - padding);
+      minY = Math.max(0, minY - padding);
+      maxX = Math.min(sourceCanvas.width - 1, maxX + padding);
+      maxY = Math.min(sourceCanvas.height - 1, maxY + padding);
+      const cropWidth = maxX - minX + 1;
+      const cropHeight = maxY - minY + 1;
+      const targetPadding = Math.max(4, Math.round(5 * ratio));
+      const availableWidth = Math.max(1, targetCanvas.width - targetPadding * 2);
+      const availableHeight = Math.max(1, targetCanvas.height - targetPadding * 2);
+      const scale = Math.min(availableWidth / cropWidth, availableHeight / cropHeight);
+      const drawWidth = cropWidth * scale;
+      const drawHeight = cropHeight * scale;
+      const drawX = (targetCanvas.width - drawWidth) / 2;
+      const drawY = (targetCanvas.height - drawHeight) / 2;
+      targetCtx.drawImage(sourceCanvas, minX, minY, cropWidth, cropHeight, drawX, drawY, drawWidth, drawHeight);
+      return true;
     }
 
     function openSignatureModal(canvasId) {
@@ -961,10 +1010,8 @@
       if (save && modalCanvas && source) {
         const sourceState = signaturePads.get(source.id);
         source.getContext('2d').clearRect(0, 0, source.width, source.height);
-        if (!modalSignatureState.cleared) {
-          drawImageToCanvas(source, modalCanvas.toDataURL('image/png'));
-        }
-        if (sourceState) sourceState.dirty = !modalSignatureState.cleared;
+        const hasSignature = !modalSignatureState.cleared && copySignatureContent(modalCanvas, source);
+        if (sourceState) sourceState.dirty = hasSignature;
         onFormChange();
       }
       if (modal) {
