@@ -9,6 +9,49 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .drafts-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .drafts-header .section-label { margin-bottom: 0; }
+    .draft-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .draft-export,
+    .draft-import {
+      border: 1px solid rgba(47, 125, 87, 0.26);
+      background: rgba(47, 125, 87, 0.08);
+      color: var(--primary-dark);
+      border-radius: 8px;
+      padding: 7px 12px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .draft-export:hover,
+    .draft-import:hover {
+      background: rgba(47, 125, 87, 0.14);
+      border-color: rgba(47, 125, 87, 0.38);
+    }
+    @media (max-width: 768px) {
+      .drafts-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .draft-actions {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#2f7d57">
   <meta name="mobile-web-app-capable" content="yes">
@@ -93,7 +136,11 @@
     </section>
 
     <section class="drafts-section">
-      <div class="section-label">暫存表單清冊</div>
+      <div class="drafts-header">
+        <div class="section-label">暫存表單清冊</div>
+        <button class="draft-import" type="button" id="draft-import-btn">匯入暫存</button>
+        <input id="draft-import-input" type="file" accept=".json,application/json" hidden>
+      </div>
       <div class="draft-list" id="draft-list">
         <div class="draft-empty">目前沒有暫存表單</div>
       </div>
@@ -149,14 +196,22 @@
       }[char]));
     }
 
+    function getDraftIndex() {
+      try {
+        const drafts = JSON.parse(localStorage.getItem('admin-form-drafts') || '[]');
+        return Array.isArray(drafts) ? drafts : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function setDraftIndex(drafts) {
+      localStorage.setItem('admin-form-drafts', JSON.stringify(Array.isArray(drafts) ? drafts : []));
+    }
+
     function renderDraftList() {
       const list = document.getElementById('draft-list');
-      let drafts = [];
-      try {
-        drafts = JSON.parse(localStorage.getItem('admin-form-drafts') || '[]');
-      } catch (e) {
-        drafts = [];
-      }
+      let drafts = getDraftIndex();
 
       if (!Array.isArray(drafts) || drafts.length === 0) {
         list.innerHTML = '<div class="draft-empty">目前沒有暫存表單</div>';
@@ -177,26 +232,118 @@
             <span>建立：${formatDraftTime(item.createdAt)}</span>
             <span>更新：${formatDraftTime(item.updatedAt)}</span>
           </div>
-          <button class="draft-delete" type="button" data-draft-id="${escapeHtml(item.id)}">刪除</button>
+          <div class="draft-actions">
+            <button class="draft-export" type="button" data-draft-id="${escapeHtml(item.id)}">匯出暫存</button>
+            <button class="draft-delete" type="button" data-draft-id="${escapeHtml(item.id)}">刪除</button>
+          </div>
         </a>
       `).join('');
     }
 
     function deleteDraft(id) {
-      let drafts = [];
-      try {
-        drafts = JSON.parse(localStorage.getItem('admin-form-drafts') || '[]');
-      } catch (e) {
-        drafts = [];
-      }
+      let drafts = getDraftIndex();
       localStorage.removeItem('admin-form-draft:' + id);
-      localStorage.setItem('admin-form-drafts', JSON.stringify(drafts.filter(item => item.id !== id)));
+      setDraftIndex(drafts.filter(item => item.id !== id));
       renderDraftList();
       window.addEventListener('pageshow', renderDraftList);
       window.addEventListener('focus', renderDraftList);
       document.addEventListener('visibilitychange', () => {
         if (!document.hidden) renderDraftList();
       });
+    }
+
+    function safeFilePart(value) {
+      return String(value || 'draft')
+        .replace(/[\\/:*?"<>|]+/g, '-')
+        .replace(/\s+/g, '-')
+        .slice(0, 60) || 'draft';
+    }
+
+    function exportDraft(id) {
+      const drafts = getDraftIndex();
+      const item = drafts.find(draft => draft.id === id);
+      const recordRaw = localStorage.getItem('admin-form-draft:' + id);
+      if (!item || !recordRaw) {
+        alert('找不到這筆暫存資料。');
+        renderDraftList();
+        return;
+      }
+      let record = null;
+      try {
+        record = JSON.parse(recordRaw);
+      } catch (e) {
+        alert('暫存資料格式無法匯出。');
+        return;
+      }
+      const exportedAt = new Date().toISOString();
+      const payload = {
+        app: 'livestock-admin-form',
+        exportType: 'draft',
+        version: 1,
+        exportedAt,
+        record
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const link = document.createElement('a');
+      const stamp = exportedAt.replace(/[-:]/g, '').slice(0, 13);
+      link.href = URL.createObjectURL(blob);
+      link.download = `admin-form-draft-${safeFilePart(item.title || item.id)}-${stamp}.json`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    }
+
+    function normalizeImportedDraft(payload) {
+      if (!payload || payload.app !== 'livestock-admin-form' || payload.exportType !== 'draft' || !payload.record) {
+        throw new Error('這不是有效的暫存檔。');
+      }
+      const source = payload.record;
+      if (!source.type || !source.data) throw new Error('暫存檔缺少必要資料。');
+      const now = new Date().toISOString();
+      const id = `${source.type || 'draft'}-imported-${Date.now()}`;
+      const urlBase = source.type === 'hazard' ? 'hazard-form.html' : 'inspection-form.html';
+      const record = {
+        ...source,
+        id,
+        url: `${urlBase}?draft=${encodeURIComponent(id)}`,
+        createdAt: source.createdAt || now,
+        updatedAt: now
+      };
+      const indexItem = {
+        id,
+        type: record.type,
+        typeLabel: record.typeLabel || '表單',
+        title: record.title || '匯入暫存表單',
+        url: record.url,
+        createdAt: record.createdAt,
+        updatedAt: record.updatedAt
+      };
+      return { id, record, indexItem };
+    }
+
+    function importDraftFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const payload = JSON.parse(String(reader.result || ''));
+          const imported = normalizeImportedDraft(payload);
+          const drafts = getDraftIndex().filter(item => item.id !== imported.id);
+          drafts.push(imported.indexItem);
+          localStorage.setItem('admin-form-draft:' + imported.id, JSON.stringify(imported.record));
+          setDraftIndex(drafts);
+          renderDraftList();
+          alert('暫存表單匯入成功。');
+        } catch (e) {
+          alert(e.message || '暫存檔匯入失敗。');
+        } finally {
+          const input = document.getElementById('draft-import-input');
+          if (input) input.value = '';
+        }
+      };
+      reader.onerror = () => alert('無法讀取暫存檔。');
+      reader.readAsText(file);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -212,11 +359,24 @@
       });
       renderDraftList();
       document.getElementById('draft-list').addEventListener('click', event => {
+        const exportButton = event.target.closest('.draft-export');
+        if (exportButton) {
+          event.preventDefault();
+          event.stopPropagation();
+          exportDraft(exportButton.dataset.draftId);
+          return;
+        }
         const button = event.target.closest('.draft-delete');
         if (!button) return;
         event.preventDefault();
         event.stopPropagation();
         deleteDraft(button.dataset.draftId);
+      });
+      document.getElementById('draft-import-btn')?.addEventListener('click', () => {
+        document.getElementById('draft-import-input')?.click();
+      });
+      document.getElementById('draft-import-input')?.addEventListener('change', event => {
+        importDraftFile(event.target.files && event.target.files[0]);
       });
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./service-worker.js')
