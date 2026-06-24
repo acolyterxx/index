@@ -88,6 +88,31 @@
       padding: 4px 8px; font: inherit; cursor: pointer;
     }
     .signature-clear:hover { border-color: #60a5fa; color: var(--text-primary); }
+    .signature-modal {
+      position: fixed; inset: 0; z-index: 100000; display: none; align-items: center; justify-content: center;
+      padding: 14px; background: rgba(15,23,42,0.74);
+    }
+    .signature-modal.open { display: flex; }
+    .signature-modal-panel {
+      width: min(100%, 620px); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      background: #0f172a; box-shadow: 0 24px 70px rgba(0,0,0,0.45); overflow: hidden;
+    }
+    .signature-modal-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 10px 12px; color: var(--text-primary); border-bottom: 1px solid var(--border); font-weight: 800;
+    }
+    .signature-modal-pad {
+      display: block; width: 100%; height: min(48vh, 340px); min-height: 230px;
+      background: rgba(255,255,255,0.98); touch-action: none; cursor: crosshair;
+    }
+    .signature-modal-actions {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 10px; border-top: 1px solid var(--border);
+    }
+    .signature-modal-actions button {
+      min-height: 42px; border: 1px solid var(--border); border-radius: 6px; font: inherit; cursor: pointer;
+      background: rgba(255,255,255,0.06); color: var(--text-secondary);
+    }
+    .signature-modal-actions .signature-modal-save { background: #2563eb; border-color: #60a5fa; color: #fff; font-weight: 800; }
     .print-sheet { display: none; }
 
     @media (max-width: 960px) {
@@ -98,7 +123,14 @@
     @media (max-width: 560px) {
       .type-grid, .signature-grid { grid-template-columns: 1fr; }
       .inspect-table { font-size: 11px; }
-      .radio-group { justify-content: start; }
+      .inspect-table th, .inspect-table td { padding: 6px 5px; }
+      .part-col { width: 17%; }
+      .content-col { width: 38%; }
+      .result-col { width: 45%; }
+      .radio-group { grid-template-columns: repeat(2, max-content); justify-content: center; gap: 6px 7px; }
+      .radio-group label { font-size: 10.5px; gap: 3px; }
+      .radio-group input[type="radio"] { width: 12px; height: 12px; }
+      .signature-pad { height: 96px; cursor: zoom-in; }
     }
     @media print {
       @page { size: A4 landscape; margin: 10mm 7mm; }
@@ -377,6 +409,19 @@
   </div>
 
   <div class="print-sheet" id="print-sheet"></div>
+  <div class="signature-modal" id="signature-modal" aria-hidden="true">
+    <div class="signature-modal-panel" role="dialog" aria-modal="true" aria-labelledby="signature-modal-title">
+      <div class="signature-modal-head">
+        <span id="signature-modal-title">簽名</span>
+      </div>
+      <canvas class="signature-modal-pad" id="signature-modal-pad" aria-label="放大簽名欄"></canvas>
+      <div class="signature-modal-actions">
+        <button type="button" onclick="clearSignatureModal()">清除</button>
+        <button type="button" onclick="closeSignatureModal(false)">取消</button>
+        <button type="button" class="signature-modal-save" onclick="closeSignatureModal(true)">完成</button>
+      </div>
+    </div>
+  </div>
 
   <footer class="site-footer">
     <p>農業部畜產試驗所 &copy; 中華民國114年　｜　作業巡檢表</p>
@@ -512,6 +557,9 @@
     let activeInspectionDate = '';
     let inspectionResultsByDate = {};
     const signaturePads = new Map();
+    let activeSignatureCanvasId = '';
+    const modalSignatureState = { drawing: false, dirty: false, cleared: false, lastX: 0, lastY: 0 };
+    let modalSignatureBound = false;
     const DRAFT_INDEX_KEY = 'admin-form-drafts';
     const DRAFT_RECORD_PREFIX = 'admin-form-draft:';
     let currentDraftId = new URLSearchParams(window.location.search).get('draft') || '';
@@ -532,6 +580,10 @@
 
     function printPlateValue(value) {
       return escapeHtml(value).replace(/([A-Za-z0-9-]+)/g, '<span class="print-plate-value">$1</span>');
+    }
+
+    function isMobileSignatureMode() {
+      return window.matchMedia('(max-width: 560px)').matches;
     }
 
     function currentForm() {
@@ -798,51 +850,129 @@
       }
     }
 
+    function bindSignatureDrawing(canvas, state, onChange) {
+      const ctx = canvas.getContext('2d');
+      const point = event => {
+        const rect = canvas.getBoundingClientRect();
+        return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+      };
+      const start = event => {
+        event.preventDefault();
+        canvas.setPointerCapture(event.pointerId);
+        const p = point(event);
+        state.drawing = true;
+        state.dirty = true;
+        state.lastX = p.x;
+        state.lastY = p.y;
+      };
+      const move = event => {
+        if (!state.drawing) return;
+        event.preventDefault();
+        const p = point(event);
+        ctx.beginPath();
+        ctx.moveTo(state.lastX, state.lastY);
+        ctx.lineTo(p.x, p.y);
+        ctx.stroke();
+        state.lastX = p.x;
+        state.lastY = p.y;
+        onChange();
+      };
+      const stop = event => {
+        if (!state.drawing) return;
+        event.preventDefault();
+        state.drawing = false;
+        onChange();
+      };
+      canvas.addEventListener('pointerdown', start);
+      canvas.addEventListener('pointermove', move);
+      canvas.addEventListener('pointerup', stop);
+      canvas.addEventListener('pointercancel', stop);
+      canvas.addEventListener('pointerleave', stop);
+    }
+
     function setupSignaturePads() {
       signaturePads.clear();
       document.querySelectorAll('.signature-pad').forEach(canvas => {
         resizeCanvas(canvas, false);
-        const ctx = canvas.getContext('2d');
         const state = { drawing: false, dirty: false, lastX: 0, lastY: 0 };
         signaturePads.set(canvas.id, state);
 
-        const point = event => {
-          const rect = canvas.getBoundingClientRect();
-          return { x: event.clientX - rect.left, y: event.clientY - rect.top };
-        };
-        const start = event => {
+        canvas.addEventListener('pointerdown', event => {
+          if (!isMobileSignatureMode()) return;
           event.preventDefault();
-          canvas.setPointerCapture(event.pointerId);
-          const p = point(event);
-          state.drawing = true;
-          state.dirty = true;
-          state.lastX = p.x;
-          state.lastY = p.y;
-        };
-        const move = event => {
-          if (!state.drawing) return;
-          event.preventDefault();
-          const p = point(event);
-          ctx.beginPath();
-          ctx.moveTo(state.lastX, state.lastY);
-          ctx.lineTo(p.x, p.y);
-          ctx.stroke();
-          state.lastX = p.x;
-          state.lastY = p.y;
-          onFormChange();
-        };
-        const stop = event => {
-          if (!state.drawing) return;
-          event.preventDefault();
-          state.drawing = false;
-          onFormChange();
-        };
-        canvas.addEventListener('pointerdown', start);
-        canvas.addEventListener('pointermove', move);
-        canvas.addEventListener('pointerup', stop);
-        canvas.addEventListener('pointercancel', stop);
-        canvas.addEventListener('pointerleave', stop);
+          event.stopImmediatePropagation();
+          openSignatureModal(canvas.id);
+        });
+        bindSignatureDrawing(canvas, state, onFormChange);
       });
+    }
+
+    function setupSignatureModal() {
+      if (modalSignatureBound) return;
+      const canvas = document.getElementById('signature-modal-pad');
+      if (!canvas) return;
+      bindSignatureDrawing(canvas, modalSignatureState, () => {
+        modalSignatureState.cleared = false;
+      });
+      modalSignatureBound = true;
+    }
+
+    function drawImageToCanvas(canvas, dataUrl) {
+      if (!canvas || !dataUrl || dataUrl.length < 100) return;
+      const ctx = canvas.getContext('2d');
+      const rect = canvas.getBoundingClientRect();
+      const img = new Image();
+      img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height);
+      img.src = dataUrl;
+    }
+
+    function openSignatureModal(canvasId) {
+      const source = document.getElementById(canvasId);
+      const modal = document.getElementById('signature-modal');
+      const modalCanvas = document.getElementById('signature-modal-pad');
+      const title = document.getElementById('signature-modal-title');
+      if (!source || !modal || !modalCanvas) return;
+      activeSignatureCanvasId = canvasId;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      if (title) title.textContent = source.getAttribute('aria-label') || '簽名';
+      modalSignatureState.drawing = false;
+      modalSignatureState.dirty = false;
+      modalSignatureState.cleared = false;
+      requestAnimationFrame(() => {
+        resizeCanvas(modalCanvas, false);
+        drawImageToCanvas(modalCanvas, source.toDataURL('image/png'));
+      });
+    }
+
+    function clearSignatureModal() {
+      const canvas = document.getElementById('signature-modal-pad');
+      if (!canvas) return;
+      canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+      modalSignatureState.dirty = false;
+      modalSignatureState.cleared = true;
+      modalSignatureState.drawing = false;
+    }
+
+    function closeSignatureModal(save) {
+      const modal = document.getElementById('signature-modal');
+      const modalCanvas = document.getElementById('signature-modal-pad');
+      const source = document.getElementById(activeSignatureCanvasId);
+      if (save && modalCanvas && source) {
+        const sourceState = signaturePads.get(source.id);
+        source.getContext('2d').clearRect(0, 0, source.width, source.height);
+        if (!modalSignatureState.cleared) {
+          drawImageToCanvas(source, modalCanvas.toDataURL('image/png'));
+        }
+        if (sourceState) sourceState.dirty = !modalSignatureState.cleared;
+        onFormChange();
+      }
+      if (modal) {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+      activeSignatureCanvasId = '';
+      modalSignatureState.drawing = false;
     }
 
     function clearSignature(idx) {
@@ -1215,6 +1345,9 @@
 
     window.addEventListener('resize', () => {
       document.querySelectorAll('.signature-pad').forEach(canvas => resizeCanvas(canvas));
+      const modal = document.getElementById('signature-modal');
+      const modalCanvas = document.getElementById('signature-modal-pad');
+      if (modal?.classList.contains('open') && modalCanvas) resizeCanvas(modalCanvas);
       buildPrintSheet();
     });
 
@@ -1226,6 +1359,7 @@
       renderTypeCards();
       renderInspectTable();
       renderSignaturePads();
+      setupSignatureModal();
       setDefaultDate();
       renderCalendar();
       loadForm();
