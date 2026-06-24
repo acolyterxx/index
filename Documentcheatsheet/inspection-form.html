@@ -933,6 +933,14 @@
       img.src = dataUrl;
     }
 
+    function clearCanvasPixels(canvas) {
+      const ctx = canvas.getContext('2d');
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.restore();
+    }
+
     function copySignatureContent(sourceCanvas, targetCanvas) {
       const sourceCtx = sourceCanvas.getContext('2d');
       const targetCtx = targetCanvas.getContext('2d');
@@ -953,8 +961,13 @@
           }
         }
       }
+      targetCtx.save();
+      targetCtx.setTransform(1, 0, 0, 1, 0, 0);
       targetCtx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
-      if (maxX < minX || maxY < minY) return false;
+      if (maxX < minX || maxY < minY) {
+        targetCtx.restore();
+        return false;
+      }
       const ratio = window.devicePixelRatio || 1;
       const padding = Math.max(8, Math.round(10 * ratio));
       minX = Math.max(0, minX - padding);
@@ -972,6 +985,7 @@
       const drawX = (targetCanvas.width - drawWidth) / 2;
       const drawY = (targetCanvas.height - drawHeight) / 2;
       targetCtx.drawImage(sourceCanvas, minX, minY, cropWidth, cropHeight, drawX, drawY, drawWidth, drawHeight);
+      targetCtx.restore();
       return true;
     }
 
@@ -997,7 +1011,7 @@
     function clearSignatureModal() {
       const canvas = document.getElementById('signature-modal-pad');
       if (!canvas) return;
-      canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+      clearCanvasPixels(canvas);
       modalSignatureState.dirty = false;
       modalSignatureState.cleared = true;
       modalSignatureState.drawing = false;
@@ -1009,7 +1023,7 @@
       const source = document.getElementById(activeSignatureCanvasId);
       if (save && modalCanvas && source) {
         const sourceState = signaturePads.get(source.id);
-        source.getContext('2d').clearRect(0, 0, source.width, source.height);
+        clearCanvasPixels(source);
         const hasSignature = !modalSignatureState.cleared && copySignatureContent(modalCanvas, source);
         if (sourceState) sourceState.dirty = hasSignature;
         onFormChange();
