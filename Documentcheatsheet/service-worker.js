@@ -1,12 +1,18 @@
 // 行政資料大補帖 Service Worker
-const CACHE_VERSION = 'hazard-v2.0';
+const CACHE_VERSION = 'hazard-v2.9';
 
 const CACHE_FILES = [
-  './',
-  './index.html',
-  './hazard-form.html',
-  './inspection-form.html',
   './style.css',
+  './form-template-rules.js',
+  './form-definitions.js',
+  './form-catalog.js',
+  './draft-store.js',
+  './form-session.js',
+  './print-utils.js',
+  './print-layout-rules.js',
+  './print-verifier.js',
+  './signature-utils.js',
+  './app-cache.js',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png'
@@ -47,20 +53,28 @@ self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
   const requestUrl = new URL(event.request.url);
   const isDocument = event.request.mode === 'navigate' || event.request.destination === 'document';
+  const isFreshAppAsset = requestUrl.pathname.endsWith('.js') || requestUrl.pathname.endsWith('.css') || requestUrl.pathname.endsWith('.json');
 
   if (isDocument || requestUrl.pathname.endsWith('.html')) {
     event.respondWith(
+      fetch(event.request).catch(() => new Response(
+        '<!doctype html><meta charset="utf-8"><title>離線</title><p>目前無法載入頁面，請確認本機伺服器已啟動後重新整理。</p>',
+        { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
+      ))
+    );
+    return;
+  }
+
+  if (isFreshAppAsset) {
+    event.respondWith(
       fetch(event.request).then(networkResponse => {
         if (networkResponse && networkResponse.status === 200) {
-          const responseToCache = networkResponse.clone();
           caches.open(CACHE_VERSION).then(cache => {
-            cache.put(event.request, responseToCache);
+            cache.put(event.request, networkResponse.clone());
           });
         }
         return networkResponse;
-      }).catch(() => {
-        return caches.match(event.request).then(cachedResponse => cachedResponse || caches.match('./index.html'));
-      })
+      }).catch(() => caches.match(event.request))
     );
     return;
   }
@@ -87,11 +101,7 @@ self.addEventListener('fetch', event => {
           cache.put(event.request, responseToCache);
         });
         return networkResponse;
-      }).catch(() => {
-        if (event.request.destination === 'document') {
-          return caches.match('./index.html');
-        }
-      });
+      }).catch(() => caches.match(event.request));
     })
   );
 });

@@ -192,6 +192,14 @@
       .print-electric-cart .print-signatures { margin-top: 3px; }
       .print-electric-cart .print-sign-box { height: 16mm; grid-template-rows: 4.8mm 1fr; }
       .print-electric-cart .print-sign-title { font-size: 12pt; line-height: 4.8mm; }
+      .print-electric-cart,
+      .print-protective-equipment,
+      .print-monthly-workplace {
+        max-height: 189mm;
+        overflow: hidden !important;
+        break-after: avoid !important;
+        page-break-after: avoid !important;
+      }
       .print-protective-equipment .print-table { font-size: 11pt; line-height: 1.08; }
       .print-protective-equipment .print-table th,
       .print-protective-equipment .print-table td { padding: 1.8px 1.5px; }
@@ -267,6 +275,43 @@
         overflow: hidden;
       }
       .print-monthly-workplace .print-table .print-day { width: 6.9mm; font-size: 12pt; }
+      .print-monthly-workplace .print-signatures { margin-top: 3px; }
+      .print-monthly-workplace .print-sign-box { height: 17mm; grid-template-rows: 5mm 1fr; }
+      .print-monthly-workplace .print-sign-title { font-size: 12pt; line-height: 5mm; }
+      .print-lab-safety .print-table .print-part {
+        width: 13mm;
+      }
+      .print-lab-safety .print-table .print-content {
+        width: 68mm;
+        text-align: left;
+      }
+      .print-lab-safety .print-table .print-day {
+        width: 6.38mm;
+      }
+      .print-lab-safety .print-table {
+        width: calc(100% - 1.2mm);
+        max-width: calc(100% - 1.2mm);
+        margin-left: 0.6mm;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+      .print-lab-safety .print-table th,
+      .print-lab-safety .print-table td {
+        border-right: 0;
+        border-bottom: 0;
+      }
+      .print-lab-safety .print-table th:last-child,
+      .print-lab-safety .print-table td:last-child {
+        border-right: 1px solid #000;
+      }
+      .print-lab-safety .print-table tbody tr:last-child td {
+        border-bottom: 1px solid #000;
+      }
+      .print-lab-safety .print-table thead .print-lab-merged-head {
+        text-align: center !important;
+        border-left: 1px solid #000 !important;
+        border-top: 1px solid #000 !important;
+      }
       .print-improve-row { height: 12mm; }
       .print-improve-cell { text-align: left !important; vertical-align: top !important; white-space: pre-wrap; line-height: 1.35; padding: 3px 5px !important; }
       .print-note { text-align: left !important; vertical-align: top !important; font-size: 11pt; line-height: 1.32; padding: 3px 5px !important; overflow: hidden; }
@@ -427,6 +472,15 @@
     <p>農業部畜產試驗所 &copy; 中華民國114年　｜　作業巡檢表</p>
   </footer>
 
+  <script src="draft-store.js"></script>
+  <script src="form-session.js"></script>
+  <script src="print-utils.js"></script>
+  <script src="print-layout-rules.js"></script>
+  <script src="print-verifier.js"></script>
+  <script src="form-definitions.js"></script>
+  <script src="form-catalog.js"></script>
+  <script src="signature-utils.js"></script>
+  <script src="app-cache.js"></script>
   <script>
     const FORM_TYPES = [
       {
@@ -528,8 +582,65 @@
           ['熱源', '發熱、產熱設備是否於安全設計下使用，避免熱源接近易燃物質（目視）'],
           ['其他', '操作 / 目視']
         ]
+      },
+      {
+        id: 'lab-safety',
+        title: '實驗場所安全衛生作業檢點表',
+        printTitle: '實驗場所安全衛生作業檢點表（每日作業前）',
+        subtitle: '每日作業前',
+        metaLabel: '作業場所',
+        metaDefault: '一樓肉品實驗室',
+        ruleArticle: '',
+        partHeading: '檢點部分',
+        contentHeading: '檢點內容',
+        printSplitIndex: 20,
+        items: [
+          ['藥品櫃', '藥品使用完畢後是否緊閉並置回原位整齊存放'],
+          ['藥品櫃', '藥品名稱是否標示清楚'],
+          ['藥品櫃', '各藥櫃是否關閉妥當'],
+          ['藥品櫃', '藥品櫃內有無藥品洩漏情形'],
+          ['藥品櫃', '其他：'],
+          ['高壓氣體鋼瓶設備', '高壓氣體鋼瓶有無橫置之固定'],
+          ['高壓氣體鋼瓶設備', '鋼瓶之固定措施是否牢固'],
+          ['高壓氣體鋼瓶設備', '各種錶壓是否正常'],
+          ['高壓氣體鋼瓶設備', '鋼瓶儲存間是否有易燃物'],
+          ['高壓氣體鋼瓶設備', '儲存間溫度是否超過攝氏40度'],
+          ['高壓氣體鋼瓶設備', '其他：'],
+          ['儀器及附屬設備', '儀器使用完畢是否依程序關閉'],
+          ['儀器及附屬設備', '電線絕緣包覆有無破壞致裸露'],
+          ['儀器及附屬設備', '其他：'],
+          ['安全衛生防護具', '特殊檢驗時，人員有無正確使用安全防護具如安全眼鏡'],
+          ['安全衛生防護具', '其他：'],
+          ['污染防治設備', '廢溶劑貯存所超過攝氏50度'],
+          ['污染防治設備', '貯存之內容物有無明顯標示'],
+          ['污染防治設備', '固體廢棄物是否分類貯存'],
+          ['污染防治設備', '其他：'],
+          ['室內整體環境條件', '緊急照明系統足否良好'],
+          ['室內整體環境條件', '室內整潔，通道明確'],
+          ['室內整體環境條件', '物品器材放置有條不紊'],
+          ['室內整體環境條件', '緊急疏散標示是否清楚'],
+          ['室內整體環境條件', '其他：'],
+          ['高壓氣體鋼瓶設備', '檢查接頭部份有無溢洩'],
+          ['高壓氣體鋼瓶設備', '各種鋼瓶成分是否標示清楚'],
+          ['高壓氣體鋼瓶設備', '其他：'],
+          ['消防滅火設施', '是否備有防止各類火災之滅火設備'],
+          ['消防滅火設施', '滅火器是否定期更新'],
+          ['消防滅火設施', '貯放場所有無明顯標示'],
+          ['消防滅火設施', '其他：'],
+          ['儀器及附屬設備', '電源供應系統正常（接地、絕緣電阻）'],
+          ['儀器及附屬設備', '其他：']
+        ]
       }
     ];
+
+    if (window.FormCatalog) {
+      FormCatalog.registerGroup('inspection', FORM_TYPES, {
+        versionLabel: 'multi-form',
+        source: 'reference_forms'
+      });
+    } else {
+      FormDefinitions.register('inspection', FORM_TYPES);
+    }
 
     const SIGNERS = ['檢點人員', '場所負責人', '單位主管', '秘書室（保管）'];
     const RESULT_MARKS = { ok: 'ˇ', maintain: 'Δ', fail: '×', na: '–' };
@@ -560,26 +671,22 @@
     let activeSignatureCanvasId = '';
     const modalSignatureState = { drawing: false, dirty: false, cleared: false, lastX: 0, lastY: 0 };
     let modalSignatureBound = false;
-    const DRAFT_INDEX_KEY = 'admin-form-drafts';
-    const DRAFT_RECORD_PREFIX = 'admin-form-draft:';
     let currentDraftId = new URLSearchParams(window.location.search).get('draft') || '';
 
     function escapeHtml(value) {
-      return String(value || '').replace(/[&<>"']/g, char => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-      }[char]));
+      return AdminPrintUtils.escapeHtml(value);
     }
 
     function printText(value) {
-      return escapeHtml(value).replace(/(\d+)/g, '<span class="print-num">$1</span>');
+      return AdminPrintUtils.printText(value);
     }
 
     function printTextWithBreaks(value) {
-      return printText(value).replace(/&lt;br&gt;/g, '<br>');
+      return AdminPrintUtils.printTextWithBreaks(value);
     }
 
     function printPlateValue(value) {
-      return escapeHtml(value).replace(/([A-Za-z0-9-]+)/g, '<span class="print-plate-value">$1</span>');
+      return AdminPrintUtils.printPlateValue(value);
     }
 
     function isMobileSignatureMode() {
@@ -587,41 +694,23 @@
     }
 
     function currentForm() {
-      return FORM_TYPES.find(item => item.id === currentTypeId) || FORM_TYPES[0];
+      const catalog = window.FormCatalog || window.FormDefinitions;
+      return catalog.find('inspection', currentTypeId) || catalog.list('inspection')[0] || FORM_TYPES[0];
     }
 
     function storageKey() {
       return `inspection-form-data:${currentTypeId}`;
     }
 
-    function getDraftIndex() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(DRAFT_INDEX_KEY) || '[]');
-        return Array.isArray(saved) ? saved : [];
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function setDraftIndex(items) {
-      localStorage.setItem(DRAFT_INDEX_KEY, JSON.stringify(items));
-    }
-
     function readCurrentDraftData() {
       if (!currentDraftId) return null;
-      const recordRaw = localStorage.getItem(DRAFT_RECORD_PREFIX + currentDraftId);
-      if (!recordRaw) return null;
-      try {
-        const record = JSON.parse(recordRaw);
-        return record.data || null;
-      } catch (e) {
-        return null;
-      }
+      return DraftStore.load(currentDraftId)?.data || null;
     }
 
     function renderTypeCards() {
       const grid = document.getElementById('type-grid');
-      grid.innerHTML = FORM_TYPES.map(type => `
+      const types = (window.FormCatalog ? FormCatalog.list('inspection') : FORM_TYPES);
+      grid.innerHTML = types.map(type => `
         <button type="button" class="type-card ${type.id === currentTypeId ? 'active' : ''}" onclick="switchType('${type.id}')">
           <strong>${escapeHtml(type.title)}</strong>
           <span>${escapeHtml(type.subtitle)}</span>
@@ -638,7 +727,8 @@
       document.getElementById('part-heading').textContent = form.partHeading || '檢點部分';
       document.getElementById('place-label').innerHTML = `${form.metaLabel} <span class="required">*</span>`;
       const place = document.getElementById('place');
-      if (!place.value || FORM_TYPES.some(item => item.metaDefault === place.value)) place.value = form.metaDefault;
+      const types = (window.FormCatalog ? FormCatalog.list('inspection') : FORM_TYPES);
+      if (!place.value || types.some(item => item.metaDefault === place.value)) place.value = form.metaDefault;
 
       const tbody = document.getElementById('inspect-tbody');
       tbody.innerHTML = form.items.map((item, idx) => `
@@ -740,9 +830,18 @@
 
     function setDefaultNormalResults(key) {
       const bucket = resultBucketForDate(key, true);
-      currentForm().items.forEach((_, idx) => {
-        if (!bucket[idx]) bucket[idx] = 'ok';
+      const form = currentForm();
+      form.items.forEach((item, idx) => {
+        if (!bucket[idx]) bucket[idx] = defaultResultForItem(form, item);
       });
+    }
+
+    function defaultResultForItem(form, item) {
+      if (form.id === 'lab-safety') {
+        if (item[0] === '高壓氣體鋼瓶設備') return 'na';
+        if (String(item[1] || '').startsWith('廢溶')) return 'na';
+      }
+      return 'ok';
     }
 
     function renderCalendar() {
@@ -832,7 +931,7 @@
     }
 
     function resizeCanvas(canvas, keepImage = true) {
-      const oldImage = keepImage ? canvas.toDataURL('image/png') : '';
+      const oldImage = keepImage ? SignatureUtils.canvasDataUrl(canvas) : '';
       const rect = canvas.getBoundingClientRect();
       const ratio = window.devicePixelRatio || 1;
       canvas.width = Math.max(1, Math.round(rect.width * ratio));
@@ -1004,7 +1103,7 @@
       modalSignatureState.cleared = false;
       requestAnimationFrame(() => {
         resizeCanvas(modalCanvas, false);
-        drawImageToCanvas(modalCanvas, source.toDataURL('image/png'));
+        drawImageToCanvas(modalCanvas, SignatureUtils.canvasDataUrl(source));
       });
     }
 
@@ -1105,20 +1204,27 @@
       const periodCount = isMonthly ? 12 : 31;
       const selectedPeriods = isMonthly ? new Set([month]) : selectedDays;
       const dayHeaders = Array.from({ length: periodCount }, (_, i) => `<th class="print-day"><span class="print-num">${i + 1}</span></th>`).join('');
-      const contentHeading = form.id === 'electric-cart'
+      const layout = window.AdminPrintLayout?.inspection;
+      const contentHeading = layout ? layout.contentHeading(form) : (form.id === 'electric-cart'
         ? '檢查方法'
-        : (form.id === 'protective-equipment' ? '檢點內容' : '檢點內容 / 檢查方法');
+        : (form.id === 'protective-equipment' ? '檢點內容' : '檢點內容 / 檢查方法'));
       const noteLabels = ['一、', '二、', '三、'];
       const noteLines = printInstructions(form).map((line, idx) => `<li>${noteLabels[idx] || ''}${printText(line)}</li>`).join('');
       const metaValue = document.getElementById('place').value;
       const middleMeta = form.id === 'electric-cart'
         ? `${printText(form.metaLabel)}：${printPlateValue(metaValue)}`
         : `${printText(form.metaLabel)}：${printText(metaValue)}`;
+      const firstHeadCell = layout
+        ? layout.firstHeadCell(form, { printText })
+        : (form.id === 'lab-safety'
+          ? `<th class="print-lab-merged-head" colspan="2">${printText(form.partHeading || '檢點部分')}</th>`
+          : `<th class="print-part">${printText(form.partHeading || '檢點部分')}</th>
+            <th class="print-content">${printText(contentHeading)}</th>`);
+      const tableColumns = layout ? layout.tableColumns(form, periodCount) : '';
       const tableHead = `
         <thead>
           <tr>
-            <th class="print-part">${printText(form.partHeading || '檢點部分')}</th>
-            <th class="print-content">${printText(contentHeading)}</th>
+            ${firstHeadCell}
             ${dayHeaders}
           </tr>
         </thead>`;
@@ -1137,12 +1243,12 @@
             const mark = selectedPeriods.has(period) ? (RESULT_MARKS[selectedResult(itemIndex, resultKey)] || '') : '';
             return `<td class="print-mark">${mark}</td>`;
           }).join('');
-          const trimOtherColonForms = new Set(['electric-cart', 'protective-equipment', 'electric-machinery', 'monthly-workplace']);
+          const trimOtherColonForms = new Set(['electric-cart', 'protective-equipment', 'electric-machinery', 'monthly-workplace', 'lab-safety']);
           let partText = trimOtherColonForms.has(form.id) ? item[0].replace(/：$/, '') : item[0];
           if (form.id === 'protective-equipment') partText = partText.replace(/／/g, '/');
           if (form.id === 'protective-equipment' && partText === '防護眼鏡及面具') partText = '防護眼鏡<br>及面具';
           if (form.id === 'electric-machinery' && partText === '電器安全') partText = '電氣安全';
-          let contentText = ((form.id === 'protective-equipment' || form.id === 'electric-machinery') && item[0].replace(/：$/, '') === '其他') ? '' : item[1];
+          let contentText = ((form.id === 'protective-equipment' || form.id === 'electric-machinery' || form.id === 'lab-safety') && item[0].replace(/：$/, '') === '其他') ? '' : item[1];
           const spanAttr = partSpans[idx] > 1 ? ` rowspan="${partSpans[idx]}"` : '';
           const partCell = partSpans[idx] > 0 ? `<td class="print-part"${spanAttr}>${printTextWithBreaks(partText)}</td>` : '';
           return `<tr>
@@ -1153,16 +1259,44 @@
         }).join('');
       };
       const rows = renderRows(form.items);
+      const splitPrintTables = splitIndex => {
+        const firstRows = renderRows(form.items.slice(0, splitIndex), 0);
+        const secondRows = renderRows(form.items.slice(splitIndex), splitIndex);
+        return `
+          <table class="print-table">
+            ${tableColumns}
+            ${tableHead}
+            <tbody>${firstRows}</tbody>
+          </table>
+          <table class="print-table print-table-continued">
+            ${tableColumns}
+            ${tableHead}
+            <tbody>
+              ${secondRows}
+              <tr class="print-improve-row">
+                <td class="print-improve-cell" colspan="${periodCount + 2}"><span class="print-improve-title">撱箄降?孵?鈭?嚗?/span>${printText(improvement)}</td>
+              </tr>
+              <tr>
+                <td class="print-note" colspan="${periodCount + 2}">
+                  <div class="print-note-title">隤芣?嚗?/div>
+                  <ol class="print-note-lines">${noteLines}</ol>
+                </td>
+              </tr>
+            </tbody>
+          </table>`;
+      };
       const electricMachineryTables = () => {
         const splitIndex = 12;
         const firstRows = renderRows(form.items.slice(0, splitIndex), 0);
         const secondRows = renderRows(form.items.slice(splitIndex), splitIndex);
         return `
           <table class="print-table">
+            ${tableColumns}
             ${tableHead}
             <tbody>${firstRows}</tbody>
           </table>
           <table class="print-table print-table-continued">
+            ${tableColumns}
             ${tableHead}
             <tbody>
               ${secondRows}
@@ -1180,6 +1314,7 @@
       };
       const printTable = form.id === 'electric-machinery' ? electricMachineryTables() : `
         <table class="print-table">
+          ${tableColumns}
           ${tableHead}
           <tbody>
             ${rows}
@@ -1197,7 +1332,7 @@
       const signatures = SIGNERS.map((label, idx) => {
         const canvas = document.getElementById(`signature-${idx}`);
         const state = canvas ? signaturePads.get(canvas.id) : null;
-        const image = canvas && state && state.dirty ? `<img src="${canvas.toDataURL('image/png')}" alt="${escapeHtml(label)}簽名">` : '';
+        const image = canvas && state && state.dirty ? `<img src="${SignatureUtils.canvasDataUrl(canvas)}" alt="${escapeHtml(label)}簽名">` : '';
         return `<div class="print-sign-box"><div class="print-sign-title">${printText(label)}</div><div class="print-sign-body">${image}</div></div>`;
       }).join('');
       sheet.innerHTML = `
@@ -1254,7 +1389,7 @@
       document.querySelectorAll('.form-input, .form-textarea, .date-input-sm').forEach(el => { data[el.id] = el.value; });
       document.querySelectorAll('.signature-pad').forEach(canvas => {
         const state = signaturePads.get(canvas.id);
-        data.signatures[canvas.id] = state && state.dirty ? canvas.toDataURL('image/png') : '';
+        data.signatures[canvas.id] = state && state.dirty ? SignatureUtils.canvasDataUrl(canvas) : '';
       });
       return data;
     }
@@ -1270,59 +1405,30 @@
     function saveForm() {
       const now = new Date().toISOString();
       if (!currentDraftId) {
-        currentDraftId = 'inspection-' + Date.now();
-        const url = new URL(window.location.href);
-        url.searchParams.set('draft', currentDraftId);
-        window.history.replaceState({}, '', url);
+        currentDraftId = FormSession.ensureDraftId(currentDraftId, 'inspection');
+        FormSession.syncLocationDraft(currentDraftId);
       }
 
-      const record = {
+      const record = FormSession.saveDraft({
         id: currentDraftId,
         type: 'inspection',
         typeLabel: '作業巡檢表',
         title: makeDraftTitle(),
-        url: 'inspection-form.html?draft=' + encodeURIComponent(currentDraftId),
-        createdAt: now,
-        updatedAt: now,
+        page: 'inspection-form.html',
         data: collectData()
-      };
-
-      const existingRaw = localStorage.getItem(DRAFT_RECORD_PREFIX + currentDraftId);
-      if (existingRaw) {
-        try {
-          const existing = JSON.parse(existingRaw);
-          record.createdAt = existing.createdAt || now;
-        } catch (e) {}
-      }
-
-      localStorage.setItem(DRAFT_RECORD_PREFIX + currentDraftId, JSON.stringify(record));
-      const index = getDraftIndex().filter(item => item.id !== currentDraftId);
-      index.push({
-        id: record.id,
-        type: record.type,
-        typeLabel: record.typeLabel,
-        title: record.title,
-        url: record.url,
-        createdAt: record.createdAt,
-        updatedAt: record.updatedAt
       });
-      setDraftIndex(index);
+
       const backLink = document.querySelector('.back-btn');
-      if (backLink) backLink.href = 'index.html?drafts=' + encodeURIComponent(currentDraftId) + '&t=' + Date.now();
+      if (backLink) backLink.href = FormSession.backToIndexUrl(currentDraftId);
       showToast('作業巡檢表已暫存，可回首頁清冊繼續修改');
     }
 
     function loadForm() {
       if (!currentDraftId) return;
-      const recordRaw = localStorage.getItem(DRAFT_RECORD_PREFIX + currentDraftId);
-      if (!recordRaw) return;
+      const record = FormSession.loadDraft(currentDraftId);
+      if (!record) return;
       let data = {};
-      try {
-        const record = JSON.parse(recordRaw);
-        data = record.data || {};
-      } catch (e) {
-        return;
-      }
+      data = record.data || {};
       const legacyResults = {};
       Object.entries(data).forEach(([id, value]) => {
         if (id === 'typeId' || id === 'signatures' || id === 'selectedDates' || id === 'activeDate' || id === 'resultsByDate') return;
@@ -1416,7 +1522,8 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       const draftData = readCurrentDraftData();
-      if (draftData?.typeId && FORM_TYPES.some(item => item.id === draftData.typeId)) currentTypeId = draftData.typeId;
+      const types = (window.FormCatalog ? FormCatalog.list('inspection') : FORM_TYPES);
+      if (draftData?.typeId && types.some(item => item.id === draftData.typeId)) currentTypeId = draftData.typeId;
       renderTypeCards();
       renderInspectTable();
       renderSignaturePads();

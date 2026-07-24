@@ -9,49 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <style>
-    .drafts-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-    .drafts-header .section-label { margin-bottom: 0; }
-    .draft-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-    .draft-export,
-    .draft-import {
-      border: 1px solid rgba(47, 125, 87, 0.26);
-      background: rgba(47, 125, 87, 0.08);
-      color: var(--primary-dark);
-      border-radius: 8px;
-      padding: 7px 12px;
-      font: inherit;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .draft-export:hover,
-    .draft-import:hover {
-      background: rgba(47, 125, 87, 0.14);
-      border-color: rgba(47, 125, 87, 0.38);
-    }
-    @media (max-width: 768px) {
-      .drafts-header {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-      .draft-actions {
-        flex-wrap: wrap;
-      }
-    }
-  </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#2f7d57">
   <meta name="mobile-web-app-capable" content="yes">
@@ -107,7 +64,7 @@
             <h2 class="card-title">承攬作業環境<br>危害告知單</h2>
             <p class="card-desc">包含危害告知、作業環境說明、安全衛生承諾書，依職業安全衛生法規定辦理</p>
             <div class="card-meta">
-              <span class="meta-item">📋 表單 114-06-09</span>
+              <span class="meta-item">📋 表單 115-07-22</span>
               <span class="meta-item">🏛️ 農業部畜產試驗所</span>
             </div>
           </div>
@@ -136,11 +93,8 @@
     </section>
 
     <section class="drafts-section">
-      <div class="drafts-header">
-        <div class="section-label">暫存表單清冊</div>
-        <button class="draft-import" type="button" id="draft-import-btn">匯入暫存</button>
-        <input id="draft-import-input" type="file" accept=".json,application/json" hidden>
-      </div>
+      <div class="section-label">暫存表單清冊</div>
+      <div class="draft-origin-note" id="draft-origin-note"></div>
       <div class="draft-list" id="draft-list">
         <div class="draft-empty">目前沒有暫存表單</div>
       </div>
@@ -167,17 +121,34 @@
         <div class="info-icon">📅</div>
         <div class="info-text">
           <strong>版本日期</strong>
-          <span>民國114年06月09日</span>
+          <span>民國115年07月22日</span>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>農業部畜產試驗所 &copy; 中華民國114年　行政資料大補帖</p>
+    <p>農業部畜產試驗所 &copy; 中華民國115年　行政資料大補帖</p>
   </footer>
 
+  <script src="form-template-rules.js"></script>
+  <script src="form-catalog.js"></script>
+  <script src="draft-store.js"></script>
+  <script src="form-session.js"></script>
+  <script src="app-cache.js"></script>
   <script>
+    function applyTemplateRules() {
+      const hazard = window.FormCatalog?.pageVersion('hazard') || window.ADMIN_FORM_RULES?.hazard;
+      if (!hazard) return;
+      const hazardCardMeta = document.querySelector('#card-hazard .card-meta .meta-item');
+      if (hazardCardMeta) hazardCardMeta.textContent = `📋 表單 ${hazard.versionLabel}`;
+      const versionInfo = Array.from(document.querySelectorAll('.info-text')).find(item => item.textContent.includes('版本日期'));
+      const versionSpan = versionInfo?.querySelector('span');
+      if (versionSpan) versionSpan.textContent = hazard.versionText;
+      const footer = document.querySelector('.site-footer p');
+      if (footer) footer.textContent = `農業部畜產試驗所 © 中華民國${hazard.footerYear}年　行政資料大補帖`;
+    }
+
     function formatDraftTime(value) {
       if (!value) return '';
       const date = new Date(value);
@@ -196,22 +167,20 @@
       }[char]));
     }
 
-    function getDraftIndex() {
-      try {
-        const drafts = JSON.parse(localStorage.getItem('admin-form-drafts') || '[]');
-        return Array.isArray(drafts) ? drafts : [];
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function setDraftIndex(drafts) {
-      localStorage.setItem('admin-form-drafts', JSON.stringify(Array.isArray(drafts) ? drafts : []));
-    }
-
     function renderDraftList() {
       const list = document.getElementById('draft-list');
-      let drafts = getDraftIndex();
+      if (!window.DraftStore) {
+        list.innerHTML = '<div class="draft-empty">暫存清冊尚未載入，請重新整理首頁</div>';
+        return;
+      }
+      let drafts = [];
+      try {
+        drafts = DraftStore.list();
+      } catch (e) {
+        console.warn('[DraftList] render failed:', e);
+        list.innerHTML = '<div class="draft-empty">暫存清冊讀取失敗，請重新整理首頁</div>';
+        return;
+      }
 
       if (!Array.isArray(drafts) || drafts.length === 0) {
         list.innerHTML = '<div class="draft-empty">目前沒有暫存表單</div>';
@@ -220,7 +189,7 @@
 
       drafts = drafts
         .slice()
-        .sort((a, b) => new Date(b.createdAt || b.updatedAt || 0) - new Date(a.createdAt || a.updatedAt || 0));
+        .sort((a, b) => new Date(b.updatedAt || b.createdAt || 0) - new Date(a.updatedAt || a.createdAt || 0));
 
       list.innerHTML = drafts.map(item => `
         <a class="draft-item" href="${escapeHtml(item.url)}">
@@ -232,121 +201,38 @@
             <span>建立：${formatDraftTime(item.createdAt)}</span>
             <span>更新：${formatDraftTime(item.updatedAt)}</span>
           </div>
-          <div class="draft-actions">
-            <button class="draft-export" type="button" data-draft-id="${escapeHtml(item.id)}">匯出暫存</button>
-            <button class="draft-delete" type="button" data-draft-id="${escapeHtml(item.id)}">刪除</button>
-          </div>
+          <button class="draft-delete" type="button" data-draft-id="${escapeHtml(item.id)}">刪除</button>
         </a>
       `).join('');
     }
 
     function deleteDraft(id) {
-      let drafts = getDraftIndex();
-      localStorage.removeItem('admin-form-draft:' + id);
-      setDraftIndex(drafts.filter(item => item.id !== id));
+      DraftStore.remove(id);
       renderDraftList();
+    }
+
+    function refreshDraftListWhenVisible() {
+      if (!document.hidden) renderDraftList();
+    }
+
+    function bindDraftRefresh() {
       window.addEventListener('pageshow', renderDraftList);
       window.addEventListener('focus', renderDraftList);
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) renderDraftList();
-      });
-    }
-
-    function safeFilePart(value) {
-      return String(value || 'draft')
-        .replace(/[\\/:*?"<>|]+/g, '-')
-        .replace(/\s+/g, '-')
-        .slice(0, 60) || 'draft';
-    }
-
-    function exportDraft(id) {
-      const drafts = getDraftIndex();
-      const item = drafts.find(draft => draft.id === id);
-      const recordRaw = localStorage.getItem('admin-form-draft:' + id);
-      if (!item || !recordRaw) {
-        alert('找不到這筆暫存資料。');
-        renderDraftList();
-        return;
-      }
-      let record = null;
-      try {
-        record = JSON.parse(recordRaw);
-      } catch (e) {
-        alert('暫存資料格式無法匯出。');
-        return;
-      }
-      const exportedAt = new Date().toISOString();
-      const payload = {
-        app: 'livestock-admin-form',
-        exportType: 'draft',
-        version: 1,
-        exportedAt,
-        record
-      };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-      const link = document.createElement('a');
-      const stamp = exportedAt.replace(/[-:]/g, '').slice(0, 13);
-      link.href = URL.createObjectURL(blob);
-      link.download = `admin-form-draft-${safeFilePart(item.title || item.id)}-${stamp}.json`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
-    }
-
-    function normalizeImportedDraft(payload) {
-      if (!payload || payload.app !== 'livestock-admin-form' || payload.exportType !== 'draft' || !payload.record) {
-        throw new Error('這不是有效的暫存檔。');
-      }
-      const source = payload.record;
-      if (!source.type || !source.data) throw new Error('暫存檔缺少必要資料。');
-      const now = new Date().toISOString();
-      const id = `${source.type || 'draft'}-imported-${Date.now()}`;
-      const urlBase = source.type === 'hazard' ? 'hazard-form.html' : 'inspection-form.html';
-      const record = {
-        ...source,
-        id,
-        url: `${urlBase}?draft=${encodeURIComponent(id)}`,
-        createdAt: source.createdAt || now,
-        updatedAt: now
-      };
-      const indexItem = {
-        id,
-        type: record.type,
-        typeLabel: record.typeLabel || '表單',
-        title: record.title || '匯入暫存表單',
-        url: record.url,
-        createdAt: record.createdAt,
-        updatedAt: record.updatedAt
-      };
-      return { id, record, indexItem };
-    }
-
-    function importDraftFile(file) {
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          const payload = JSON.parse(String(reader.result || ''));
-          const imported = normalizeImportedDraft(payload);
-          const drafts = getDraftIndex().filter(item => item.id !== imported.id);
-          drafts.push(imported.indexItem);
-          localStorage.setItem('admin-form-draft:' + imported.id, JSON.stringify(imported.record));
-          setDraftIndex(drafts);
+      window.addEventListener('storage', event => {
+        if (!window.DraftStore || event.key === DraftStore.INDEX_KEY || event.key === DraftStore.UPDATED_KEY || (event.key || '').startsWith(DraftStore.RECORD_PREFIX)) {
           renderDraftList();
-          alert('暫存表單匯入成功。');
-        } catch (e) {
-          alert(e.message || '暫存檔匯入失敗。');
-        } finally {
-          const input = document.getElementById('draft-import-input');
-          if (input) input.value = '';
         }
-      };
-      reader.onerror = () => alert('無法讀取暫存檔。');
-      reader.readAsText(file);
+      });
+      document.addEventListener('visibilitychange', refreshDraftListWhenVisible);
+    }
+
+    function renderDraftOriginNote() {
+      AppCache.renderOriginNote('draft-origin-note');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      applyTemplateRules();
+      renderDraftOriginNote();
       const cards = document.querySelectorAll('.card');
       cards.forEach((card, i) => {
         card.style.opacity = '0';
@@ -358,31 +244,19 @@
         }, 200 + i * 150);
       });
       renderDraftList();
+      bindDraftRefresh();
+      setTimeout(renderDraftList, 250);
+      if (new URLSearchParams(window.location.search).has('drafts')) {
+        setTimeout(renderDraftList, 700);
+      }
       document.getElementById('draft-list').addEventListener('click', event => {
-        const exportButton = event.target.closest('.draft-export');
-        if (exportButton) {
-          event.preventDefault();
-          event.stopPropagation();
-          exportDraft(exportButton.dataset.draftId);
-          return;
-        }
         const button = event.target.closest('.draft-delete');
         if (!button) return;
         event.preventDefault();
         event.stopPropagation();
         deleteDraft(button.dataset.draftId);
       });
-      document.getElementById('draft-import-btn')?.addEventListener('click', () => {
-        document.getElementById('draft-import-input')?.click();
-      });
-      document.getElementById('draft-import-input')?.addEventListener('change', event => {
-        importDraftFile(event.target.files && event.target.files[0]);
-      });
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./service-worker.js')
-          .then(registration => registration.update())
-          .catch(() => {});
-      }
+      AppCache.registerServiceWorker('./service-worker.js');
     });
   </script>
 </body>

@@ -240,6 +240,16 @@
       color: var(--text-primary);
       margin-right: 4px;
     }
+    .pre-rules-notice {
+      margin-bottom: 12px;
+      padding: 12px 16px;
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      border-radius: var(--radius-sm);
+      background: rgba(245, 166, 35, 0.08);
+      color: #8a5a00;
+      font-size: 13px;
+      line-height: 1.7;
+    }
 
     /* ──── Hide 基本資料 section title on screen ──── */
     .form-section:first-of-type .section-title { display: none; }
@@ -261,6 +271,20 @@
     .hazard-mobile-detail,
     .hazard-mobile-detail-row {
       display: none;
+    }
+    .checkbox-label.has-num {
+      display: grid;
+      grid-template-columns: 2em 1fr;
+      column-gap: 0.2em;
+      align-items: start;
+    }
+    .checkbox-label-num {
+      text-align: right;
+      white-space: nowrap;
+    }
+    #section-basic-rules .hazard-notes p {
+      padding-left: 2.9em;
+      text-indent: -2.9em;
     }
 
     /* ──── Pledge section title – centered on screen ──── */
@@ -297,6 +321,7 @@
       text-align: center;
     }
     .print-input-value { display: none; }
+    #hazard-print-template { display: none; }
 
     @media (max-width: 700px) {
       .hazard-table {
@@ -396,6 +421,150 @@
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box !important; }
       body { background:#fff !important; color:#000 !important; font-family:'標楷體','DFKai-SB',serif !important; font-size:11pt !important; margin:0 !important; }
       .bg-animation,.form-topbar,.progress-bar,.notice-block,.btn,footer.site-footer { display:none !important; }
+      body.hazard-print-template-ready .form-container,
+      body.hazard-print-template-ready .site-footer,
+      body.hazard-print-template-ready #ios-install-hint,
+      body.hazard-print-template-ready #pwa-install-btn,
+      body.hazard-print-template-ready .toast,
+      body.hazard-print-template-ready [data-toast="true"] { display:none !important; }
+      body.hazard-print-template-ready #hazard-print-template { display:block !important; }
+      #hazard-print-template {
+        display:none;
+        font-family:'標楷體','DFKai-SB',serif !important;
+        color:#000 !important;
+        font-size:10pt !important;
+        line-height:1.55 !important;
+        width:100% !important;
+      }
+      #hazard-print-template .tpl-page {
+        width:100% !important;
+        min-height:26.9cm;
+        position:relative;
+        page-break-after:always;
+        break-after:page;
+      }
+      #hazard-print-template .tpl-page:last-child { page-break-after:auto; break-after:auto; }
+      #hazard-print-template .tpl-main-title {
+        text-align:center !important;
+        font-family:'標楷體','DFKai-SB',serif !important;
+        font-size:16pt !important;
+        font-weight:400 !important;
+        line-height:1.9 !important;
+        padding-bottom:2pt !important;
+        margin:0 0 3pt !important;
+      }
+      #hazard-print-template .tpl-section-title {
+        font-family:'標楷體','DFKai-SB',serif !important;
+        font-size:11pt !important;
+        font-weight:400 !important;
+        line-height:2.05 !important;
+        padding:1pt 0 3pt !important;
+        margin:0 !important;
+        overflow:visible !important;
+      }
+      #hazard-print-template table { width:100%; border-collapse:collapse; table-layout:fixed; }
+      #hazard-print-template th,
+      #hazard-print-template td {
+        border:1px solid #000;
+        padding:2.5pt 4pt 3.5pt;
+        vertical-align:middle;
+        line-height:1.7;
+        overflow:visible;
+        font-weight:400;
+      }
+      #hazard-print-template .tpl-basic-table { table-layout:fixed; }
+      #hazard-print-template .tpl-basic-table col:nth-child(1) { width:11%; }
+      #hazard-print-template .tpl-basic-table col:nth-child(2) { width:10%; }
+      #hazard-print-template .tpl-basic-table col:nth-child(3) { width:10%; }
+      #hazard-print-template .tpl-basic-table col:nth-child(4) { width:11%; }
+      #hazard-print-template .tpl-basic-table col:nth-child(5) { width:11%; }
+      #hazard-print-template .tpl-basic-table col:nth-child(6) { width:11%; }
+      #hazard-print-template .tpl-basic-table col:nth-child(7) { width:9%; }
+      #hazard-print-template .tpl-basic-table col:nth-child(8) { width:9%; }
+      #hazard-print-template .tpl-basic-table col:nth-child(9) { width:9%; }
+      #hazard-print-template .tpl-basic-table col:nth-child(10) { width:9%; }
+      #hazard-print-template .tpl-basic-table td {
+        font-size:10.8pt;
+        line-height:1.45;
+        padding:2pt 4pt 3pt;
+        word-break:keep-all;
+        overflow-wrap:normal;
+      }
+      #hazard-print-template .tpl-basic-table .tpl-cell-text {
+        display:block;
+        max-height:2.9em;
+        overflow:hidden;
+        white-space:normal;
+        word-break:break-all;
+        overflow-wrap:anywhere;
+        line-height:1.45;
+      }
+      #hazard-print-template .tpl-basic-table tr.tpl-two-line-row td {
+        height:auto;
+        vertical-align:middle;
+        overflow:visible;
+      }
+      #hazard-print-template .tpl-basic-table .tpl-two-line-label {
+        display:block;
+        line-height:1.35;
+      }
+      #hazard-print-template .tpl-basic-table .tpl-wide-text {
+        display:block;
+        overflow:visible;
+        white-space:nowrap;
+        word-break:keep-all;
+        overflow-wrap:normal;
+        line-height:1.45;
+      }
+      #hazard-print-template .tpl-basic-table .tpl-label {
+        line-height:1.35;
+        white-space:normal;
+      }
+      #hazard-print-template .tpl-label { text-align:center; }
+      #hazard-print-template .tpl-sign-cell { height:38pt; text-align:center; }
+      #hazard-print-template .tpl-sig-img { max-width:95%; max-height:34pt; object-fit:contain; }
+      #hazard-print-template .tpl-date-note {
+        display:inline-block;
+        margin-left:12pt;
+        white-space:nowrap;
+        font-size:9pt;
+      }
+      #hazard-print-template .tpl-notice { line-height:1.6; margin:1pt 0 2pt; }
+      #hazard-print-template .tpl-rules { margin:0; padding:0; line-height:1.55; }
+      #hazard-print-template .tpl-rules p { margin:0 0 0.5pt; padding-left:2.9em; text-indent:-2.9em; }
+      #hazard-print-template .tpl-check-table td { width:33.333%; border:1px solid #000; line-height:1.55; padding:1.5pt 4pt 2.5pt; }
+      #hazard-print-template .tpl-hazard-check td { width:33.333%; }
+      #hazard-print-template .tpl-pre-note { border:1px solid #000; padding:2pt 4pt 3pt; line-height:1.45; margin:0 0 2pt; }
+      #hazard-print-template .tpl-hazard-table { font-size:8.5pt; table-layout:fixed; }
+      #hazard-print-template .tpl-hazard-table th { background:#ddd; text-align:center; line-height:1.4; padding:3pt 3pt 4pt; }
+      #hazard-print-template .tpl-hazard-table td { vertical-align:top; line-height:1.45; padding:2pt 3pt 3pt; }
+      #hazard-print-template .tpl-num { width:22pt; text-align:center; }
+      #hazard-print-template .tpl-op { width:74pt; }
+      #hazard-print-template .tpl-risk { width:76pt; text-align:left; }
+      #hazard-print-template .tpl-measure-row { display:grid; grid-template-columns:13pt 1fr; column-gap:1pt; }
+      #hazard-print-template .tpl-measure-num { text-align:right; white-space:nowrap; }
+      #hazard-print-template .tpl-pledge-title {
+        text-align:center;
+        font-size:12.5pt;
+        line-height:2.1;
+        padding-bottom:3pt;
+        margin:0 0 2pt;
+        font-weight:400;
+      }
+      #hazard-print-template .tpl-pledge-page {
+        min-height:26.9cm !important;
+        width:100% !important;
+        padding-bottom:1.6cm;
+      }
+      #hazard-print-template .tpl-pledge-body { line-height:1.8; text-align:justify; width:100%; }
+      #hazard-print-template .tpl-pledge-row { display:grid; grid-template-columns:2.1em 1fr; column-gap:0.2em; margin:0 0 2pt; }
+      #hazard-print-template .tpl-pledge-num { text-align:right; }
+      #hazard-print-template .tpl-zhi { margin:10pt 0; line-height:2.35; }
+      #hazard-print-template .tpl-zhi div { min-height:16pt; padding-bottom:3pt; overflow:visible; }
+      #hazard-print-template .tpl-pledge-info { margin-top:2pt; line-height:1.85; }
+      #hazard-print-template .tpl-pledge-info div { min-height:16pt; padding-bottom:3pt; overflow:visible; }
+      #hazard-print-template .tpl-pledge-sign { width:55%; min-height:34pt; border:1px solid #aaa; display:flex; align-items:center; justify-content:center; margin:1pt 0 3pt; }
+      #hazard-print-template .tpl-sign-date { position:absolute; left:0; right:0; bottom:0.45cm; text-align:center; line-height:2; padding-bottom:3pt; }
       .form-container { max-width:100% !important; padding:0 !important; margin:0 !important; }
 
       /* ─ Header ─ */
@@ -417,9 +586,9 @@
         display:block !important;
         overflow:visible !important;
         box-sizing:border-box !important;
-        font-family:'Microsoft JhengHei','Noto Sans TC',sans-serif !important;
+        font-family:'標楷體','DFKai-SB',serif !important;
         font-size:11pt !important;
-        font-weight:700 !important;
+        font-weight:400 !important;
         color:#000 !important;
         border:none !important;
         padding:0 0 3pt !important;
@@ -429,22 +598,15 @@
         min-height:0 !important;
       }
       .section-title::after {
-        content:'' !important;
-        position:absolute !important;
-        left:0 !important;
-        right:0 !important;
-        bottom:0 !important;
-        border-bottom:1.5px solid #000 !important;
+        content:none !important;
       }
       /* Hide 基本資料 section title in print */
-      .form-section:first-child .section-title { display:none !important; }
+      .form-container > .form-section:first-of-type .section-title { display:none !important; }
       /* Hide env label hint */
       .env-field-label { display:none !important; }
-      /* ※ notice: show above section title via flex order on section-env */
-      #section-env { display:flex !important; flex-direction:column !important; }
-      #section-env .env-notice-print { order:-1 !important; display:block !important; font-size:9pt !important; color:#000 !important; margin-bottom:4pt !important; line-height:1.7 !important; }
-      #section-env .section-title { order:0 !important; }
-      #section-env .form-field { order:1 !important; }
+      #section-basic-rules { margin-bottom:0 !important; padding-bottom:0 !important; }
+      .pre-rules-notice { display:block !important; border:none !important; background:transparent !important; color:#000 !important; padding:0 !important; margin:0 0 2pt !important; font-size:9pt !important; line-height:1.45 !important; }
+      #section-env .env-notice-print { display:none !important; }
       /* Section-work 二、: work-notice-print ABOVE section-title */
       #section-work { display:flex !important; flex-direction:column !important; }
       #section-work .work-notice-print { order:-1 !important; display:block !important; font-size:8.5pt !important; color:#000 !important; margin-bottom:3pt !important; line-height:1.6 !important; }
@@ -487,6 +649,15 @@
       #ff-depthead   { grid-column:5/7 !important; grid-row:6 !important; }
       /* ─ Row 7: 危害告知日期+※說明(full) ─ */
       #ff-notify     { grid-column:1/7 !important; grid-row:7 !important; }
+      #ff-notify {
+        display:grid !important;
+        grid-template-columns:72pt 1fr !important;
+        align-items:center !important;
+        column-gap:4pt !important;
+        white-space:nowrap !important;
+      }
+      #ff-notify > .form-label { grid-column:1 !important; }
+      #ff-notify > .date-row { grid-column:2 !important; }
 
       /* Sig boxes inside grid cells: horizontal label+box layout */
       #ff-boss .sig-blank-box, #ff-supervisor .sig-blank-box,
@@ -510,14 +681,22 @@
         margin:2pt auto !important;
       }
       /* Show notify note in print */
-      .notify-note { font-size:9pt !important; color:#000 !important; display:inline !important; }
+      #ff-notify > .date-row {
+        display:flex !important;
+        align-items:center !important;
+        flex-wrap:nowrap !important;
+        gap:2pt !important;
+        white-space:nowrap !important;
+        min-width:0 !important;
+      }
+      .notify-note { font-size:8.5pt !important; color:#000 !important; display:inline-block !important; margin-left:10pt !important; white-space:nowrap !important; }
       .form-label { font-size:8.5pt !important; font-weight:bold !important; color:#000 !important; display:inline !important; margin:0 3pt 0 0 !important; }
       .form-label>span { display:none !important; }
       .form-input { border:none !important; border-bottom:1px solid #888 !important; background:transparent !important; color:#000 !important; font-size:10pt !important; font-family:'標楷體','DFKai-SB',serif !important; padding:0 2pt !important; min-width:70pt !important; display:inline !important; border-radius:0 !important; width:auto !important; }
       .date-row { display:inline-flex !important; align-items:center !important; gap:2pt !important; flex-wrap:wrap !important; }
       /* Times New Roman for all numeric inputs */
       .date-input-sm { border:none !important; border-bottom:1px solid #888 !important; background:transparent !important; color:#000 !important; font-size:10pt !important; padding:0 2pt !important; width:26pt !important; border-radius:0 !important; font-family:'Times New Roman',Times,serif !important; }
-      .date-row label { font-size:10pt !important; color:#000 !important; margin:0 1pt !important; font-family:'Times New Roman',Times,serif !important; }
+      .date-row label { font-size:10pt !important; color:#000 !important; margin:0 1pt !important; font-family:'標楷體','DFKai-SB',serif !important; }
       .print-mirror-source { display:none !important; }
       .print-input-value {
         display:inline !important;
@@ -554,15 +733,19 @@
       #env-other { display:block !important; font-size:9.5pt !important; color:#000 !important; border:none !important; border-bottom:1px solid #888 !important; background:transparent !important; width:100% !important; margin-top:3pt !important; font-family:'標楷體','DFKai-SB',serif !important; }
 
       /* ─ Work type & hazard checkboxes ─ */
-      .checkbox-grid { display:grid !important; grid-template-columns:repeat(3,1fr) !important; gap:1pt !important; border:1px solid #ccc !important; padding:2pt 4pt !important; }
+      .checkbox-grid { display:grid !important; grid-template-columns:repeat(3,1fr) !important; grid-auto-flow:column !important; gap:1pt !important; border:1px solid #ccc !important; padding:2pt 4pt !important; }
+      #section-work .checkbox-grid { grid-template-rows:repeat(5, auto) !important; }
       .checkbox-item { display:flex !important; align-items:flex-start !important; gap:3pt !important; border:none !important; background:transparent !important; padding:1pt 2pt !important; border-radius:0 !important; }
       .checkbox-item.checked { background:transparent !important; }
       .checkbox-item.checked .checkbox-label { font-weight:bold !important; }
       .checkbox-label { font-size:8.5pt !important; color:#000 !important; line-height:1.3 !important; }
+      .checkbox-label.has-num { display:grid !important; grid-template-columns:2.2em 1fr !important; column-gap:0.2em !important; align-items:start !important; }
+      .checkbox-label-num { text-align:right !important; white-space:nowrap !important; }
+      #section-basic-rules .hazard-notes p { padding-left:2.9em !important; text-indent:-2.9em !important; }
       input[type="checkbox"] { width:9pt !important; height:9pt !important; accent-color:#000; flex-shrink:0 !important; margin-top:1pt !important; }
       #section-hazard { margin-bottom:2pt !important; }
       #section-hazard .section-title { margin-bottom:3pt !important; padding-bottom:2pt !important; }
-      #section-hazard .checkbox-grid { grid-template-columns:repeat(4,1fr) !important; gap:0 !important; padding:1pt 3pt !important; }
+      #section-hazard .checkbox-grid { grid-template-columns:repeat(4,1fr) !important; grid-template-rows:repeat(5, auto) !important; grid-auto-flow:column !important; gap:0 !important; padding:1pt 3pt !important; }
       #section-hazard .checkbox-item { gap:2pt !important; padding:0.5pt 1.5pt !important; }
       #section-hazard .checkbox-label { font-size:8pt !important; line-height:1.15 !important; }
       #section-hazard input[type="checkbox"] { width:8pt !important; height:8pt !important; margin-top:0.5pt !important; }
@@ -571,30 +754,41 @@
       .hazard-notes { border:none !important; background:transparent !important; border-radius:0 !important; padding:2pt 0 4pt !important; font-size:9pt !important; color:#000 !important; line-height:1.6 !important; margin-bottom:3pt !important; }
       .hazard-notes p { margin:0 0 2pt !important; }
       .hazard-notes strong { color:#000 !important; }
+      #section-basic-rules .hazard-notes { padding:0 !important; margin:0 !important; line-height:1.45 !important; }
+      #section-basic-rules .hazard-notes p { margin:0 0 0.5pt !important; padding-left:2.9em !important; text-indent:-2.9em !important; }
+      #section-prevention .hazard-notes { border:1px solid #000 !important; padding:2pt 4pt !important; margin:0 0 2pt !important; line-height:1.35 !important; }
 
       /* ─ Hazard prevention table ─ */
       .hazard-table { width:100% !important; border-collapse:collapse !important; font-size:8.5pt !important; table-layout:fixed !important; }
+      .hazard-table thead th:nth-child(4),
+      .hazard-table .hazard-measures-cell { display:table-cell !important; }
+      .hazard-table thead th:nth-child(1), .hazard-table .row-num { width:22pt !important; }
+      .hazard-table thead th:nth-child(2), .hazard-table .hazard-op-cell { width:74pt !important; }
+      .hazard-table thead th:nth-child(3), .hazard-table .hazard-risk-cell { width:76pt !important; }
       /* box-sizing:content-box on th/td so padding is additive and does NOT consume content area */
-      .hazard-table th { box-sizing:content-box !important; background:#ddd !important; color:#000 !important; border:1px solid #000 !important; font-size:9pt !important; font-weight:bold !important; padding:5pt 4pt 8pt !important; text-align:center !important; line-height:2 !important; vertical-align:middle !important; }
-      .hazard-table td { box-sizing:content-box !important; border:1px solid #000 !important; color:#000 !important; padding:3pt 4pt 5pt !important; font-size:8.5pt !important; vertical-align:top !important; line-height:1.7 !important; word-wrap:break-word !important; }
+      .hazard-table th { box-sizing:border-box !important; background:#ddd !important; color:#000 !important; border:1px solid #000 !important; font-size:9pt !important; font-weight:bold !important; padding:3pt 3pt 4pt !important; text-align:center !important; line-height:1.35 !important; vertical-align:middle !important; }
+      .hazard-table td { box-sizing:border-box !important; border:1px solid #000 !important; color:#000 !important; padding:2pt 3pt 3pt !important; font-size:8.5pt !important; vertical-align:top !important; line-height:1.45 !important; word-wrap:break-word !important; }
       .hazard-table .row-num { background:#f5f5f5 !important; color:#000 !important; text-align:center !important; width:28pt !important; }
       .hazard-table .op-name { font-weight:bold !important; color:#000 !important; }
       .hazard-table tr { page-break-inside:avoid !important; }
       .hazard-mobile-toggle, .hazard-mobile-detail, .hazard-mobile-detail-row { display:none !important; }
-      .hazard-risk-text { display:inline !important; }
+      .hazard-table thead th:nth-child(3) { font-size:9pt !important; text-align:center !important; }
+      .hazard-table thead th:nth-child(3)::after { content:none !important; }
+      .hazard-risk-cell { text-align:left !important; vertical-align:top !important; }
+      .hazard-risk-text { display:inline !important; text-align:left !important; }
       /* Measure numbered rows: number cell fixed width, text cell wraps */
       .hazard-table td > div { display:table !important; width:100% !important; table-layout:fixed !important; }
-      .hazard-table td > div > span:first-child { display:table-cell !important; white-space:nowrap !important; width:18pt !important; vertical-align:top !important; padding-right:2pt !important; font-size:8.5pt !important; }
-      .hazard-table td > div > span:last-child { display:table-cell !important; vertical-align:top !important; font-size:8.5pt !important; word-break:break-all !important; }
+      .hazard-table td > div > span:first-child { display:table-cell !important; white-space:nowrap !important; width:11pt !important; vertical-align:top !important; padding-right:1pt !important; font-size:8.5pt !important; }
+      .hazard-table td > div > span:last-child { display:table-cell !important; vertical-align:top !important; font-size:8.5pt !important; word-break:normal !important; overflow-wrap:anywhere !important; }
 
       /* ─ Commitment letter ─ */
       #section-sig { display:none !important; }
       /* Pledge section: flex column for ordering */
-      #section-pledge { display:flex !important; flex-direction:column !important; }
-      #section-pledge .section-title { order:0 !important; text-align:center !important; color:#000 !important; font-size:12.5pt !important; margin-bottom:3pt !important; }
+      #section-pledge { display:flex !important; flex-direction:column !important; position:relative !important; min-height:25cm !important; padding-bottom:1.4cm !important; overflow:visible !important; }
+      #section-pledge .section-title { order:0 !important; text-align:center !important; color:#000 !important; font-family:'標楷體','DFKai-SB',serif !important; font-weight:400 !important; font-size:12.5pt !important; margin-bottom:3pt !important; line-height:1.55 !important; }
       #section-pledge .pledge-box { order:1 !important; }
       /* pledge-zhi: left-aligned, 此致 on line 1, 農業部... on line 2 */
-      #section-pledge .pledge-zhi { order:2 !important; display:block !important; font-size:10pt !important; color:#000 !important; text-align:left !important; margin:2pt 0 1pt 0 !important; line-height:1.45 !important; }
+      #section-pledge .pledge-zhi { order:2 !important; display:block !important; font-family:'標楷體','DFKai-SB',serif !important; font-size:10pt !important; color:#000 !important; text-align:left !important; margin:9pt 0 9pt 0 !important; line-height:2.15 !important; padding-bottom:2pt !important; overflow:visible !important; }
       /* Form-grid (name, address, tel, taxid, date) */
       #pledge-form-grid { order:3 !important; }
       /* Sig wrapper: right after form-grid */
@@ -602,7 +796,7 @@
       /* Hide 備註事項 */
       #section-pledge .form-field[style*="margin-top:16px"] { display:none !important; }
       /* pledge-box styling */
-      .pledge-box { background:#fff !important; border:1.5px solid #000 !important; color:#000 !important; padding:6pt 9pt !important; font-size:10pt !important; line-height:1.65 !important; border-radius:0 !important; margin-bottom:2pt !important; }
+      .pledge-box { background:#fff !important; border:none !important; color:#000 !important; padding:0 !important; font-size:10pt !important; line-height:1.65 !important; border-radius:0 !important; margin-bottom:2pt !important; }
       .pledge-box p { margin-bottom:2pt !important; text-align:justify !important; }
       .pledge-list-item { grid-template-columns:1.5em 1fr !important; column-gap:0.25em !important; }
       .pledge-list-num { text-align:right !important; }
@@ -613,6 +807,12 @@
       .pledge-box .form-input { display:inline !important; padding:0 3pt !important; border-top:none !important; border-left:none !important; border-right:none !important; border-bottom:1.5px solid #000 !important; border-radius:0 !important; background:transparent !important; font-size:10pt !important; color:#000 !important; min-width:80pt !important; }
       .pledge-box .form-input.print-mirror-source { display:none !important; }
       .pledge-box .print-input-value { border-bottom:1.5px solid #000 !important; min-width:80pt !important; }
+      #section-pledge .print-input-value {
+        line-height:1.7 !important;
+        padding:1pt 2pt 2pt !important;
+        vertical-align:middle !important;
+        overflow:visible !important;
+      }
       .pledge-box #pledge-company + .print-input-value {
         display:inline-block !important;
         width:112pt !important;
@@ -638,20 +838,23 @@
         line-height:1.25 !important;
       }
       /* Pledge info grid */
-      #pledge-form-grid { border-top:1px solid #000 !important; border-left:1px solid #000 !important; gap:0 !important; }
-      #section-pledge .form-field { border-right:1px solid #000 !important; border-bottom:1px solid #000 !important; padding:1.5pt 4pt !important; line-height:1.25 !important; min-height:0 !important; }
-      #section-pledge .form-label { line-height:1.25 !important; margin-right:2pt !important; }
+      #pledge-form-grid { border:none !important; gap:0 !important; margin-top:2pt !important; }
+      #section-pledge .form-field { border:none !important; padding:2pt 0 3pt !important; line-height:1.65 !important; min-height:0 !important; overflow:visible !important; }
+      #section-pledge .form-label { font-family:'標楷體','DFKai-SB',serif !important; line-height:1.65 !important; margin-right:2pt !important; vertical-align:middle !important; }
       /* Pledge sig inline (inside grid, below name) */
-      #pledge-ff-sig-inline { grid-column:1/-1 !important; border-right:1px solid #000 !important; border-bottom:1px solid #000 !important; padding:1.5pt 4pt !important; margin-bottom:0 !important; }
+      #pledge-ff-sig-inline { grid-column:1/-1 !important; border:none !important; padding:1.5pt 0 !important; margin-bottom:0 !important; }
       #pledge-ff-sig-inline .form-label { display:block !important; font-size:9pt !important; margin-bottom:1pt !important; }
       #pledge-ff-sig-inline .sig-pad-wrap { min-height:30pt !important; width:55% !important; display:block !important; margin:1pt 0 !important; }
       #pledge-ff-sig-inline .sig-print-img { max-height:34pt !important; margin:1pt auto !important; }
       /* Pledge sig wrapper (old external wrapper) - hide since we moved it inline */
       #pledge-sig-wrapper { display:none !important; }
+      #pledge-form-grid .form-field:last-child { position:absolute !important; left:0 !important; right:0 !important; bottom:0.45cm !important; text-align:center !important; }
+      #pledge-form-grid .form-field:last-child .form-label { display:none !important; }
+      #pledge-form-grid .form-field:last-child .date-row { justify-content:center !important; }
 
       .form-textarea { font-size:9pt !important; color:#000 !important; border:1px solid #000 !important; background:#fff !important; border-radius:0 !important; width:100% !important; padding:3pt !important; font-family:'標楷體','DFKai-SB',serif !important; }
 
-      @page { size:A4 portrait; margin:0.75cm 2.5cm 1cm 2.5cm; }
+      @page { size:A4 portrait; margin:0.75cm 1.35cm 1cm 1.35cm; }
     }
 
     @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
@@ -734,7 +937,7 @@
     <div class="form-header">
       <div class="form-org">農業部畜產試驗所</div>
       <h1 class="form-title-main">農業部畜產試驗所承攬作業環境危害告知單</h1>
-      <p class="form-subtitle">版本日期：中華民國114年06月09日　｜　本表格依職業安全衛生法第26條規定辦理</p>
+      <p class="form-subtitle">版本日期：中華民國115年07月22日　｜　本表格依職業安全衛生法第26條規定辦理</p>
     </div>
 
     <div class="progress-bar">
@@ -855,15 +1058,24 @@
       </div>
     </div>
 
+    <!-- Section 1: 基本遵守事項 -->
+    <div class="form-section" id="section-basic-rules">
+      <div class="pre-rules-notice">※以下由承攬商與請購單位共同確認填寫，應說明工作環境狀況，包括設施、佈置及機械設備等，必要時以圖示說明。</div>
+      <div class="section-title">一、基本遵守事項</div>
+      <div class="hazard-notes">
+        <p>（一）已確實詳閱及了解「本所承攬作業環境危害告知單」。</p>
+        <p>（二）人員進入工作場所，應依作業特性，配戴必要之個人安全衛生防護具。</p>
+        <p>（三）作業前使用機具、工具應確實實施點檢，所有捲夾設備嚴禁配戴手套。</p>
+        <p>（四）不隨意碰觸所內電氣設備及操作機台，作業前應知會本案承辦人核准後始可作業。</p>
+        <p>（五）危險機械或設備之操作人員應依法取得合格執照始可操作。</p>
+        <p>（六）承攬商仍應於作業前評估各項細部作業之可能危害，採取相應預防、保護措施，對所屬人員實施法定教育訓練與危害告知，可能危害及對應防護措施，並指派專人於現場指揮監督。</p>
+        <p>（七）本所對於承攬商之作業設施或作業方法，認為有危害人員安全顧慮時，得隨時令其停工，至危害消失為止。</p>
+      </div>
+    </div>
+
     <!-- Section 2: 作業現場環境說明 -->
     <div class="form-section" id="section-env">
-      <!-- Print-only ※ notice: flex order:-1 places it ABOVE section-title in print -->
-      <div class="env-notice-print" style="display:none;">※以下由承攬商與請購單位共同確認填寫，應說明工作環境狀況，包括設施、佈置及機械設備等，必要時以圖示說明。</div>
-      <!-- Screen-only notice (hidden in print) -->
-      <div class="notice-block">
-        ⚠️ 以下由承攬商與請購單位共同確認填寫，應說明工作環境狀況，包括設施、佈置及機械設備等，必要時以圖示說明。
-      </div>
-      <div class="section-title">一、承攬作業現場環境說明</div>
+      <div class="section-title">二、承攬作業現場環境說明</div>
       <div class="form-field">
         <div class="env-check-grid" id="env-check-grid">
           <!-- 由JS建立可選項目 -->
@@ -874,7 +1086,7 @@
     <div class="form-section" id="section-work">
       <!-- Print-only notice: flex order:-1 puts it ABOVE section-title in print -->
       <div class="work-notice-print" style="display:none;">承攬商若有下列作業，應於施工前填寫該項作業之申請單，提交請購單位，並經核可後使得施工：（1）動火；（2）高架；（3）局限空間；（4）活線；（5）吊掛（如附件1~5）</div>
-      <div class="section-title">二、勾選作業項目</div>
+      <div class="section-title">三、勾選作業項目</div>
       <!-- Screen notice (hidden in print) -->
       <div class="notice-block" style="background: rgba(63,143,199,0.08); border-color: rgba(63,143,199,0.2); color: #2f6f9f; margin-bottom:16px;">
         承攬商若有下列作業，應於施工前填寫該項作業之申請單，提交請購單位，並經核可後使得施工：（1）動火；（2）高架；（3）局限空間；（4）活線；（5）吊掛（如附件1~5）
@@ -886,18 +1098,18 @@
 
     <!-- Section 4: 勾選可能危害 -->
     <div class="form-section" id="section-hazard">
-      <div class="section-title">三、勾選可能危害</div>
+      <div class="section-title">四、勾選可能危害</div>
       <div class="checkbox-grid" id="hazard-grid">
         <!-- JS will populate -->
       </div>
     </div>
 
     <!-- Section 5: 危害防止對策 -->
-    <div class="form-section">
-      <div class="section-title">四、危害防止對策</div>
+    <div class="form-section" id="section-prevention">
+      <div class="section-title">五、危害防止對策</div>
       <div class="hazard-notes">
-        <p><strong>1.</strong> 承攬商仍應於作業前評估各項細部作業之可能危害，採取相應預防、保護措施，對所屬人員實施法定教育訓練與危害告知，可能危害及對應防護措施，並指派專人於現場指揮監督。</p>
-        <p><strong>2.</strong> 本危害告知單正本由請購單位及承攬商雙方各執一份，影本送秘書室留存，修改時並應再以書面為之，本危害告知單等相關文件依規定保存3年。</p>
+        <p>（對應四、勾選可能危害，請敘明危害防止對策，如下表供參閱）</p>
+        <p>備註：本危害告知單正本由請購單位及承攬商雙方各執一份，影本送秘書室留存，修改時並應再以書面為之，本危害告知單等相關文件依規定保存3年。</p>
       </div>
       <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
         <table class="hazard-table">
@@ -1002,10 +1214,21 @@
 
   </div>
 
+  <div id="hazard-print-template" aria-hidden="true"></div>
+
   <footer class="site-footer">
-    <p>農業部畜產試驗所 &copy; 中華民國114年　｜　承攬作業環境危害告知單</p>
+    <p>農業部畜產試驗所 &copy; 中華民國115年　｜　承攬作業環境危害告知單</p>
   </footer>
 
+  <script src="form-template-rules.js"></script>
+  <script src="form-catalog.js"></script>
+  <script src="draft-store.js"></script>
+  <script src="form-session.js"></script>
+  <script src="print-utils.js"></script>
+  <script src="print-layout-rules.js"></script>
+  <script src="print-verifier.js"></script>
+  <script src="signature-utils.js"></script>
+  <script src="app-cache.js"></script>
   <script>
     // ---- Data ----
     const WORK_TYPES = [
@@ -1096,12 +1319,12 @@
         op: '吊裝、吊掛作業',
         risk: '翻倒、吊桿彎曲、荷件掉落、觸電',
         measures: [
-          '合格人員之操作。',
-          '吊車具合格證。',
+          '施工區域內，應設置禁止非施工人員進入之明顯標示。',
+          '吊掛作業時，應指派人員進行交通指揮及人員管制。',
+          '從事吊運之起重機具應檢查合格，起重機操作手、吊掛手應有合格證照(一機三證)，吊舉物下方應嚴禁人員進入。',
           '捆綁索檢點。',
           '高壓線防護派人監視。',
-          '嚴禁人員待於吊裝物下方。',
-          '工作人員不得待在吊裝物上方。',
+          '嚴禁人員待在吊裝物下方。',
         ]
       },
       {
@@ -1170,13 +1393,14 @@
         num: 11,
         op: '環境美化、園藝作業',
         sub: '（例如割草、修剪樹木等）',
-        risk: '夾、捲、切、割、擦傷、咬傷',
+        risk: '夾、捲、切、割、擦傷、與動植物接觸',
         measures: [
           '使用之機械，如有傳動帶、傳動輪、齒輪、轉軸等被捲、夾、擦傷之虞者，應設護罩或護欄。',
-          '作業時穿著長褲、長靴等，防範蚊蟲及蛇類咬傷。',
           '作業時佩戴安全帽、防護手套等。',
           '建立10公尺以上作業警戒區。',
           '臨時用電要裝設漏電斷路器。',
+          '作業時穿著長褲、長靴等，防範蚊蟲及蛇類咬傷。',
+          '施工前應派員辦理施工範圍之樹木上有無蜂巢、毒蛇、毒蟲、有毒植物之檢查，如發現毒蜂群、毒蛇、毒蟲時應迅速離開現場。',
         ]
       },
       {
@@ -1275,12 +1499,16 @@
       container.style.gridTemplateRows = `repeat(${rows}, auto)`;
       container.style.gridAutoFlow = 'column';
       items.forEach((item, i) => {
+        const numbered = item.match(/^(\d+\.)\s*(.+)$/);
+        const labelHtml = numbered
+          ? `<span class="checkbox-label has-num"><span class="checkbox-label-num">${numbered[1]}</span><span>${numbered[2]}</span></span>`
+          : `<span class="checkbox-label">${item}</span>`;
         const div = document.createElement('label');
         div.className = 'checkbox-item';
         div.htmlFor = containerId + '-' + i;
         div.innerHTML = `
           <input type="checkbox" id="${containerId}-${i}" onchange="this.closest('.checkbox-item').classList.toggle('checked', this.checked); updateProgress()">
-          <span class="checkbox-label">${item}</span>
+          ${labelHtml}
         `;
         container.appendChild(div);
       });
@@ -1367,7 +1595,161 @@
       if (el) el.addEventListener('input', () => { el.dataset.manualEdit = '1'; });
     });
 
+    function tplEscape(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[ch]));
+    }
+
+    function tplValue(id) {
+      return document.getElementById(id)?.value || '';
+    }
+
+    function tplDate(prefix) {
+      return `<span>${tplEscape(tplValue(prefix + '-year'))}</span> 年 <span>${tplEscape(tplValue(prefix + '-month'))}</span> 月 <span>${tplEscape(tplValue(prefix + '-day'))}</span> 日`;
+    }
+
+    function tplSig(key) {
+      const src = SignatureUtils.load('hazard_' + key) || document.getElementById(key + '-img')?.getAttribute('src') || '';
+      return src && src.startsWith('data:image') ? `<img class="tpl-sig-img" src="${src}" alt="簽章">` : '';
+    }
+
+    function tplPledgeSig() {
+      const fallback = window.AdminPrintLayout?.hazard?.signatureFallback() || window.ADMIN_FORM_RULES?.hazard?.printTemplate?.pledge?.signatureFallback || ['sig-pledge', 'sig-boss'];
+      for (const key of fallback) {
+        const html = tplSig(key);
+        if (html) return html;
+      }
+      return '';
+    }
+
+    function tplCheckRows(items, containerId, cols, rowsOverride) {
+      const rows = rowsOverride || Math.ceil(items.length / cols);
+      let html = '';
+      for (let r = 0; r < rows; r++) {
+        html += '<tr>';
+        for (let c = 0; c < cols; c++) {
+          const idx = c * rows + r;
+          const item = items[idx] || '';
+          const checked = document.getElementById(`${containerId}-${idx}`)?.checked;
+          html += `<td>${item ? `${checked ? '☑' : '□'}${tplEscape(item.replace(/^\d+\.\s*/, match => match))}` : '&nbsp;'}</td>`;
+        }
+        html += '</tr>';
+      }
+      return html;
+    }
+
+    function tplHazardCheckRows() {
+      const layout = window.AdminPrintLayout?.hazard?.hazardCheckLayout() || window.ADMIN_FORM_RULES?.hazard?.printTemplate?.hazardCheckLayout || [
+        [0, 7, 13], [1, 8, 14], [2, 9, 15], [3, 10, 16], [4, 11, 17], [5, 12, null], [6, null, null]
+      ];
+      return layout.map(row => `<tr>${row.map(idx => {
+        if (idx === null) return '<td>&nbsp;</td>';
+        const item = HAZARDS[idx] || '';
+        const checked = document.getElementById(`hazard-grid-${idx}`)?.checked;
+        return `<td>${checked ? '☑' : '□'}${tplEscape(item)}</td>`;
+      }).join('')}</tr>`).join('');
+    }
+
+    function tplEnvRows() {
+      const selected = ENV_OPTIONS
+        .map((item, idx) => document.getElementById(`env-opt-${idx}`)?.checked ? `☑${tplEscape(item)}` : '')
+        .filter(Boolean);
+      const rows = selected.length ? selected : ['（請敘明承攬作業現場環境）'];
+      return rows.map(item => `<div>${item}</div>`).join('');
+    }
+
+    function tplHazardTableRows() {
+      return HAZARD_TABLE_DATA.map(row => {
+        const measures = row.measures.map((m, idx) =>
+          `<div class="tpl-measure-row"><span class="tpl-measure-num">${idx + 1}.</span><span>${tplEscape(m)}</span></div>`
+        ).join('');
+        return `<tr>
+          <td class="tpl-num">${row.num}</td>
+          <td class="tpl-op">${tplEscape(row.op)}${row.sub ? `<br><span>${tplEscape(row.sub)}</span>` : ''}</td>
+          <td class="tpl-risk">${tplEscape(row.risk)}</td>
+          <td>${measures}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    function buildHazardPrintTemplate() {
+      const target = document.getElementById('hazard-print-template');
+      if (!target) return;
+      const printRules = window.ADMIN_FORM_RULES?.hazard?.printTemplate || {};
+      const labels = window.AdminPrintLayout?.hazard?.basicLabels() || printRules.basicTable?.labelsWithOriginalBreaks || {};
+      const pledgeNums = window.AdminPrintLayout?.hazard?.pledgeNumbers() || printRules.pledge?.numberLabels || ['一、', '二、', '三、', '四、', '五、', '六、'];
+      target.innerHTML = `
+        <section class="tpl-page">
+          <h1 class="tpl-main-title">農業部畜產試驗所承攬作業環境危害告知單</h1>
+          <table class="tpl-basic-table">
+            <colgroup>${'<col>'.repeat(10)}</colgroup>
+            <tr><td class="tpl-label">承攬商<br>名稱</td><td colspan="5"><div class="tpl-cell-text">${tplEscape(tplValue('contractor-name'))}</div></td><td class="tpl-label" colspan="2">統一編號</td><td colspan="2"><div class="tpl-cell-text">${tplEscape(tplValue('tax-id'))}</div></td></tr>
+            <tr><td class="tpl-label">負責人<br>簽章</td><td class="tpl-sign-cell" colspan="2">${tplSig('sig-boss')}</td><td class="tpl-label">現場主管<br>簽章</td><td class="tpl-sign-cell" colspan="2">${tplSig('sig-supervisor')}</td><td class="tpl-label" colspan="2">緊急連絡<br>電話</td><td colspan="2"><div class="tpl-cell-text">${tplEscape(tplValue('emergency-tel'))}</div></td></tr>
+            <tr class="tpl-two-line-row"><td class="tpl-label"><span class="tpl-two-line-label">${labels.workName || '承攬作業<br>名稱'}</span></td><td colspan="9"><div class="tpl-wide-text">${tplEscape(tplValue('work-name'))}</div></td></tr>
+            <tr class="tpl-two-line-row"><td class="tpl-label"><span class="tpl-two-line-label">${labels.workPeriod || '承攬作業<br>期間'}</span></td><td colspan="9"><div class="tpl-wide-text">${tplDate('start')} 至 ${tplDate('end')}</div></td></tr>
+            <tr class="tpl-two-line-row"><td class="tpl-label"><span class="tpl-two-line-label">${labels.workLocation || '承攬作業<br>地點'}</span></td><td colspan="9"><div class="tpl-wide-text">${tplEscape(tplValue('work-location'))}</div></td></tr>
+            <tr><td class="tpl-label">請購單位</td><td colspan="2"><div class="tpl-cell-text">${tplEscape(tplValue('purchase-dept'))}</div></td><td class="tpl-label">承辦人<br>簽章</td><td class="tpl-sign-cell" colspan="2">${tplSig('sig-handler')}</td><td class="tpl-label" colspan="2">單位主管<br>簽章</td><td class="tpl-sign-cell" colspan="2">${tplSig('sig-depthead')}</td></tr>
+            <tr><td class="tpl-label">危害告知<br>日期</td><td colspan="9"><div class="tpl-cell-text">${tplDate('notify')}<span class="tpl-date-note">※應於作業開始前將作業環境危害因素告知承攬商</span></div></td></tr>
+          </table>
+
+          <div class="tpl-notice">※以下由承攬商與請購單位共同確認填寫，應說明工作環境狀況，包括設施、佈置及機械設備等，必要時以圖示說明。</div>
+          <div class="tpl-section-title">一、基本遵守事項</div>
+          <div class="tpl-rules">
+            <p>（一）已確實詳閱及了解「本所承攬作業環境危害告知單」。</p>
+            <p>（二）人員進入工作場所，應依作業特性，配戴必要之個人安全衛生防護具。</p>
+            <p>（三）作業前使用機具、工具應確實實施點檢，所有捲夾設備嚴禁配戴手套。</p>
+            <p>（四）不隨意碰觸所內電氣設備及操作機台，作業前應知會本案承辦人核准後始可作業。</p>
+            <p>（五）危險機械或設備之操作人員應依法取得合格執照始可操作。</p>
+            <p>（六）承攬商仍應於作業前評估各項細部作業之可能危害，採取相應預防、保護措施，對所屬人員實施法定教育訓練與危害告知，可能危害及對應防護措施，並指派專人於現場指揮監督。</p>
+            <p>（七）本所對於承攬商之作業設施或作業方法，認為有危害人員安全顧慮時，得隨時令其停工，至危害消失為止。</p>
+          </div>
+
+          <div class="tpl-section-title">二、承攬作業現場環境說明</div>
+          <div class="tpl-pre-note">${tplEnvRows()}</div>
+          <div class="tpl-section-title">三、勾選作業項目</div>
+          <table class="tpl-check-table"><tbody>${tplCheckRows(WORK_TYPES, 'work-type-grid', 3)}</tbody></table>
+          <div class="tpl-section-title">四、勾選可能危害</div>
+          <table class="tpl-check-table tpl-hazard-check"><tbody>${tplHazardCheckRows()}</tbody></table>
+          <div class="tpl-section-title">五、危害防止對策</div>
+          <div class="tpl-pre-note">
+            <div>（對應四、勾選可能危害，請敘明危害防止對策，如下表供參閱）</div>
+            <div>備註：本危害告知單正本由請購單位及承攬商雙方各執一份，影本送秘書室留存，修改時並應再以書面為之，本危害告知單等相關文件依規定保存3年。</div>
+          </div>
+          <table class="tpl-hazard-table">
+            <thead><tr><th class="tpl-num">項次</th><th class="tpl-op">作業項目</th><th class="tpl-risk">潛在危害因素</th><th>危害防止對策</th></tr></thead>
+            <tbody>${tplHazardTableRows()}</tbody>
+          </table>
+        </section>
+
+        <section class="tpl-page tpl-pledge-page">
+          <div class="tpl-pledge-title">農業部畜產試驗所承攬作業安全衛生承諾書</div>
+          <div class="tpl-pledge-body">
+            <p>本公司（人）${tplEscape(tplValue('pledge-company')) || '　'} 承攬農業部畜產試驗所（以下簡稱貴所）${tplEscape(tplValue('pledge-project')) || '　'} 案。</p>
+            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[0] || '一、'}</span><span>貴所已告知本公司（人）有關工作場所環境危害因素，本公司承諾妥善規劃以避免災害發生，所屬人員進行作業時，全程使用符合職業安全衛生法暨相關規定之防護器具，並於作業期間指派工作場所負責人於現場指揮監督管理及負起雇主應負之一切責任，因作業產生之廢棄物應取得該場所管理人同意暫時堆放於指定區域，並於作業結束後，即盡速清理復原作業區域，若該場所管理人不同意暫時堆放情形，於作業當日立即清運離所。</span></div>
+            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[1] || '二、'}</span><span>本公司若有再交付承攬時，本公司承諾會負起「職業安全衛生法」所定雇主之責任。</span></div>
+            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[2] || '三、'}</span><span>本公司承諾作業開始前評估各項細部作業之可能危害，採取相應防護措施，對所屬人員實施法定教育訓練與危害告知，若貴所要求查證，本公司有提供人員教育訓練證明之義務。</span></div>
+            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[3] || '四、'}</span><span>作業期間如遇颱風、大雨等預報時，本公司應提前採取預防措施。天然災害過後，應實施檢查確認安全無虞後始可復工。</span></div>
+            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[4] || '五、'}</span><span>本公司承諾經貴所巡視發現本公司作業員工有違反法令規定情事，同意貴所要求下立即停止作業，通知本公司改善完成後才復工。</span></div>
+            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[5] || '六、'}</span><span>本公司如違反職業安全衛生法暨相關規定，造成之災害，導致貴所損失，本公司願負起賠償責任。</span></div>
+          </div>
+          <div class="tpl-zhi"><div>此致</div><div>農業部畜產試驗所</div></div>
+          <div class="tpl-pledge-info">
+            <div>承攬商名稱：${tplEscape(tplValue('pledge-name'))}</div>
+            <div>承攬商負責人（代理負責人）簽章：</div>
+            <div class="tpl-pledge-sign">${tplPledgeSig()}</div>
+            <div>地址：${tplEscape(tplValue('pledge-address'))}</div>
+            <div>電話：${tplEscape(tplValue('pledge-tel'))}</div>
+            <div>統一編號：${tplEscape(tplValue('pledge-taxid'))}</div>
+          </div>
+          <div class="tpl-sign-date">${tplDate('pledge')}</div>
+        </section>`;
+      document.body.classList.add('hazard-print-template-ready');
+    }
+
     function syncPrintInputValues() {
+      document.querySelectorAll('.toast, [data-toast="true"]').forEach(toast => toast.remove());
+      buildHazardPrintTemplate();
       document.querySelectorAll('.print-input-value').forEach(mirror => mirror.remove());
       document.querySelectorAll('.form-input').forEach(input => {
         if (!['text', 'tel'].includes(input.type)) return;
@@ -1384,6 +1766,7 @@
     window.addEventListener('afterprint', () => {
       document.querySelectorAll('.print-input-value').forEach(mirror => mirror.remove());
       document.querySelectorAll('.print-mirror-source').forEach(input => input.classList.remove('print-mirror-source'));
+      document.body.classList.remove('hazard-print-template-ready');
     });
 
     function isMobileDevice() {
@@ -1481,23 +1864,8 @@
       document.getElementById('progress-fill').style.width = pct + '%';
     }
 
-    const DRAFT_INDEX_KEY = 'admin-form-drafts';
-    const DRAFT_RECORD_PREFIX = 'admin-form-draft:';
     const HAZARD_SIGNATURE_KEYS = ['sig-boss', 'sig-supervisor', 'sig-handler', 'sig-depthead', 'sig-pledge'];
     let currentDraftId = new URLSearchParams(window.location.search).get('draft') || '';
-
-    function getDraftIndex() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(DRAFT_INDEX_KEY) || '[]');
-        return Array.isArray(saved) ? saved : [];
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function setDraftIndex(items) {
-      localStorage.setItem(DRAFT_INDEX_KEY, JSON.stringify(items));
-    }
 
     function collectFormData() {
       const data = {};
@@ -1521,60 +1889,48 @@
 
     // ---- Draft to localStorage ----
     function saveForm() {
-      const now = new Date().toISOString();
-      if (!currentDraftId) {
-        currentDraftId = 'hazard-' + Date.now();
-        const url = new URL(window.location.href);
-        url.searchParams.set('draft', currentDraftId);
-        window.history.replaceState({}, '', url);
+      try {
+        const now = new Date().toISOString();
+        if (!currentDraftId) {
+          currentDraftId = FormSession.ensureDraftId(currentDraftId, 'hazard');
+          FormSession.syncLocationDraft(currentDraftId);
+        }
+
+        const record = {
+          id: currentDraftId,
+          type: 'hazard',
+          typeLabel: '承攬作業環境危害告知單',
+          title: makeDraftTitle(),
+          url: 'hazard-form.html?draft=' + encodeURIComponent(currentDraftId),
+          createdAt: now,
+          updatedAt: now,
+          data: collectFormData()
+        };
+
+        const savedRecord = FormSession.saveDraft({
+          id: currentDraftId,
+          type: 'hazard',
+          typeLabel: record.typeLabel,
+          title: record.title,
+          page: 'hazard-form.html',
+          data: record.data
+        });
+        localStorage.setItem('hazard-form-data', JSON.stringify(record.data));
+        record.createdAt = savedRecord.createdAt;
+        const backLink = document.querySelector('.back-btn');
+        if (backLink) backLink.href = FormSession.backToIndexUrl(currentDraftId);
+        showToast('✅ 表單已暫存，可回首頁清冊繼續修改');
+      } catch (e) {
+        console.error('[HazardForm] save failed:', e);
+        showToast('⚠️ 暫存失敗，請確認瀏覽器儲存空間或重新整理後再試');
       }
-
-      const record = {
-        id: currentDraftId,
-        type: 'hazard',
-        typeLabel: '承攬作業環境危害告知單',
-        title: makeDraftTitle(),
-        url: 'hazard-form.html?draft=' + encodeURIComponent(currentDraftId),
-        createdAt: now,
-        updatedAt: now,
-        data: collectFormData()
-      };
-
-      const existingRaw = localStorage.getItem(DRAFT_RECORD_PREFIX + currentDraftId);
-      if (existingRaw) {
-        try {
-          const existing = JSON.parse(existingRaw);
-          record.createdAt = existing.createdAt || now;
-        } catch (e) {}
-      }
-
-      localStorage.setItem(DRAFT_RECORD_PREFIX + currentDraftId, JSON.stringify(record));
-      localStorage.setItem('hazard-form-data', JSON.stringify(record.data));
-
-      const index = getDraftIndex().filter(item => item.id !== currentDraftId);
-      index.push({
-        id: record.id,
-        type: record.type,
-        typeLabel: record.typeLabel,
-        title: record.title,
-        url: record.url,
-        createdAt: record.createdAt,
-        updatedAt: record.updatedAt
-      });
-      setDraftIndex(index);
-      showToast('✅ 表單已暫存，可回首頁清冊繼續修改');
     }
 
     function loadForm() {
       let saved = '';
       if (currentDraftId) {
-        const recordRaw = localStorage.getItem(DRAFT_RECORD_PREFIX + currentDraftId);
-        if (recordRaw) {
-          try {
-            const record = JSON.parse(recordRaw);
-            saved = JSON.stringify(record.data || {});
-          } catch (e) {}
-        }
+        const record = FormSession.loadDraft(currentDraftId);
+        if (record) saved = JSON.stringify(record.data || {});
       }
       if (!saved) return;
       const data = JSON.parse(saved);
@@ -1616,6 +1972,8 @@
 
     function showToast(msg) {
       const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.dataset.toast = 'true';
       toast.textContent = msg;
       Object.assign(toast.style, {
         position: 'fixed', bottom: '32px', right: '32px',
@@ -1814,7 +2172,7 @@ modalConfirm.addEventListener('click', () => {
   const data = modalCanvas.toDataURL('image/png');
 
   // Save to localStorage
-  try { localStorage.setItem('hazard_' + activeKey, data); } catch(e) {}
+  SignatureUtils.save('hazard_' + activeKey, data);
 
   // Copy to mini preview canvas
   const wrap   = document.getElementById(activeKey);
@@ -1878,7 +2236,7 @@ function initSignaturePads() {
 
 // ── Update hint text in mini pad after confirm ──
 function clearSig(key) {
-  try { localStorage.removeItem('hazard_' + key); } catch(e) {}
+  SignatureUtils.remove('hazard_' + key);
   const wrap = document.getElementById(key);
   if (wrap) {
     const canvas = wrap.querySelector('.sig-canvas');
@@ -1908,13 +2266,9 @@ document.addEventListener('DOMContentLoaded', () => {
 <script>
   let deferredInstallPrompt = null;
 
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./service-worker.js')
-        .then(reg => console.log('[PWA] Service Worker 已註冊:', reg.scope))
-        .catch(err => console.warn('[PWA] Service Worker 註冊失敗:', err));
-    });
-  }
+  window.addEventListener('load', () => {
+    AppCache.registerServiceWorker('./service-worker.js');
+  });
 
   // ── Android：偵測安裝提示事件 ──
   window.addEventListener('beforeinstallprompt', (e) => {
