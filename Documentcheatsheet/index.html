@@ -16,7 +16,13 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="行政大補帖">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-</head>
+  <style>
+    .shortcut-action { display:flex; flex-direction:column; align-items:center; gap:8px; margin:-34px auto 42px; text-align:center; }
+    .shortcut-btn { border:1px solid rgba(47,125,87,.34); border-radius:999px; padding:10px 22px; background:rgba(255,255,255,.84); color:#246644; font:inherit; font-size:14px; font-weight:700; cursor:pointer; box-shadow:0 6px 18px rgba(47,125,87,.1); transition:transform .2s ease, background .2s ease; }
+    .shortcut-btn:hover, .shortcut-btn:focus-visible { background:rgba(47,125,87,.1); transform:translateY(-1px); outline:none; }
+    .shortcut-hint { display:none; max-width:520px; margin:0; color:#4f6256; font-size:12px; line-height:1.6; }
+    .shortcut-hint.show { display:block; }
+  </style></head>
 <body>
   <div class="bg-animation">
     <div class="orb orb-1"></div>
@@ -47,6 +53,10 @@
       </div>
       <h1 class="hero-title">行政資料<span class="gradient-text">大補帖</span></h1>
       <p class="hero-subtitle">承攬作業管理 · 快速填表 · 數位簽章</p>
+    </section>
+    <section class="shortcut-action" aria-label="建立捷徑">
+      <button id="shortcut-btn" class="shortcut-btn" type="button">↗ 建立捷徑</button>
+      <p id="shortcut-hint" class="shortcut-hint" role="status"></p>
     </section>
 
     <section class="cards-section">
@@ -259,5 +269,49 @@
       AppCache.registerServiceWorker('./service-worker.js');
     });
   </script>
-</body>
+  <script>
+    let deferredShortcutPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', event => {
+      event.preventDefault();
+      deferredShortcutPrompt = event;
+    });
+
+    function showShortcutHint(message) {
+      const hint = document.getElementById('shortcut-hint');
+      if (!hint) return;
+      hint.textContent = message;
+      hint.classList.add('show');
+    }
+
+    function setupShortcutButton() {
+      const button = document.getElementById('shortcut-btn');
+      if (!button) return;
+      button.addEventListener('click', async () => {
+        const userAgent = navigator.userAgent.toLowerCase();
+        const isIOS = /iphone|ipad|ipod/.test(userAgent);
+        const isMobile = /android|iphone|ipad|ipod|mobile/.test(userAgent);
+
+        if (deferredShortcutPrompt) {
+          deferredShortcutPrompt.prompt();
+          const result = await deferredShortcutPrompt.userChoice;
+          if (result.outcome === 'accepted') {
+            showShortcutHint('捷徑已建立，之後可從裝置主畫面快速開啟。');
+          }
+          deferredShortcutPrompt = null;
+          return;
+        }
+
+        if (isIOS) {
+          showShortcutHint('請點選瀏覽器的「分享」按鈕，再選擇「加入主畫面」。');
+        } else if (isMobile) {
+          showShortcutHint('請開啟瀏覽器選單，選擇「加到主畫面」或「建立捷徑」。');
+        } else {
+          showShortcutHint('請點選瀏覽器右上角選單，選擇「建立捷徑」或「將此頁加到書籤」，之後即可快速開啟。');
+        }
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', setupShortcutButton);
+  </script></body>
 </html>

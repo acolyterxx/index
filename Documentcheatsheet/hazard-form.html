@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
@@ -453,6 +453,25 @@
         padding-bottom:2pt !important;
         margin:0 0 3pt !important;
       }
+      #hazard-print-template .tpl-first-page {
+        display:flex;
+        flex-direction:column;
+      }
+      #hazard-print-template .tpl-prehazard-content {
+        flex:1 1 auto;
+        min-height:0;
+        display:flex;
+        flex-direction:column;
+        justify-content:space-between;
+      }
+      #hazard-print-template .tpl-hazard-page {
+        page-break-before:always;
+        break-before:page;
+      }
+      #hazard-print-template .tpl-check-table {
+        break-inside:avoid;
+        page-break-inside:avoid;
+      }
       #hazard-print-template .tpl-section-title {
         font-family:'標楷體','DFKai-SB',serif !important;
         font-size:11pt !important;
@@ -535,13 +554,29 @@
       #hazard-print-template .tpl-check-table td { width:33.333%; border:1px solid #000; line-height:1.55; padding:1.5pt 4pt 2.5pt; }
       #hazard-print-template .tpl-hazard-check td { width:33.333%; }
       #hazard-print-template .tpl-pre-note { border:1px solid #000; padding:2pt 4pt 3pt; line-height:1.45; margin:0 0 2pt; }
-      #hazard-print-template .tpl-hazard-table { font-size:8.5pt; table-layout:fixed; }
-      #hazard-print-template .tpl-hazard-table th { background:#ddd; text-align:center; line-height:1.4; padding:3pt 3pt 4pt; }
-      #hazard-print-template .tpl-hazard-table td { vertical-align:top; line-height:1.45; padding:2pt 3pt 3pt; }
+       #hazard-print-template .tpl-hazard-table {
+         font-size:8.2pt;
+        border-collapse:separate;
+        border-spacing:0;
+      }
+      #hazard-print-template .tpl-hazard-table th,
+      #hazard-print-template .tpl-hazard-table td {
+        border:0;
+        border-top:1px solid #000;
+        border-left:1px solid #000;
+      }
+      #hazard-print-template .tpl-hazard-table th:last-child,
+      #hazard-print-template .tpl-hazard-table td:last-child { border-right:1px solid #000; }
+      #hazard-print-template .tpl-hazard-table tbody tr:last-child td { border-bottom:1px solid #000; }
+       #hazard-print-template .tpl-hazard-table th { background:#ddd; text-align:center; line-height:1.25; padding:2pt 2.5pt 2.5pt; }
+       #hazard-print-template .tpl-hazard-table td { vertical-align:top; line-height:1.3; padding:1.5pt 2.5pt 2pt; }
+      #hazard-print-template .tpl-num-col { width:22pt; }
+      #hazard-print-template .tpl-op-col { width:74pt; }
+      #hazard-print-template .tpl-risk-col { width:76pt; }
       #hazard-print-template .tpl-num { width:22pt; text-align:center; }
       #hazard-print-template .tpl-op { width:74pt; }
       #hazard-print-template .tpl-risk { width:76pt; text-align:left; }
-      #hazard-print-template .tpl-measure-row { display:grid; grid-template-columns:13pt 1fr; column-gap:1pt; }
+      #hazard-print-template .tpl-measure-row { display:grid; grid-template-columns:13pt 1fr; column-gap:1pt; line-height:1.3; }
       #hazard-print-template .tpl-measure-num { text-align:right; white-space:nowrap; }
       #hazard-print-template .tpl-pledge-title {
         text-align:center;
@@ -1680,7 +1715,7 @@
       const labels = window.AdminPrintLayout?.hazard?.basicLabels() || printRules.basicTable?.labelsWithOriginalBreaks || {};
       const pledgeNums = window.AdminPrintLayout?.hazard?.pledgeNumbers() || printRules.pledge?.numberLabels || ['一、', '二、', '三、', '四、', '五、', '六、'];
       target.innerHTML = `
-        <section class="tpl-page">
+        <section class="tpl-page tpl-first-page">
           <h1 class="tpl-main-title">農業部畜產試驗所承攬作業環境危害告知單</h1>
           <table class="tpl-basic-table">
             <colgroup>${'<col>'.repeat(10)}</colgroup>
@@ -1693,7 +1728,8 @@
             <tr><td class="tpl-label">危害告知<br>日期</td><td colspan="9"><div class="tpl-cell-text">${tplDate('notify')}<span class="tpl-date-note">※應於作業開始前將作業環境危害因素告知承攬商</span></div></td></tr>
           </table>
 
-          <div class="tpl-notice">※以下由承攬商與請購單位共同確認填寫，應說明工作環境狀況，包括設施、佈置及機械設備等，必要時以圖示說明。</div>
+          <div class="tpl-prehazard-content">
+            <div class="tpl-notice">※以下由承攬商與請購單位共同確認填寫，應說明工作環境狀況，包括設施、佈置及機械設備等，必要時以圖示說明。</div>
           <div class="tpl-section-title">一、基本遵守事項</div>
           <div class="tpl-rules">
             <p>（一）已確實詳閱及了解「本所承攬作業環境危害告知單」。</p>
@@ -1709,6 +1745,11 @@
           <div class="tpl-pre-note">${tplEnvRows()}</div>
           <div class="tpl-section-title">三、勾選作業項目</div>
           <table class="tpl-check-table"><tbody>${tplCheckRows(WORK_TYPES, 'work-type-grid', 3)}</tbody></table>
+          </div>
+
+        </section>
+
+        <section class="tpl-page tpl-hazard-page">
           <div class="tpl-section-title">四、勾選可能危害</div>
           <table class="tpl-check-table tpl-hazard-check"><tbody>${tplHazardCheckRows()}</tbody></table>
           <div class="tpl-section-title">五、危害防止對策</div>
@@ -1717,6 +1758,7 @@
             <div>備註：本危害告知單正本由請購單位及承攬商雙方各執一份，影本送秘書室留存，修改時並應再以書面為之，本危害告知單等相關文件依規定保存3年。</div>
           </div>
           <table class="tpl-hazard-table">
+            <colgroup><col class="tpl-num-col"><col class="tpl-op-col"><col class="tpl-risk-col"><col class="tpl-measure-col"></colgroup>
             <thead><tr><th class="tpl-num">項次</th><th class="tpl-op">作業項目</th><th class="tpl-risk">潛在危害因素</th><th>危害防止對策</th></tr></thead>
             <tbody>${tplHazardTableRows()}</tbody>
           </table>
