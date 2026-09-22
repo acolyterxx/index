@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-  <meta name="description" content="農業部畜產試驗所承攬作業環境危害告知單 - 線上填寫版">
-  <title>承攬作業環境危害告知單 | 農業部畜產試驗所</title>
+  <meta name="description" content="颲脫平?函??Ｚ岫撽??踵雿平?啣??勗拿???- 蝺?憛怠神??>
+  <title>?踵雿平?啣??勗拿???| 颲脫平?函??Ｚ岫撽?</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
@@ -15,12 +15,12 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="危害告知單">
+  <meta name="apple-mobile-web-app-title" content="?勗拿???>
   <link rel="apple-touch-icon" href="icons/icon-192.png">
 
   <style>
 
-    /* ── Signature Pad (small preview in form) ── */
+    /* ?? Signature Pad (small preview in form) ?? */
     .hazard-page {
       --text-primary: #142019;
       --text-secondary: #2d3f34;
@@ -72,7 +72,7 @@
     /* Print image (hidden on screen, shown in print) */
     .sig-print-img { display: none; }
 
-    /* ── Fullscreen Signature Modal ── */
+    /* ?? Fullscreen Signature Modal ?? */
     #sig-modal {
       display: none;
       position: fixed;
@@ -251,10 +251,10 @@
       line-height: 1.7;
     }
 
-    /* ──── Hide 基本資料 section title on screen ──── */
+    /* ???? Hide ?箸鞈? section title on screen ???? */
     .form-section:first-of-type .section-title { display: none; }
 
-    /* ──── Hazard table measure rows: display:table for hanging indent on screen ──── */
+    /* ???? Hazard table measure rows: display:table for hanging indent on screen ???? */
     .hazard-table td > div { display: table; width: 100%; }
     .hazard-table td > div > span:first-child {
       display: table-cell;
@@ -287,7 +287,7 @@
       text-indent: -2.9em;
     }
 
-    /* ──── Pledge section title – centered on screen ──── */
+    /* ???? Pledge section title ??centered on screen ???? */
     #section-pledge > .section-title { justify-content: center; text-align: center; }
     #section-pledge .pledge-zhi {
       display: block;
@@ -336,7 +336,7 @@
         font-size: 0;
       }
       .hazard-table thead th:nth-child(3)::after {
-        content: '展開';
+        content: '撅?';
         font-size: 13px;
       }
       .hazard-table thead th:first-child {
@@ -419,7 +419,7 @@
     }
     @media print {
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box !important; }
-      body { background:#fff !important; color:#000 !important; font-family:'標楷體','DFKai-SB',serif !important; font-size:11pt !important; margin:0 !important; }
+      body { background:#fff !important; color:#000 !important; font-family:'璅扑擃?,'DFKai-SB',serif !important; font-size:11pt !important; margin:0 !important; }
       .bg-animation,.form-topbar,.progress-bar,.notice-block,.btn,footer.site-footer { display:none !important; }
       body.hazard-print-template-ready .form-container,
       body.hazard-print-template-ready .site-footer,
@@ -430,7 +430,7 @@
       body.hazard-print-template-ready #hazard-print-template { display:block !important; }
       #hazard-print-template {
         display:none;
-        font-family:'標楷體','DFKai-SB',serif !important;
+        font-family:'璅扑擃?,'DFKai-SB',serif !important;
         color:#000 !important;
         font-size:10pt !important;
         line-height:1.55 !important;
@@ -446,7 +446,7 @@
       #hazard-print-template .tpl-page:last-child { page-break-after:auto; break-after:auto; }
       #hazard-print-template .tpl-main-title {
         text-align:center !important;
-        font-family:'標楷體','DFKai-SB',serif !important;
+        font-family:'璅扑擃?,'DFKai-SB',serif !important;
         font-size:16pt !important;
         font-weight:400 !important;
         line-height:1.9 !important;
@@ -476,22 +476,24 @@
       /* Keep points 1-3 compact so the complete first page remains available. */
       #hazard-print-template .tpl-prehazard-content > .tpl-section-title {
         font-size:10pt !important;
-        line-height:1.15 !important;
+        line-height:1 !important;
+        height:11pt !important;
+        min-height:11pt !important;
         padding:0 !important;
       }
       #hazard-print-template .tpl-prehazard-content > .tpl-rules {
-        line-height:1.3 !important;
+        line-height:1.22 !important;
       }
       #hazard-print-template .tpl-prehazard-content > .tpl-rules p {
         margin:0 !important;
       }
       #hazard-print-template .tpl-prehazard-content > .tpl-pre-note {
         padding:1pt 3pt 1.5pt !important;
-        line-height:1.2 !important;
+        line-height:1.1 !important;
         margin:0 !important;
       }
       #hazard-print-template .tpl-prehazard-content > .tpl-check-table td {
-        line-height:1.2 !important;
+        line-height:1.1 !important;
         padding:1pt 3pt 1.5pt !important;
       }
       #hazard-print-template .tpl-hazard-page {
@@ -503,7 +505,7 @@
         page-break-inside:avoid;
       }
       #hazard-print-template .tpl-section-title {
-        font-family:'標楷體','DFKai-SB',serif !important;
+        font-family:'璅扑擃?,'DFKai-SB',serif !important;
         font-size:11pt !important;
         font-weight:400 !important;
         line-height:2.05 !important;
@@ -634,16 +636,16 @@
       #hazard-print-template .tpl-pledge-info { margin-top:1pt; line-height:1.5; }
       #hazard-print-template .tpl-pledge-info div { min-height:12pt; padding-bottom:1pt; overflow:visible; }
       #hazard-print-template .tpl-pledge-sign { width:55%; min-height:28pt; border:1px solid #aaa; display:flex; align-items:center; justify-content:center; margin:1pt 0 2pt; }
-      #hazard-print-template .tpl-sign-date { position:absolute; left:0; right:0; bottom:0.15cm; text-align:center; line-height:1.5; padding:0; }
+      #hazard-print-template .tpl-sign-date { position:absolute; left:0; right:0; bottom:0.65cm; text-align:center; line-height:1.5; padding:0; }
       .form-container { max-width:100% !important; padding:0 !important; margin:0 !important; }
 
-      /* ─ Header ─ */
+      /* ? Header ? */
       .form-header { background:#fff !important; border:none !important; border-radius:0 !important; padding:0 0 3pt !important; margin-bottom:4pt !important; text-align:center !important; box-shadow:none !important; }
       .form-org { display:none !important; }
-      .form-title-main { font-size:16pt !important; font-weight:bold !important; color:#000 !important; letter-spacing:2pt !important; display:block !important; margin-bottom:1pt !important; background:none !important; -webkit-text-fill-color:#000 !important; font-family:'標楷體','DFKai-SB',serif !important; }
+      .form-title-main { font-size:16pt !important; font-weight:bold !important; color:#000 !important; letter-spacing:2pt !important; display:block !important; margin-bottom:1pt !important; background:none !important; -webkit-text-fill-color:#000 !important; font-family:'璅扑擃?,'DFKai-SB',serif !important; }
       .form-subtitle { font-size:8.5pt !important; color:#444 !important; }
 
-      /* ─ Sections ─ */
+      /* ? Sections ? */
       .form-section { background:#fff !important; border:none !important; border-radius:0 !important; padding:0 !important; margin-bottom:4pt !important; backdrop-filter:none !important; box-shadow:none !important; break-inside:auto !important; page-break-inside:auto !important; }
       /* Hazard section: page 2 */
       #section-pledge { page-break-before:always !important; }
@@ -656,7 +658,7 @@
         display:block !important;
         overflow:visible !important;
         box-sizing:border-box !important;
-        font-family:'標楷體','DFKai-SB',serif !important;
+        font-family:'璅扑擃?,'DFKai-SB',serif !important;
         font-size:11pt !important;
         font-weight:400 !important;
         color:#000 !important;
@@ -670,20 +672,20 @@
       .section-title::after {
         content:none !important;
       }
-      /* Hide 基本資料 section title in print */
+      /* Hide ?箸鞈? section title in print */
       .form-container > .form-section:first-of-type .section-title { display:none !important; }
       /* Hide env label hint */
       .env-field-label { display:none !important; }
       #section-basic-rules { margin-bottom:0 !important; padding-bottom:0 !important; }
       .pre-rules-notice { display:block !important; border:none !important; background:transparent !important; color:#000 !important; padding:0 !important; margin:0 0 2pt !important; font-size:9pt !important; line-height:1.45 !important; }
       #section-env .env-notice-print { display:none !important; }
-      /* Section-work 二、: work-notice-print ABOVE section-title */
+      /* Section-work 鈭? work-notice-print ABOVE section-title */
       #section-work { display:flex !important; flex-direction:column !important; }
       #section-work .work-notice-print { order:-1 !important; display:block !important; font-size:8.5pt !important; color:#000 !important; margin-bottom:3pt !important; line-height:1.6 !important; }
       #section-work .section-title { order:0 !important; }
       #section-work .checkbox-grid { order:1 !important; }
 
-      /* ─ Basic info grid: 6-col for 7-row print layout ─ */
+      /* ? Basic info grid: 6-col for 7-row print layout ? */
       #basic-info-grid {
         display:grid !important;
         grid-template-columns: repeat(6,1fr) !important;
@@ -700,24 +702,24 @@
         margin:0 !important;
         overflow:visible !important;
       }
-      /* ─ Row 1: 承攬商名稱(col1-3) | 統一編號(col4-6) ─ */
+      /* ? Row 1: ?踵??蝔?col1-3) | 蝯曹?蝺刻?(col4-6) ? */
       #ff-contractor { grid-column:1/4 !important; grid-row:1 !important; }
       #ff-taxid      { grid-column:4/7 !important; grid-row:1 !important; }
-      /* ─ Row 2: 負責人簽章(col1-2) | 現場主管簽章(col3-4) | 緊急連絡電話(col5-6) ─ */
+      /* ? Row 2: 鞎痊鈭箇偷蝡?col1-2) | ?曉銝餌恣蝪賜?(col3-4) | 蝺仿?窗?餉店(col5-6) ? */
       #ff-boss       { grid-column:1/3 !important; grid-row:2 !important; }
       #ff-supervisor { grid-column:3/5 !important; grid-row:2 !important; }
       #ff-tel        { grid-column:5/7 !important; grid-row:2 !important; }
-      /* ─ Row 3: 承攬作業名稱(full) ─ */
+      /* ? Row 3: ?踵雿平?迂(full) ? */
       #ff-workname   { grid-column:1/7 !important; grid-row:3 !important; }
-      /* ─ Row 4: 作業期間(full) ─ */
+      /* ? Row 4: 雿平??(full) ? */
       #ff-period     { grid-column:1/7 !important; grid-row:4 !important; margin-top:0 !important; }
-      /* ─ Row 5: 作業地點(full) ─ */
+      /* ? Row 5: 雿平?圈?(full) ? */
       #ff-location   { grid-column:1/7 !important; grid-row:5 !important; }
-      /* ─ Row 6: 請購單位(col1-2) | 承辦人簽章(col3-4) | 單位主管簽章(col5-6) ─ */
+      /* ? Row 6: 隢頃?桐?(col1-2) | ?輯齒鈭箇偷蝡?col3-4) | ?桐?銝餌恣蝪賜?(col5-6) ? */
       #ff-purchase   { grid-column:1/3 !important; grid-row:6 !important; }
       #ff-handler    { grid-column:3/5 !important; grid-row:6 !important; }
       #ff-depthead   { grid-column:5/7 !important; grid-row:6 !important; }
-      /* ─ Row 7: 危害告知日期+※說明(full) ─ */
+      /* ? Row 7: ?勗拿??交?+?餉牧??full) ? */
       #ff-notify     { grid-column:1/7 !important; grid-row:7 !important; }
       #ff-notify {
         display:grid !important;
@@ -762,11 +764,11 @@
       .notify-note { font-size:8.5pt !important; color:#000 !important; display:inline-block !important; margin-left:10pt !important; white-space:nowrap !important; }
       .form-label { font-size:8.5pt !important; font-weight:bold !important; color:#000 !important; display:inline !important; margin:0 3pt 0 0 !important; }
       .form-label>span { display:none !important; }
-      .form-input { border:none !important; border-bottom:1px solid #888 !important; background:transparent !important; color:#000 !important; font-size:10pt !important; font-family:'標楷體','DFKai-SB',serif !important; padding:0 2pt !important; min-width:70pt !important; display:inline !important; border-radius:0 !important; width:auto !important; }
+      .form-input { border:none !important; border-bottom:1px solid #888 !important; background:transparent !important; color:#000 !important; font-size:10pt !important; font-family:'璅扑擃?,'DFKai-SB',serif !important; padding:0 2pt !important; min-width:70pt !important; display:inline !important; border-radius:0 !important; width:auto !important; }
       .date-row { display:inline-flex !important; align-items:center !important; gap:2pt !important; flex-wrap:wrap !important; }
       /* Times New Roman for all numeric inputs */
       .date-input-sm { border:none !important; border-bottom:1px solid #888 !important; background:transparent !important; color:#000 !important; font-size:10pt !important; padding:0 2pt !important; width:26pt !important; border-radius:0 !important; font-family:'Times New Roman',Times,serif !important; }
-      .date-row label { font-size:10pt !important; color:#000 !important; margin:0 1pt !important; font-family:'標楷體','DFKai-SB',serif !important; }
+      .date-row label { font-size:10pt !important; color:#000 !important; margin:0 1pt !important; font-family:'璅扑擃?,'DFKai-SB',serif !important; }
       .print-mirror-source { display:none !important; }
       .print-input-value {
         display:inline !important;
@@ -774,7 +776,7 @@
         max-width:100% !important;
         border-bottom:1px solid #888 !important;
         color:#000 !important;
-        font-family:'標楷體','DFKai-SB',serif !important;
+        font-family:'璅扑擃?,'DFKai-SB',serif !important;
         font-size:10pt !important;
         line-height:1.45 !important;
         padding:0 2pt !important;
@@ -784,7 +786,7 @@
         vertical-align:baseline !important;
       }
 
-      /* ─ Sig pads in print: hide canvas, show saved image ─ */
+      /* ? Sig pads in print: hide canvas, show saved image ? */
       .sig-pad-wrap { border:1px solid #aaa !important; background:#fff !important; border-radius:0 !important; overflow:visible !important; display:block !important; min-height:38pt !important; touch-action:auto !important; }
       .sig-canvas { display:none !important; }
       .sig-actions { display:none !important; }
@@ -793,16 +795,16 @@
       .sig-print-img[src=""] { display:none !important; }
 
 
-      /* ─ Env description checkboxes ─ */
+      /* ? Env description checkboxes ? */
       .env-check-grid { display:block !important; columns:2 !important; column-gap:10pt !important; border:1px solid #ccc !important; padding:3pt 5pt !important; margin-bottom:3pt !important; }
       .env-check-item { display:none !important; }
       .env-check-item.checked { display:block !important; break-inside:avoid !important; border:none !important; padding:0.5pt 0 !important; background:transparent !important; }
       .env-check-item.checked .env-check-label { color:#000 !important; font-size:9.5pt !important; line-height:1.5 !important; }
-      .env-check-item.checked .env-check-label::before { content:'☑ '; }
+      .env-check-item.checked .env-check-label::before { content:'??'; }
       .env-check-item.checked input[type="checkbox"] { display:none !important; }
-      #env-other { display:block !important; font-size:9.5pt !important; color:#000 !important; border:none !important; border-bottom:1px solid #888 !important; background:transparent !important; width:100% !important; margin-top:3pt !important; font-family:'標楷體','DFKai-SB',serif !important; }
+      #env-other { display:block !important; font-size:9.5pt !important; color:#000 !important; border:none !important; border-bottom:1px solid #888 !important; background:transparent !important; width:100% !important; margin-top:3pt !important; font-family:'璅扑擃?,'DFKai-SB',serif !important; }
 
-      /* ─ Work type & hazard checkboxes ─ */
+      /* ? Work type & hazard checkboxes ? */
       .checkbox-grid { display:grid !important; grid-template-columns:repeat(3,1fr) !important; grid-auto-flow:column !important; gap:1pt !important; border:1px solid #ccc !important; padding:2pt 4pt !important; }
       #section-work .checkbox-grid { grid-template-rows:repeat(5, auto) !important; }
       .checkbox-item { display:flex !important; align-items:flex-start !important; gap:3pt !important; border:none !important; background:transparent !important; padding:1pt 2pt !important; border-radius:0 !important; }
@@ -820,7 +822,7 @@
       #section-hazard .checkbox-label { font-size:8pt !important; line-height:1.15 !important; }
       #section-hazard input[type="checkbox"] { width:8pt !important; height:8pt !important; margin-top:0.5pt !important; }
 
-      /* ─ Hazard prevention notes (above table) ─ */
+      /* ? Hazard prevention notes (above table) ? */
       .hazard-notes { border:none !important; background:transparent !important; border-radius:0 !important; padding:2pt 0 4pt !important; font-size:9pt !important; color:#000 !important; line-height:1.6 !important; margin-bottom:3pt !important; }
       .hazard-notes p { margin:0 0 2pt !important; }
       .hazard-notes strong { color:#000 !important; }
@@ -828,7 +830,7 @@
       #section-basic-rules .hazard-notes p { margin:0 0 0.5pt !important; padding-left:2.9em !important; text-indent:-2.9em !important; }
       #section-prevention .hazard-notes { border:1px solid #000 !important; padding:2pt 4pt !important; margin:0 0 2pt !important; line-height:1.35 !important; }
 
-      /* ─ Hazard prevention table ─ */
+      /* ? Hazard prevention table ? */
       .hazard-table { width:100% !important; border-collapse:collapse !important; font-size:8.5pt !important; table-layout:fixed !important; }
       .hazard-table thead th:nth-child(4),
       .hazard-table .hazard-measures-cell { display:table-cell !important; }
@@ -851,19 +853,19 @@
       .hazard-table td > div > span:first-child { display:table-cell !important; white-space:nowrap !important; width:11pt !important; vertical-align:top !important; padding-right:1pt !important; font-size:8.5pt !important; }
       .hazard-table td > div > span:last-child { display:table-cell !important; vertical-align:top !important; font-size:8.5pt !important; word-break:normal !important; overflow-wrap:anywhere !important; }
 
-      /* ─ Commitment letter ─ */
+      /* ? Commitment letter ? */
       #section-sig { display:none !important; }
       /* Pledge section: flex column for ordering */
       #section-pledge { display:flex !important; flex-direction:column !important; position:relative !important; min-height:25cm !important; padding-bottom:1.4cm !important; overflow:visible !important; }
-      #section-pledge .section-title { order:0 !important; text-align:center !important; color:#000 !important; font-family:'標楷體','DFKai-SB',serif !important; font-weight:400 !important; font-size:12.5pt !important; margin-bottom:3pt !important; line-height:1.55 !important; }
+      #section-pledge .section-title { order:0 !important; text-align:center !important; color:#000 !important; font-family:'璅扑擃?,'DFKai-SB',serif !important; font-weight:400 !important; font-size:12.5pt !important; margin-bottom:3pt !important; line-height:1.55 !important; }
       #section-pledge .pledge-box { order:1 !important; }
-      /* pledge-zhi: left-aligned, 此致 on line 1, 農業部... on line 2 */
-      #section-pledge .pledge-zhi { order:2 !important; display:block !important; font-family:'標楷體','DFKai-SB',serif !important; font-size:10pt !important; color:#000 !important; text-align:left !important; margin:9pt 0 9pt 0 !important; line-height:2.15 !important; padding-bottom:2pt !important; overflow:visible !important; }
+      /* pledge-zhi: left-aligned, 甇方 on line 1, 颲脫平??.. on line 2 */
+      #section-pledge .pledge-zhi { order:2 !important; display:block !important; font-family:'璅扑擃?,'DFKai-SB',serif !important; font-size:10pt !important; color:#000 !important; text-align:left !important; margin:9pt 0 9pt 0 !important; line-height:2.15 !important; padding-bottom:2pt !important; overflow:visible !important; }
       /* Form-grid (name, address, tel, taxid, date) */
       #pledge-form-grid { order:3 !important; }
       /* Sig wrapper: right after form-grid */
       #pledge-sig-wrapper { order:4 !important; margin-top:0 !important; }
-      /* Hide 備註事項 */
+      /* Hide ?酉鈭? */
       #section-pledge .form-field[style*="margin-top:16px"] { display:none !important; }
       /* pledge-box styling */
       .pledge-box { background:#fff !important; border:none !important; color:#000 !important; padding:0 !important; font-size:10pt !important; line-height:1.65 !important; border-radius:0 !important; margin-bottom:2pt !important; }
@@ -910,7 +912,7 @@
       /* Pledge info grid */
       #pledge-form-grid { border:none !important; gap:0 !important; margin-top:2pt !important; }
       #section-pledge .form-field { border:none !important; padding:2pt 0 3pt !important; line-height:1.65 !important; min-height:0 !important; overflow:visible !important; }
-      #section-pledge .form-label { font-family:'標楷體','DFKai-SB',serif !important; line-height:1.65 !important; margin-right:2pt !important; vertical-align:middle !important; }
+      #section-pledge .form-label { font-family:'璅扑擃?,'DFKai-SB',serif !important; line-height:1.65 !important; margin-right:2pt !important; vertical-align:middle !important; }
       /* Pledge sig inline (inside grid, below name) */
       #pledge-ff-sig-inline { grid-column:1/-1 !important; border:none !important; padding:1.5pt 0 !important; margin-bottom:0 !important; }
       #pledge-ff-sig-inline .form-label { display:block !important; font-size:9pt !important; margin-bottom:1pt !important; }
@@ -922,7 +924,7 @@
       #pledge-form-grid .form-field:last-child .form-label { display:none !important; }
       #pledge-form-grid .form-field:last-child .date-row { justify-content:center !important; }
 
-      .form-textarea { font-size:9pt !important; color:#000 !important; border:1px solid #000 !important; background:#fff !important; border-radius:0 !important; width:100% !important; padding:3pt !important; font-family:'標楷體','DFKai-SB',serif !important; }
+      .form-textarea { font-size:9pt !important; color:#000 !important; border:1px solid #000 !important; background:#fff !important; border-radius:0 !important; width:100% !important; padding:3pt !important; font-family:'璅扑擃?,'DFKai-SB',serif !important; }
 
       @page { size:A4 portrait; margin:0.75cm 1.35cm 1cm 1.35cm; }
     }
@@ -970,33 +972,33 @@
   </div>
 
   <nav class="form-topbar">
-    <a href="index.html" class="back-btn">← 返回首頁</a>
-    <span class="topbar-title">承攬作業環境危害告知單</span>
+    <a href="index.html" class="back-btn">??餈?擐?</a>
+    <span class="topbar-title">?踵雿平?啣??勗拿???/span>
     <div class="topbar-actions">
-      <button id="pwa-install-btn" onclick="triggerInstall()">📲 安裝 APP</button>
-      <button class="btn btn-ghost" onclick="clearForm()">🗑 清除</button>
-      <button class="btn btn-print" onclick="handlePrintExport()">🖨 列印 / 匯出PDF</button>
-      <button class="btn btn-primary" onclick="saveForm()">💾 暫存</button>
+      <button id="pwa-install-btn" onclick="triggerInstall()">? 摰? APP</button>
+      <button class="btn btn-ghost" onclick="clearForm()">?? 皜</button>
+      <button class="btn btn-print" onclick="handlePrintExport()">? ? / ?臬PDF</button>
+      <button class="btn btn-primary" onclick="saveForm()">? ?怠?</button>
     </div>
   </nav>
   <!-- iOS Safari install hint -->
   <div id="ios-install-hint">
-    📱 安裝到手機主畫面：<br>
-    點擊瀏覽器底部分享鍵 <strong>⎋</strong>，選「加入至主畫面」
-    <br><button onclick="document.getElementById('ios-install-hint').classList.remove('show')">我明白了</button>
+    ? 摰??唳?璈蜓?恍嚗?br>
+    暺??汗?典??典?鈭恍 <strong>??/strong>嚗???亥銝餌?Ｕ?
+    <br><button onclick="document.getElementById('ios-install-hint').classList.remove('show')">???賭?</button>
   </div>
 
-  <!-- ── Fullscreen Signature Modal ── -->
+  <!-- ?? Fullscreen Signature Modal ?? -->
   <div id="sig-modal">
     <div id="sig-modal-inner">
-      <div id="sig-modal-title">✍️ 請在下方空白處簽名</div>
+      <div id="sig-modal-title">?? 隢銝蝛箇?偷??/div>
       <div id="sig-modal-canvas-wrap">
         <canvas id="sig-modal-canvas"></canvas>
-        <div id="sig-modal-placeholder">← 用手指在此簽名 →</div>
+        <div id="sig-modal-placeholder">???冽??甇斤偷????/div>
       </div>
       <div id="sig-modal-bar">
-        <button id="sig-modal-clear" type="button">清除</button>
-        <button id="sig-modal-confirm" type="button">✓ 確定</button>
+        <button id="sig-modal-clear" type="button">皜</button>
+        <button id="sig-modal-confirm" type="button">??蝣箏?</button>
       </div>
     </div>
   </div>
@@ -1005,190 +1007,190 @@
   <div class="form-container">
 
     <div class="form-header">
-      <div class="form-org">農業部畜產試驗所</div>
-      <h1 class="form-title-main">農業部畜產試驗所承攬作業環境危害告知單</h1>
-      <p class="form-subtitle">版本日期：中華民國115年07月22日　｜　本表格依職業安全衛生法第26條規定辦理</p>
+      <div class="form-org">颲脫平?函??Ｚ岫撽?</div>
+      <h1 class="form-title-main">颲脫平?函??Ｚ岫撽??踵雿平?啣??勗拿???/h1>
+      <p class="form-subtitle">??交?嚗葉?舀???15撟?7??2?乓嚚?祈”?潔??瑟平摰銵?瘜洵26璇?摰齒??/p>
     </div>
 
     <div class="progress-bar">
       <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
     </div>
 
-    <!-- Section 1: 基本資料 -->
+    <!-- Section 1: ?箸鞈? -->
     <div class="form-section">
-      <div class="section-title">基本資料</div>
+      <div class="section-title">?箸鞈?</div>
 
       <div class="form-grid" id="basic-info-grid" style="grid-template-columns: 1fr 1fr;">
         <div class="form-field" id="ff-contractor">
-          <label class="form-label" for="contractor-name">承攬商名稱 <span class="required">*</span></label>
-          <input class="form-input" id="contractor-name" type="text" placeholder="請輸入承攬商名稱" oninput="syncPledge(); updateProgress()">
+          <label class="form-label" for="contractor-name">?踵??蝔?<span class="required">*</span></label>
+          <input class="form-input" id="contractor-name" type="text" placeholder="隢撓?交?砍??迂" oninput="syncPledge(); updateProgress()">
         </div>
         <div class="form-field" id="ff-taxid">
-          <label class="form-label" for="tax-id">統一編號</label>
-          <input class="form-input" id="tax-id" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="8碼統一編號" maxlength="8" oninput="syncPledge(); updateProgress()">
+          <label class="form-label" for="tax-id">蝯曹?蝺刻?</label>
+          <input class="form-input" id="tax-id" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="8蝣潛絞銝蝺刻?" maxlength="8" oninput="syncPledge(); updateProgress()">
         </div>
-        <!-- 負責人簽章 -->
+        <!-- 鞎痊鈭箇偷蝡?-->
         <div class="form-field" id="ff-boss">
-          <label class="form-label">負責人簽章</label>
+          <label class="form-label">鞎痊鈭箇偷蝡?/label>
           <div class="sig-pad-wrap" id="sig-boss">
             <canvas class="sig-canvas" data-key="sig-boss"></canvas>
             <div class="sig-actions">
-              <span class="sig-hint">✍️ 用手指在此簽名</span>
-              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-boss')">清除</button>
+              <span class="sig-hint">?? ?冽??甇斤偷??/span>
+              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-boss')">皜</button>
             </div>
-            <img class="sig-print-img" id="sig-boss-img" src="" alt="簽章">
+            <img class="sig-print-img" id="sig-boss-img" src="" alt="蝪賜?">
           </div>
         </div>
 
         <div class="form-field" id="ff-tel">
-          <label class="form-label" for="emergency-tel">緊急連絡電話</label>
-          <input class="form-input" id="emergency-tel" type="tel" placeholder="例如：0912-345-678" oninput="syncPledge(); updateProgress()">
+          <label class="form-label" for="emergency-tel">蝺仿?窗?餉店</label>
+          <input class="form-input" id="emergency-tel" type="tel" placeholder="靘?嚗?912-345-678" oninput="syncPledge(); updateProgress()">
         </div>
-        <!-- 現場主管簽章 -->
+        <!-- ?曉銝餌恣蝪賜? -->
         <div class="form-field" id="ff-supervisor">
-          <label class="form-label">現場主管簽章</label>
+          <label class="form-label">?曉銝餌恣蝪賜?</label>
           <div class="sig-pad-wrap" id="sig-supervisor">
             <canvas class="sig-canvas" data-key="sig-supervisor"></canvas>
             <div class="sig-actions">
-              <span class="sig-hint">✍️ 用手指在此簽名</span>
-              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-supervisor')">清除</button>
+              <span class="sig-hint">?? ?冽??甇斤偷??/span>
+              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-supervisor')">皜</button>
             </div>
-            <img class="sig-print-img" id="sig-supervisor-img" src="" alt="簽章">
+            <img class="sig-print-img" id="sig-supervisor-img" src="" alt="蝪賜?">
           </div>
         </div>
 
         <div class="form-field" id="ff-purchase">
-          <label class="form-label" for="purchase-dept">請購單位</label>
-          <input class="form-input" id="purchase-dept" type="text" placeholder="請輸入請購單位" oninput="updateProgress()">
+          <label class="form-label" for="purchase-dept">隢頃?桐?</label>
+          <input class="form-input" id="purchase-dept" type="text" placeholder="隢撓?亥?鞈澆雿? oninput="updateProgress()">
         </div>
-        <!-- 承辦人簽章 -->
+        <!-- ?輯齒鈭箇偷蝡?-->
         <div class="form-field" id="ff-handler">
-          <label class="form-label">承辦人簽章</label>
+          <label class="form-label">?輯齒鈭箇偷蝡?/label>
           <div class="sig-pad-wrap" id="sig-handler">
             <canvas class="sig-canvas" data-key="sig-handler"></canvas>
             <div class="sig-actions">
-              <span class="sig-hint">✍️ 用手指在此簽名</span>
-              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-handler')">清除</button>
+              <span class="sig-hint">?? ?冽??甇斤偷??/span>
+              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-handler')">皜</button>
             </div>
-            <img class="sig-print-img" id="sig-handler-img" src="" alt="簽章">
+            <img class="sig-print-img" id="sig-handler-img" src="" alt="蝪賜?">
           </div>
         </div>
-        <!-- 單位主管簽章 -->
+        <!-- ?桐?銝餌恣蝪賜? -->
         <div class="form-field" id="ff-depthead">
-          <label class="form-label">單位主管簽章</label>
+          <label class="form-label">?桐?銝餌恣蝪賜?</label>
           <div class="sig-pad-wrap" id="sig-depthead">
             <canvas class="sig-canvas" data-key="sig-depthead"></canvas>
             <div class="sig-actions">
-              <span class="sig-hint">✍️ 用手指在此簽名</span>
-              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-depthead')">清除</button>
+              <span class="sig-hint">?? ?冽??甇斤偷??/span>
+              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-depthead')">皜</button>
             </div>
-            <img class="sig-print-img" id="sig-depthead-img" src="" alt="簽章">
+            <img class="sig-print-img" id="sig-depthead-img" src="" alt="蝪賜?">
           </div>
         </div>
 
         <div class="form-field form-grid-full" id="ff-workname">
-          <label class="form-label" for="work-name">承攬作業名稱 <span class="required">*</span></label>
-          <input class="form-input" id="work-name" type="text" placeholder="請輸入承攬作業名稱" oninput="syncPledge(); updateProgress()">
+          <label class="form-label" for="work-name">?踵雿平?迂 <span class="required">*</span></label>
+          <input class="form-input" id="work-name" type="text" placeholder="隢撓?交?砌?璆剖?蝔? oninput="syncPledge(); updateProgress()">
         </div>
         <div class="form-field form-grid-full" id="ff-location">
-          <label class="form-label" for="work-location">承攬作業地點 <span class="required">*</span></label>
-          <input class="form-input" id="work-location" type="text" placeholder="請輸入作業地點" oninput="updateProgress()">
+          <label class="form-label" for="work-location">?踵雿平?圈? <span class="required">*</span></label>
+          <input class="form-input" id="work-location" type="text" placeholder="隢撓?乩?璆剖暺? oninput="updateProgress()">
         </div>
-        <!-- 作業期間（移入grid以便print排版） -->
+        <!-- 雿平??嚗宏?卮rid隞乩噶print??嚗?-->
         <div class="form-field form-grid-full" id="ff-period" style="margin-top:0;">
-          <label class="form-label">承攬作業期間 <span class="required">*</span></label>
+          <label class="form-label">?踵雿平?? <span class="required">*</span></label>
           <div class="date-row">
-            <input class="date-input-sm" id="start-year" type="text" placeholder="年" maxlength="3" oninput="updateProgress()">
-            <label>年</label>
-            <input class="date-input-sm" id="start-month" type="text" placeholder="月" maxlength="2" style="width:55px" oninput="updateProgress()">
-            <label>月</label>
-            <input class="date-input-sm" id="start-day" type="text" placeholder="日" maxlength="2" style="width:55px" oninput="updateProgress()">
-            <label>日　至</label>
-            <input class="date-input-sm" id="end-year" type="text" placeholder="年" maxlength="3" oninput="updateProgress()">
-            <label>年</label>
-            <input class="date-input-sm" id="end-month" type="text" placeholder="月" maxlength="2" style="width:55px" oninput="updateProgress()">
-            <label>月</label>
-            <input class="date-input-sm" id="end-day" type="text" placeholder="日" maxlength="2" style="width:55px" oninput="updateProgress()">
-            <label>日</label>
+            <input class="date-input-sm" id="start-year" type="text" placeholder="撟? maxlength="3" oninput="updateProgress()">
+            <label>撟?/label>
+            <input class="date-input-sm" id="start-month" type="text" placeholder="?? maxlength="2" style="width:55px" oninput="updateProgress()">
+            <label>??/label>
+            <input class="date-input-sm" id="start-day" type="text" placeholder="?? maxlength="2" style="width:55px" oninput="updateProgress()">
+            <label>?乓??/label>
+            <input class="date-input-sm" id="end-year" type="text" placeholder="撟? maxlength="3" oninput="updateProgress()">
+            <label>撟?/label>
+            <input class="date-input-sm" id="end-month" type="text" placeholder="?? maxlength="2" style="width:55px" oninput="updateProgress()">
+            <label>??/label>
+            <input class="date-input-sm" id="end-day" type="text" placeholder="?? maxlength="2" style="width:55px" oninput="updateProgress()">
+            <label>??/label>
           </div>
         </div>
-        <!-- 危害告知日期（移入grid以便print排版） -->
+        <!-- ?勗拿??交?嚗宏?卮rid隞乩噶print??嚗?-->
         <div class="form-field form-grid-full" id="ff-notify">
-          <label class="form-label">危害告知日期 <span class="required">*</span></label>
+          <label class="form-label">?勗拿??交? <span class="required">*</span></label>
           <div class="date-row">
-            <input class="date-input-sm" id="notify-year" type="text" placeholder="年" maxlength="3" oninput="syncPledgeDate(); updateProgress()">
-            <label>年</label>
-            <input class="date-input-sm" id="notify-month" type="text" placeholder="月" maxlength="2" style="width:55px" oninput="syncPledgeDate(); updateProgress()">
-            <label>月</label>
-            <input class="date-input-sm" id="notify-day" type="text" placeholder="日" maxlength="2" style="width:55px" oninput="syncPledgeDate(); updateProgress()">
-            <label>日</label>
-            <span class="notify-note" style="margin-left:20px; font-size:12px; color:var(--text-muted);">※應於作業開始前將作業環境危害因素告知承攬商</span>
+            <input class="date-input-sm" id="notify-year" type="text" placeholder="撟? maxlength="3" oninput="syncPledgeDate(); updateProgress()">
+            <label>撟?/label>
+            <input class="date-input-sm" id="notify-month" type="text" placeholder="?? maxlength="2" style="width:55px" oninput="syncPledgeDate(); updateProgress()">
+            <label>??/label>
+            <input class="date-input-sm" id="notify-day" type="text" placeholder="?? maxlength="2" style="width:55px" oninput="syncPledgeDate(); updateProgress()">
+            <label>??/label>
+            <span class="notify-note" style="margin-left:20px; font-size:12px; color:var(--text-muted);">?餅??潔?璆剝?憪?撠?璆剔憓摰喳?蝝??交?砍?</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Section 1: 基本遵守事項 -->
+    <!-- Section 1: ?箸?萄?鈭? -->
     <div class="form-section" id="section-basic-rules">
-      <div class="pre-rules-notice">※以下由承攬商與請購單位共同確認填寫，應說明工作環境狀況，包括設施、佈置及機械設備等，必要時以圖示說明。</div>
-      <div class="section-title">一、基本遵守事項</div>
+      <div class="pre-rules-notice">?颱誑銝?踵??隢頃?桐??勗?蝣箄?憛怠神嚗?隤芣?撌乩??啣??瘜??閮剜??蝵桀?璈１閮剖?蝑?敹??誑?內隤芣???/div>
+      <div class="section-title">銝??祇摰???/div>
       <div class="hazard-notes">
-        <p>（一）已確實詳閱及了解「本所承攬作業環境危害告知單」。</p>
-        <p>（二）人員進入工作場所，應依作業特性，配戴必要之個人安全衛生防護具。</p>
-        <p>（三）作業前使用機具、工具應確實實施點檢，所有捲夾設備嚴禁配戴手套。</p>
-        <p>（四）不隨意碰觸所內電氣設備及操作機台，作業前應知會本案承辦人核准後始可作業。</p>
-        <p>（五）危險機械或設備之操作人員應依法取得合格執照始可操作。</p>
-        <p>（六）承攬商仍應於作業前評估各項細部作業之可能危害，採取相應預防、保護措施，對所屬人員實施法定教育訓練與危害告知，可能危害及對應防護措施，並指派專人於現場指揮監督。</p>
-        <p>（七）本所對於承攬商之作業設施或作業方法，認為有危害人員安全顧慮時，得隨時令其停工，至危害消失為止。</p>
+        <p>嚗?嚗歇蝣箏祕閰喲??閫???踵雿平?啣??勗拿??柴?/p>
+        <p>嚗?嚗犖?⊿脣撌乩??湔?嚗?靘?璆剔?改??敹?銋犖摰銵??脰風?瑯?/p>
+        <p>嚗?嚗?璆剖?雿輻璈?極?瑟?蝣箏祕撖行暺炎嚗??憭曇身?蝳??湔?憟?/p>
+        <p>嚗?嚗??冽?蝣啗孛??折瘞?身????璈嚗?璆剖???獢颲虫犖?詨?敺??臭?璆准?/p>
+        <p>嚗?嚗?芣?璇唳?閮剖?銋?雿犖?⊥?靘?????瑞憪????/p>
+        <p>嚗嚗?砍?隞??潔?璆剖?閰摯??蝝圈雿平銋?賢摰喉??∪??豢????霅瑟?踝?撠?撅砌犖?∪祕?賣?摰??脰?蝺渲??勗拿?嚗?賢摰喳?撠??脰風?芣嚗蒂?晷撠犖?潛?湔??桃???/p>
+        <p>嚗?嚗?撠?踵??雿平閮剜??璆剜瘜?隤?摰喃犖?∪??券“?格?嚗??冽?隞文?極嚗?勗拿瘨仃?箸迫??/p>
       </div>
     </div>
 
-    <!-- Section 2: 作業現場環境說明 -->
+    <!-- Section 2: 雿平?曉?啣?隤芣? -->
     <div class="form-section" id="section-env">
-      <div class="section-title">二、承攬作業現場環境說明</div>
+      <div class="section-title">鈭?砌?璆剔?渡憓牧??/div>
       <div class="form-field">
         <div class="env-check-grid" id="env-check-grid">
-          <!-- 由JS建立可選項目 -->
+          <!-- ?宿S撱箇??舫? -->
         </div>
       </div>
     </div>
-    <!-- Section 3: 勾選作業項目 -->
+    <!-- Section 3: ?暸雿平? -->
     <div class="form-section" id="section-work">
       <!-- Print-only notice: flex order:-1 puts it ABOVE section-title in print -->
-      <div class="work-notice-print" style="display:none;">承攬商若有下列作業，應於施工前填寫該項作業之申請單，提交請購單位，並經核可後使得施工：（1）動火；（2）高架；（3）局限空間；（4）活線；（5）吊掛（如附件1~5）</div>
-      <div class="section-title">三、勾選作業項目</div>
+      <div class="work-notice-print" style="display:none;">?踵?????璆哨???賢極?‵撖怨府??璆凋??唾??殷??漱隢頃?桐?嚗蒂蝬?臬?雿踹??賢極嚗?1嚗??恬?嚗?嚗??塚?嚗?嚗??征??嚗?嚗暑蝺?嚗?嚗???憒?隞?~5嚗?/div>
+      <div class="section-title">銝?訾?璆剝???/div>
       <!-- Screen notice (hidden in print) -->
       <div class="notice-block" style="background: rgba(63,143,199,0.08); border-color: rgba(63,143,199,0.2); color: #2f6f9f; margin-bottom:16px;">
-        承攬商若有下列作業，應於施工前填寫該項作業之申請單，提交請購單位，並經核可後使得施工：（1）動火；（2）高架；（3）局限空間；（4）活線；（5）吊掛（如附件1~5）
+        ?踵?????璆哨???賢極?‵撖怨府??璆凋??唾??殷??漱隢頃?桐?嚗蒂蝬?臬?雿踹??賢極嚗?1嚗??恬?嚗?嚗??塚?嚗?嚗??征??嚗?嚗暑蝺?嚗?嚗???憒?隞?~5嚗?
       </div>
       <div class="checkbox-grid" id="work-type-grid">
         <!-- JS will populate -->
       </div>
     </div>
 
-    <!-- Section 4: 勾選可能危害 -->
+    <!-- Section 4: ?暸?航?勗拿 -->
     <div class="form-section" id="section-hazard">
-      <div class="section-title">四、勾選可能危害</div>
+      <div class="section-title">??詨?賢摰?/div>
       <div class="checkbox-grid" id="hazard-grid">
         <!-- JS will populate -->
       </div>
     </div>
 
-    <!-- Section 5: 危害防止對策 -->
+    <!-- Section 5: ?勗拿?脫迫撠? -->
     <div class="form-section" id="section-prevention">
-      <div class="section-title">五、危害防止對策</div>
+      <div class="section-title">鈭摰喲甇Ｗ?蝑?/div>
       <div class="hazard-notes">
-        <p>（對應四、勾選可能危害，請敘明危害防止對策，如下表供參閱）</p>
-        <p>備註：本危害告知單正本由請購單位及承攬商雙方各執一份，影本送秘書室留存，修改時並應再以書面為之，本危害告知單等相關文件依規定保存3年。</p>
+        <p>嚗?????詨?賢摰喉?隢??摰喲甇Ｗ?蝑?憒?銵其??嚗?/p>
+        <p>?酉嚗?勗拿??格迤?祉隢頃?桐???砍???銝隞踝?敶望???詨恕??嚗耨?寞?銝行??誑?賊?箔?嚗?勗拿??桃??賊??辣靘?摰?摮?撟氬?/p>
       </div>
       <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
         <table class="hazard-table">
           <thead>
             <tr>
-              <th style="width:36px">項次</th>
-              <th style="width:130px">作業項目</th>
-              <th style="width:120px">潛在危害因素</th>
-              <th>危害防止對策</th>
+              <th style="width:36px">?活</th>
+              <th style="width:130px">雿平?</th>
+              <th style="width:120px">瞏?勗拿??</th>
+              <th>?勗拿?脫迫撠?</th>
             </tr>
           </thead>
           <tbody id="hazard-table-body">
@@ -1199,87 +1201,87 @@
     </div>
 
 
-    <!-- Section 6: 安全衛生承諾書 -->
+    <!-- Section 6: 摰銵??輯姥??-->
     <div class="form-section" id="section-pledge" style="border-color: rgba(245,166,35,0.3);">
-      <div class="section-title" style="color: var(--accent); justify-content:center; text-align:center;">農業部畜產試驗所承攬作業安全衛生承諾書</div>
+      <div class="section-title" style="color: var(--accent); justify-content:center; text-align:center;">颲脫平?函??Ｚ岫撽??踵雿平摰銵??輯姥??/div>
 
       <div class="pledge-box">
-        <p>本公司（人）<input class="form-input" id="pledge-company" type="text" placeholder="承攬商名稱（自動帶入）" style="display:inline; width:200px; padding:4px 10px;"> 承攬農業部畜產試驗所（以下簡稱貴所）<input class="form-input" id="pledge-project" type="text" placeholder="承攬項目名稱（自動帶入）" style="display:inline; width:250px; padding:4px 10px;"> 案。</p>
-        <p class="pledge-list-item"><span class="pledge-list-num">1.</span><span class="pledge-list-text">貴所已告知本公司（人）有關工作場所環境危害因素，本公司承諾妥善規劃以避免災害發生，所屬人員進行作業時，全程使用符合職業安全衛生法暨相關規定之防護器具，並於作業期間指派<strong>工作場所負責人</strong>於現場指揮監督管理及負起雇主應負之一切責任，因作業產生之廢棄物應取得該場所管理人同意暫時堆放於指定區域，並於作業結束後，即盡速清理復原作業區域，若該場所管理人不同意暫時堆放情形，於作業當日立即清運離所。</span></p>
-        <p class="pledge-list-item"><span class="pledge-list-num">2.</span><span class="pledge-list-text">本公司若有再交付承攬時，本公司承諾會負起「職業安全衛生法」所定雇主之責任。</span></p>
-        <p class="pledge-list-item"><span class="pledge-list-num">3.</span><span class="pledge-list-text">本公司承諾作業開始前評估各項細部作業之可能危害，採取相應防護措施，對所屬人員實施法定教育訓練與危害告知，若貴所要求查證，本公司有提供人員教育訓練證明之義務。</span></p>
-        <p class="pledge-list-item"><span class="pledge-list-num">4.</span><span class="pledge-list-text">作業期間如遇颱風、大雨等預報時，本公司應提前採取預防措施。天然災害過後，應實施檢查確認安全無虞後始可復工。</span></p>
-        <p class="pledge-list-item"><span class="pledge-list-num">5.</span><span class="pledge-list-text">本公司承諾經貴所巡視發現本公司作業員工有違反法令規定情事，同意貴所要求下立即停止作業，通知本公司改善完成後才復工。</span></p>
-        <p class="pledge-list-item"><span class="pledge-list-num">6.</span><span class="pledge-list-text">本公司如違反職業安全衛生法暨相關規定，造成之災害，導致貴所損失，本公司願負起賠償責任。</span></p>
+        <p>?砍?賂?鈭綽?<input class="form-input" id="pledge-company" type="text" placeholder="?踵??蝔梧??芸?撣嗅嚗? style="display:inline; width:200px; padding:4px 10px;"> ?踵颲脫平?函??Ｚ岫撽?嚗誑銝陛蝔梯眼?嚗?input class="form-input" id="pledge-project" type="text" placeholder="?踵??迂嚗?葆?伐?" style="display:inline; width:250px; padding:4px 10px;"> 獢?/p>
+        <p class="pledge-list-item"><span class="pledge-list-num">1.</span><span class="pledge-list-text">鞎湔?撌脣??交?砍嚗犖嚗??極雿??啣??勗拿??嚗?砍?輯姥憒亙?閬?隞仿?摰喟???撅砌犖?⊿脰?雿平???函?雿輻蝚血??瑟平摰銵?瘜?賊?閬?銋霅瑕?瘀?銝行雿平???晷<strong>撌乩??湔?鞎痊鈭?/strong>?潛?湔??桃??恣??鞎絲?蜓??銋??痊隞鳴???璆剔??撱Ｘ??拇???閰脣?蝞∠?鈭箏?????暹?????銝行雿平蝯?敺??喟???儔??璆剖????亥府?湔?蝞∠?鈭箔????急???耦嚗雿平?嗆蝡皜??Ｘ???/span></p>
+        <p class="pledge-list-item"><span class="pledge-list-num">2.</span><span class="pledge-list-text">?砍?貉??鈭支??踵???砍?豢隢暹?鞎絲?璆剖??刻?????摰?銝颱?鞎砌遙??/span></p>
+        <p class="pledge-list-item"><span class="pledge-list-num">3.</span><span class="pledge-list-text">?砍?豢隢曆?璆剝?憪?閰摯??蝝圈雿平銋?賢摰喉??∪??豢??脰風?芣嚗??撅砌犖?∪祕?賣?摰??脰?蝺渲??勗拿?嚗鞎湔?閬??亥?嚗?砍??靘犖?⊥??脰?蝺渲???蝢拙???/span></p>
+        <p class="pledge-list-item"><span class="pledge-list-num">4.</span><span class="pledge-list-text">雿平??憒?憸梢◢?之?函?????砍?豢????∪???芣?予?嗥摰喲?敺??祕?賣炎?亦Ⅱ隤??函??憪敺拙極??/span></p>
+        <p class="pledge-list-item"><span class="pledge-list-num">5.</span><span class="pledge-list-text">?砍?豢隢曄?鞎湔?撌∟??潛?砍?訾?璆剖撌交???瘜誘閬???嚗??眼?閬?銝??喳?甇Ｖ?璆哨???砍?豢?????儔撌乓?/span></p>
+        <p class="pledge-list-item"><span class="pledge-list-num">6.</span><span class="pledge-list-text">?砍?詨????瑟平摰銵?瘜?賊?閬?嚗?銋摰喉?撠鞎湔??仃嚗?砍憿?韏瑁??痊隞颯?/span></p>
       </div>
 
-      <div class="pledge-zhi">此致<br>農業部畜產試驗所</div>
+      <div class="pledge-zhi">甇方<br>颲脫平?函??Ｚ岫撽?</div>
 
       <div id="pledge-form-grid" class="form-grid">
         <div class="form-field form-grid-full" id="pledge-ff-name">
-          <label class="form-label" for="pledge-name">承攬商名稱
-            <span style="font-size:11px; font-weight:400; color:var(--primary-light); margin-left:6px;">↑ 自動帶入</span>
+          <label class="form-label" for="pledge-name">?踵??蝔?
+            <span style="font-size:11px; font-weight:400; color:var(--primary-light); margin-left:6px;">???芸?撣嗅</span>
           </label>
-          <input class="form-input" id="pledge-name" type="text" placeholder="承攬商名稱（自動帶入）">
+          <input class="form-input" id="pledge-name" type="text" placeholder="?踵??蝔梧??芸?撣嗅嚗?>
         </div>
-        <!-- 簽章欄移至承攬商名稱下方 -->
+        <!-- 蝪賜?甈宏?單?砍??迂銝 -->
         <div class="form-field form-grid-full" id="pledge-ff-sig-inline" style="margin-bottom:4px;">
-          <label class="form-label" style="margin-bottom:6px; display:block;">承攬商負責人（代理負責人）簽章</label>
+          <label class="form-label" style="margin-bottom:6px; display:block;">?踵??鞎砌犖嚗誨??鞎砌犖嚗偷蝡?/label>
           <div class="sig-pad-wrap" id="sig-pledge">
             <canvas class="sig-canvas" data-key="sig-pledge"></canvas>
             <div class="sig-actions">
-              <span class="sig-hint">✍️ 用手指在此簽名</span>
-              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-pledge')">清除</button>
+              <span class="sig-hint">?? ?冽??甇斤偷??/span>
+              <button type="button" class="sig-clear-btn" onclick="clearSig('sig-pledge')">皜</button>
             </div>
-            <img class="sig-print-img" id="sig-pledge-img" src="" alt="簽章">
+            <img class="sig-print-img" id="sig-pledge-img" src="" alt="蝪賜?">
           </div>
         </div>
 
         <div class="form-field">
-          <label class="form-label" for="pledge-address">地址</label>
-          <input class="form-input" id="pledge-address" type="text" placeholder="公司地址">
+          <label class="form-label" for="pledge-address">?啣?</label>
+          <input class="form-input" id="pledge-address" type="text" placeholder="?砍?啣?">
         </div>
         <div class="form-field">
-          <label class="form-label" for="pledge-tel">電話
-            <span style="font-size:11px; font-weight:400; color:var(--primary-light); margin-left:6px;">↑ 自動帶入</span>
+          <label class="form-label" for="pledge-tel">?餉店
+            <span style="font-size:11px; font-weight:400; color:var(--primary-light); margin-left:6px;">???芸?撣嗅</span>
           </label>
-          <input class="form-input" id="pledge-tel" type="tel" placeholder="公司電話（自動帶入）">
+          <input class="form-input" id="pledge-tel" type="tel" placeholder="?砍?餉店嚗?葆?伐?">
         </div>
         <div class="form-field">
-          <label class="form-label" for="pledge-taxid">統一編號
-            <span style="font-size:11px; font-weight:400; color:var(--primary-light); margin-left:6px;">↑ 自動帶入</span>
+          <label class="form-label" for="pledge-taxid">蝯曹?蝺刻?
+            <span style="font-size:11px; font-weight:400; color:var(--primary-light); margin-left:6px;">???芸?撣嗅</span>
           </label>
-          <input class="form-input" id="pledge-taxid" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="8碼統一編號（自動帶入）" maxlength="8">
+          <input class="form-input" id="pledge-taxid" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="8蝣潛絞銝蝺刻?嚗?葆?伐?" maxlength="8">
         </div>
         <div class="form-field">
-          <label class="form-label">簽署日期
-            <span style="font-size:11px; font-weight:400; color:var(--primary-light); margin-left:6px;">↑ 自動帶入（可修改）</span>
+          <label class="form-label">蝪賜蔡?交?
+            <span style="font-size:11px; font-weight:400; color:var(--primary-light); margin-left:6px;">???芸?撣嗅嚗靽格嚗?/span>
           </label>
           <div class="date-row">
-            <input class="date-input-sm" id="pledge-year" type="text" placeholder="年" maxlength="3">
-            <label>年</label>
-            <input class="date-input-sm" id="pledge-month" type="text" placeholder="月" maxlength="2" style="width:55px">
-            <label>月</label>
-            <input class="date-input-sm" id="pledge-day" type="text" placeholder="日" maxlength="2" style="width:55px">
-            <label>日</label>
+            <input class="date-input-sm" id="pledge-year" type="text" placeholder="撟? maxlength="3">
+            <label>撟?/label>
+            <input class="date-input-sm" id="pledge-month" type="text" placeholder="?? maxlength="2" style="width:55px">
+            <label>??/label>
+            <input class="date-input-sm" id="pledge-day" type="text" placeholder="?? maxlength="2" style="width:55px">
+            <label>??/label>
           </div>
         </div>
       </div>
 
-      <!-- 簽章已移至pledge-form-grid內 (pledge-ff-sig-inline) -->
+      <!-- 蝪賜?撌脩宏?逍ledge-form-grid??(pledge-ff-sig-inline) -->
 
-      <!-- 備注事項 -->
+      <!-- ?釣鈭? -->
       <div class="form-field" style="margin-top:16px;">
-        <label class="form-label" for="sig-remarks">備注事項</label>
-        <textarea class="form-textarea" id="sig-remarks" placeholder="如有補充事項請填寫..." style="min-height:60px;"></textarea>
+        <label class="form-label" for="sig-remarks">?釣鈭?</label>
+        <textarea class="form-textarea" id="sig-remarks" placeholder="憒?鋆?鈭?隢‵撖?.." style="min-height:60px;"></textarea>
       </div>
     </div>
 
     <!-- Submit Area -->
     <div class="submit-area" style="display: flex; gap:16px; justify-content: flex-end; margin-top: 8px;">
-      <button class="btn btn-ghost" onclick="clearForm()">🗑 清除表單</button>
-      <button class="btn btn-print" onclick="handlePrintExport()">🖨 列印 / 匯出PDF</button>
-      <button class="btn btn-primary" onclick="saveForm()">💾 暫存表單</button>
+      <button class="btn btn-ghost" onclick="clearForm()">?? 皜銵典</button>
+      <button class="btn btn-print" onclick="handlePrintExport()">? ? / ?臬PDF</button>
+      <button class="btn btn-primary" onclick="saveForm()">? ?怠?銵典</button>
     </div>
 
   </div>
@@ -1287,7 +1289,7 @@
   <div id="hazard-print-template" aria-hidden="true"></div>
 
   <footer class="site-footer">
-    <p>農業部畜產試驗所 &copy; 中華民國115年　｜　承攬作業環境危害告知單</p>
+    <p>颲脫平?函??Ｚ岫撽? &copy; 銝剛瘞?115撟氬嚚?踵雿平?啣??勗拿???/p>
   </footer>
 
   <script src="form-template-rules.js"></script>
@@ -1302,246 +1304,246 @@
   <script>
     // ---- Data ----
     const WORK_TYPES = [
-      '1. 局限空間作業',
-      '2. 電焊、氬焊、氣焊、等作業',
-      '3. 高架作業（2公尺以上）',
-      '4. 吊裝、吊掛作業',
-      '5. 電氣、帶電作業',
-      '6. 廢棄物清運作業',
-      '7. 油漆、粉刷、打蠟作業',
-      '8. 地面清潔作業',
-      '9. 搬運作業',
-      '10. 環境清潔、消毒作業',
-      '11. 環境美化、園藝作業',
-      '12. 裝修作業',
-      '13. 拆除作業',
-      '14. 建物修繕作業',
-      '15. 其他（請說明）',
+      '1. 撅?征??璆?,
+      '2. ?餌??鬲?除??雿平',
+      '3. 擃雿平嚗??砍偕隞乩?嚗?,
+      '4. ??????璆?,
+      '5. ?餅除?葆?颱?璆?,
+      '6. 撱Ｘ??拇???璆?,
+      '7. 瘝寞????瑯???璆?,
+      '8. ?圈皜?雿平',
+      '9. ?祇?雿平',
+      '10. ?啣?皜???瘥?璆?,
+      '11. ?啣?蝢?????璆?,
+      '12. 鋆耨雿平',
+      '13. ?雿平',
+      '14. 撱箇靽桃?雿平',
+      '15. ?嗡?嚗?隤芣?嚗?,
     ];
 
     const HAZARDS = [
-      '1. 墜落、滾落',
-      '2. 被撞',
-      '3. 物體倒塌、崩塌',
-      '4. 物體掉落（飛落）',
-      '5. 夾、捲、切割、衝（撞）擊、擦傷',
-      '6. 踏穿樓板、踩踏尖銳物',
-      '7. 跌（滑）倒',
-      '8. 火災、爆炸',
-      '9. 感電',
-      '10. 溺斃',
-      '11. 缺氧',
-      '12. 與有害物質等接觸',
-      '13. 與高低溫、輻射、噪音、震動、異常氣壓接觸',
-      '14. 交通事故',
-      '15. 肌肉骨骼傷害',
-      '16. 生物危害（蚊蟲咬傷）',
-      '17. 中毒',
-      '18. 其他（請說明）',
+      '1. 憓?遝??,
+      '2. 鋡急?',
+      '3. ?拚????援憛?,
+      '4. ?拚??嚗??踝?',
+      '5. 憭整???脯?嚗?嚗????,
+      '6. 頦忽璅?萱頦??喟',
+      '7. 頝?皛???,
+      '8. ?怎????,
+      '9. ?',
+      '10. 皞箸?',
+      '11. 蝻箸飢',
+      '12. ??摰喟鞈芰??亥孛',
+      '13. ??雿澈?撒撠?喋??撣豢除憯閫?,
+      '14. 鈭日???,
+      '15. ??撉券盲?瑕拿',
+      '16. ??勗拿嚗??脣?瘀?',
+      '17. 銝剜?',
+      '18. ?嗡?嚗?隤芣?嚗?,
     ];
 
     const HAZARD_TABLE_DATA = [
       {
         num: 1,
-        op: '局限空間作業',
-        sub: '（例如下水道作業、人孔進出作業、水塔清洗作業、污水設施清洗作業等）',
-        risk: '缺氧、可燃性氣體',
+        op: '撅?征??璆?,
+        sub: '嚗?憒?瘞湧?雿平?犖摮脣雿平?偌憛?瘣?璆准情瘞渲身?賣?瘣?璆剔?嚗?,
+        risk: '蝻箸飢??扳除擃?,
         measures: [
-          '機械通風。',
-          '個人防護器具（呼吸式防護具）及防護索。',
-          '實施氧氣及有毒氣體測定。',
-          '每2小時測定(O₂/可燃性氣體濃度)。',
+          '璈１?◢??,
+          '?犖?脰風?典嚗?詨??脰風?瘀??霅瑞揣??,
+          '撖行瘞扳除??瘥除擃葫摰?,
+          '瘥?撠?皜砍?(O???舐??扳除擃?摨???,
         ]
       },
       {
         num: 2,
-        op: '電焊、氬焊、氣焊、等作業',
-        risk: '灼傷、燃燒、火災、爆炸、輻射危害',
+        op: '?餌??鬲?除??雿平',
+        risk: '?澆????賬??詻撒撠摰?,
         measures: [
-          '個人防護器具（電焊/面罩/皮手套等）。',
-          '備乾粉滅火器/二氧化碳滅火器。',
-          '遮火圍幕。',
-          '電焊機金屬外殼接地，備電擊防止裝置。',
-          '鋼瓶直立固定。',
-          '附近若有易燃物須清除或備防火毯。',
-          '電線跨馬路須有過路橋裝置。',
+          '?犖?脰風?典嚗???Ｙ蔗/?格?憟?嚗?,
+          '?嗾蝎??怠/鈭飢?４皛?具?,
+          '?桃????,
+          '?餌?璈?撅砍?畾潭?堆???甇Ｚ?蝵柴?,
+          '?潛?渡??箏???,
+          '???交????拚?皜???脩瘥胯?,
+          '?餌?頝券收頝舫???頝舀?鋆蔭??,
         ]
       },
       {
         num: 3,
-        op: '高架作業（2公尺以上）',
-        sub: '（例如樹木截枝作業、建物屋頂從事拆除作業、大樓外牆清洗作業、空調維護保養作業等）',
-        risk: '墜落、施工架倒塌',
+        op: '擃雿平嚗??砍偕隞乩?嚗?,
+        sub: '嚗?憒邦?冽??璆准遣?拙???鈭??支?璆准之璅???瘣?璆准征隤輻雁霅瑚?擗?璆剔?嚗?,
+        risk: '憓?撌交??',
         measures: [
-          '安全帶、索、安全帽、良好梯子。',
-          '施工架確實牢靠固定。',
-          '施工架頂層應設置90公分以上護欄，並應包括上欄杆、中欄杆。',
-          '酒醉或有酒醉之虞者、身體虛弱有安全顧慮者不得施工。',
-          '情緒不穩定，經醫師診斷認為身體狀況不良者不得施工。',
-          '施工架以鋼管、門型架構築，若用竹材應以鍍鋅鐵線紮結牢固。',
-          '大樓外牆清洗作業吊籠之構造，應符合吊籠安全檢查構造標準，使用足夠長度之捲揚用之鋼索。',
-          '高度超過1.5公尺以上之場所作業時，應設置能使勞工安全上下之設備。',
-          '於2公尺以上開口部分作業應設置護蓋或安全網等防護設備。',
+          '摰撣嗚揣???典蜇?憟賣０摮?,
+          '?賢極?嗥Ⅱ撖衣?摰?,
+          '?賢極?園?撅斗?閮剔蔭90?砍?隞乩?霅瑟?嚗蒂???砌?甈??葉甈???,
+          '??????銋??澈擃?撘望?摰憿扳??敺撌乓?,
+          '??銝帘摰?蝬撣怨那?瑁??箄澈擃?瘜??航?敺撌乓?,
+          '?賢極?嗡誑?潛恣???瑽?嚗?函姘??隞仿??蝺揹蝯?箝?,
+          '憭扳?憭?皜?雿平??銋????泵??蝐??冽炎?交???皞?雿輻頞喳??瑕漲銋?銋蝝Ｕ?,
+          '擃漲頞?1.5?砍偕隞乩?銋?雿平???身蝵株雿踹?撌亙??其?銝?閮剖???,
+          '???砍偕隞乩???典?雿平?身蝵株風??摰蝬脩??脰風閮剖???,
         ]
       },
       {
         num: 4,
-        op: '吊裝、吊掛作業',
-        risk: '翻倒、吊桿彎曲、荷件掉落、觸電',
+        op: '??????璆?,
+        risk: '蝧餃?獢踹??脯隞嗆??賬孛??,
         measures: [
-          '施工區域內，應設置禁止非施工人員進入之明顯標示。',
-          '吊掛作業時，應指派人員進行交通指揮及人員管制。',
-          '從事吊運之起重機具應檢查合格，起重機操作手、吊掛手應有合格證照(一機三證)，吊舉物下方應嚴禁人員進入。',
-          '捆綁索檢點。',
-          '高壓線防護派人監視。',
-          '嚴禁人員待在吊裝物下方。',
+          '?賢極??嚗?閮剔蔭蝳迫?撌乩犖?⊿脣銋?憿舀?蝷箝?,
+          '??雿平????瘣曆犖?⊿脰?鈭日??桀?鈭箏蝞∪??,
+          '敺???銋絲???瑟?瑼Ｘ?嚗絲???????????霅(銝璈?霅?嚗??銝?蝳犖?⊿脣??,
+          '??蝝Ｘ炎暺?,
+          '擃?蝺霅瑟晷鈭箇閬?,
+          '?渡?鈭箏敺???拐??嫘?,
         ]
       },
       {
         num: 5,
-        op: '電氣、帶電作業',
-        risk: '感電',
+        op: '?餅除?葆?颱?璆?,
+        risk: '?',
         measures: [
-          '備漏電斷路器。',
-          '電線架高。',
-          '禁經潮溼地。',
-          '須有漏電裝置檢測。',
-          '對電路之檢查、修理等活線作業時，應使該作業勞工戴用絕緣用防護具，或應使用活線作業用器具。',
-          '電氣作業應在斷電情況下作業，並將該電路開關上鎖或標示「禁止送電」、「停電作業中」或設置監視人員。',
-          '發電室、變電室或受電室，非工作人員不得任意進入。',
+          '???餅頝臬??,
+          '?餌??園???,
+          '蝳?瞏格獐?啜?,
+          '??瞍鋆蔭瑼Ｘ葫??,
+          '撠頝臭?瑼Ｘ?耨??瘣餌?雿平???蝙閰脖?璆剖?撌交?函?蝺??脰風?瘀???雿輻瘣餌?雿平?典?瑯?,
+          '?餅除雿平??琿??銝?璆哨?銝血?閰脤頝舫?????璅內??甇ａ???颱?璆凋葉??閮剔蔭???鈭箏??,
+          '?潮摰扎??餃恕???餃恕嚗?撌乩?鈭箏銝?隞餅??脣??,
         ]
       },
       {
         num: 6,
-        op: '廢棄物清運作業',
-        risk: '墜落',
+        op: '撱Ｘ??拇???璆?,
+        risk: '憓',
         measures: [
-          '車輛於行駛中，禁止人員攀附於車廂或車頂外。',
-          '請按工作性質配戴口罩、手套，及戴反光帽、穿斑馬衣，著安全鞋等安全配備。',
-          '夜間或雨天作業，須加設警告燈號。',
+          '頠??潸?擏葉嚗?甇Ｖ犖?⊥??頠???????,
+          '隢?撌乩??扯釭???蔗??憟????撣賬忽?收銵?????券?蝑??券???,
+          '憭??憭拐?璆哨???閮剛郎????,
         ]
       },
       {
         num: 7,
-        op: '油漆、粉刷、打蠟作業',
-        risk: '墜落、與有害物接觸',
+        op: '瘝寞????瑯???璆?,
+        risk: '憓???拿?拇閫?,
         measures: [
-          '利用合梯作業時，除應注意合梯之構造、材質及規格需符合規定外，使用時應將繫材確實扣牢，人員不得利用合梯行走。',
-          '勞工工作場所之通道、地板、階梯，應保持不致使勞工跌倒、滑倒、踩傷等之安全狀態，或採取必要之預防措施（例如放置警告標示）。',
-          '現場通風或配戴過濾口罩。',
+          '?拍?０雿平???斗?瘜冽??０銋???鞈芸?閬?蝚血?閬?憭?雿輻??撠鼠?Ⅱ撖行?ｇ?鈭箏銝??拍?０銵粥??,
+          '?極撌乩??湔?銋???踴?璇荔??????港蝙?極頝??萱?瑞?銋??函??????閬???芣嚗?憒蝵株郎??蝷綽???,
+          '?曉?◢???湧?瞈曉蝵押?,
         ]
       },
       {
         num: 8,
-        op: '地面清潔作業',
-        risk: '跌倒',
+        op: '?圈皜?雿平',
+        risk: '頝?,
         measures: [
-          '工作場所之通道、地板、階梯，應保持不致使勞工跌倒、滑倒、踩傷等之安全狀態。',
-          '臨時用電要裝設漏電斷路器。',
+          '撌乩??湔?銋???踴?璇荔??????港蝙?極頝??萱?瑞?銋??函???,
+          '?冽??券閬?閮剜??餅頝臬??,
         ]
       },
       {
         num: 9,
-        op: '搬運作業（例如物品裝卸）',
-        risk: '物體倒塌、崩塌',
+        op: '?祇?雿平嚗?憒???賂?',
+        risk: '?拚????援憛?,
         measures: [
-          '採取繩索捆綁護網、擋樁、限制高度或變更堆積等必要措施。',
-          '作業時佩戴安全帽、防護手套等。',
+          '?∪?蝜拍揣??霅瑞雯??璅??園?摨行?霈??蝑?閬?賬?,
+          '雿平?蔗?游??典蜇?霅瑟?憟???,
         ]
       },
       {
         num: 10,
-        op: '環境清潔、消毒作業',
-        risk: '與有害物接觸',
+        op: '?啣?皜???瘥?璆?,
+        risk: '??摰喟?亥孛',
         measures: [
-          '噴藥時，要穿著個人安全防護裝備安全帽、防護眼鏡、耳塞、防毒面具、手套、長袖衣袖、長統膠鞋。',
-          '噴藥完畢，立即沐浴更衣，並收妥藥劑空瓶以備回收。',
-          '操作消毒機應注意噴槍以防噴傷人員。',
+          '?渲??閬忽?犖摰?脰風鋆?摰撣賬霅瑞?～喳??瘥?瑯?憟鋡﹝鋡蝯梯???,
+          '?渲摰嚗??單?瘚湔銵??銝行憒亥?征?嗡誑???嗚?,
+          '??瘨?璈?瘜冽??湔?隞仿?游鈭箏??,
         ]
       },
       {
         num: 11,
-        op: '環境美化、園藝作業',
-        sub: '（例如割草、修剪樹木等）',
-        risk: '夾、捲、切、割、擦傷、與動植物接觸',
+        op: '?啣?蝢?????璆?,
+        sub: '嚗?憒?耨?芣邦?函?嚗?,
+        risk: '憭整?????瑯????拇閫?,
         measures: [
-          '使用之機械，如有傳動帶、傳動輪、齒輪、轉軸等被捲、夾、擦傷之虞者，應設護罩或護欄。',
-          '作業時佩戴安全帽、防護手套等。',
-          '建立10公尺以上作業警戒區。',
-          '臨時用電要裝設漏電斷路器。',
-          '作業時穿著長褲、長靴等，防範蚊蟲及蛇類咬傷。',
-          '施工前應派員辦理施工範圍之樹木上有無蜂巢、毒蛇、毒蟲、有毒植物之檢查，如發現毒蜂群、毒蛇、毒蟲時應迅速離開現場。',
+          '雿輻銋?璇堆?憒??喳?撣嗚?憚??頛芥?頠貊?鋡急?冗??瑚????身霅瑞蔗?風甈?,
+          '雿平?蔗?游??典蜇?霅瑟?憟???,
+          '撱箇?10?砍偕隞乩?雿平霅行????,
+          '?冽??券閬?閮剜??餅頝臬??,
+          '雿平?忽?銴脯?渡?嚗蝭??脣????砍??,
+          '?賢極??瘣曉颲衣??賢極蝭?銋邦?其???楷?????脯?瘥??拐?瑼Ｘ嚗??潛瘥?蝢扎????脫??????氬?,
         ]
       },
       {
         num: 12,
-        op: '裝修作業',
-        risk: '墜落、感電、夾捲切割擦傷、與有害物接觸',
+        op: '鋆耨雿平',
+        risk: '憓???颯冗?脣??脫?瑯??拿?拇閫?,
         measures: [
-          '合梯梯腳間繫材要扣牢。',
-          '進入工地要正確佩戴安全帽。',
-          '臨時用電要裝設漏電斷路器。',
-          '砂輪機、圓盤鋸等機具要設置護罩。',
-          '開口處要設置90公分高的護欄或安全網。',
-          '電焊切割作業，要移除易燃物，並設置滅火器。',
-          '油漆、防水作業，要保持空氣流通，並遠離火源。',
-          '2公尺以上作業要使用移動式施工架或高空工作車。',
+          '?０璇航?鼠??????,
+          '?脣撌亙閬迤蝣箔蔗?游??典蜇??,
+          '?冽??券閬?閮剜??餅頝臬??,
+          '?憚璈??日蝑??瑁?閮剔蔭霅瑞蔗??,
+          '???閮剔蔭90?砍?擃?霅瑟????函雯??,
+          '?餌??雿平嚗?蝘駁???抬?銝西身蝵格??怠??,
+          '瘝寞??瘞港?璆哨?閬??征瘞????銝阡??Ｙ皞?,
+          '2?砍偕隞乩?雿平閬蝙?函宏???賢極?嗆?擃征撌乩?頠?,
         ]
       },
       {
         num: 13,
-        op: '拆除作業',
-        risk: '墜落、感電、夾捲切割擦傷、與有害物接觸',
+        op: '?雿平',
+        risk: '憓???颯冗?脣??脫?瑯??拿?拇閫?,
         measures: [
-          '進入工地要正確佩戴安全帽。',
-          '合梯梯腳間繫材要扣牢。',
-          '臨時用電要裝設漏電斷路器。',
-          '砂輪機、圓盤鋸等機具要設置護罩。',
-          '拆除應按序由外而內、由上而下，逐步拆除。',
-          '拆除配電設備及線路，應先切斷電源。',
-          '拆除可燃性氣體管線，應先將管中殘存氣體釋放。',
-          '2公尺以上作業要使用移動式施工架或高空工作車。',
-          '屋頂拆除，應設置適當強度且寬度在30公分以上的踏板或裝設安全護網，並使勞工佩掛安全帶。',
-          '拆除區域應設置圍柵或標示，並選任專人於現場指揮監督。',
+          '?脣撌亙閬迤蝣箔蔗?游??典蜇??,
+          '?０璇航?鼠??????,
+          '?冽??券閬?閮剜??餅頝臬??,
+          '?憚璈??日蝑??瑁?閮剔蔭霅瑞蔗??,
+          '???摨憭?銝?嚗郊???,
+          '??閮剖???頝荔?????餅???,
+          '??舐??扳除擃恣蝺???撠恣銝剜?摮除擃??整?,
+          '2?砍偕隞乩?雿平閬蝙?函宏???賢極?嗆?擃征撌乩?頠?,
+          '撅??嚗?閮剔蔭?拍撘瑕漲銝祝摨血30?砍?隞乩????踵?鋆身摰霅瑞雯嚗蒂雿踹?撌乩蔗???典葆??,
+          '????閮剔蔭???蝷綽?銝阡隞餃?鈭箸?曉?????,
         ]
       },
       {
         num: 14,
-        op: '建物修繕作業',
-        risk: '墜落、感電、夾捲切割擦傷',
+        op: '撱箇靽桃?雿平',
+        risk: '憓???颯冗?脣??脫??,
         measures: [
-          '進入工地要正確佩戴安全帽，有墜落之虞使勞工佩掛安全帶。',
-          '搭設施工架：內外兩側要設置交叉拉桿及下拉桿；於適當之垂直、水平距離處以壁連桿與構造物妥實連接；構件之連接部分應以適當插銷連接固定穩固；板料應設金屬扣鎖及防脫落鉤；底部之立架，應使用可調型基腳座版。',
-          '施工架基礎地面應平整，且夯實緊密，並襯以適當材質之墊材。',
-          '懸臂式施工架或高度超過5公尺以上施工架之構築，要專人妥為安全設計並簽章確認強度計算書。',
-          '以捲揚機吊運物料，安裝前須核對並確認設計資料及強度計算書。',
-          '颱風來臨前，受風面積過大的防塵網及帆布，應先予以拆卸固定。',
-          '臨時用電要裝設漏電斷路器。',
-          '合梯梯腳間繫材要扣牢。',
-          '拆除應按序由外而內、由上而下，逐步拆除。',
-          '拆除區域應設置圍柵或標示，並選任專人於現場指揮監督。',
+          '?脣撌亙閬迤蝣箔蔗?游??典蜇嚗?憓銋?雿踹?撌乩蔗???典葆??,
+          '?剛身?賢極?塚??批??拙閬身蝵桐漱??獢踹?銝?獢選??潮?嗡???偌撟唾??Ｚ?隞亙???▼???憒亙祕??嚗?隞嗡????典??誑?拍????箏?蝛拙嚗??閮剝?撅祆???脰?賡嚗??其?蝡嚗?雿輻?航矽??喳漣??,
+          '?賢極?嗅蝷?Ｘ?撟單嚗?憭臬祕蝺?嚗蒂镼臭誑?拍?釭銋???,
+          '?貉?撘撌交??摨西????砍偕隞乩??賢極?嗡?瑽?嚗?撠犖憒亦摰閮剛?銝衣偷蝡Ⅱ隤撥摨西?蝞??,
+          '隞交?????拇?嚗?鋆??撠蒂蝣箄?閮剛?鞈??撥摨西?蝞??,
+          '憸梢◢靘???◢?Ｙ??之?憛萇雯??撣???鈭誑??箏???,
+          '?冽??券閬?閮剜??餅頝臬??,
+          '?０璇航?鼠??????,
+          '???摨憭?銝?嚗郊???,
+          '????閮剔蔭???蝷綽?銝阡隞餃?鈭箸?曉?????,
         ]
       },
     ];
 
     // ---- Env Description Options ----
     const ENV_OPTIONS = [
-      '場地通風良好',
-      '場地通風不良，需機械通風',
-      '現場設有電力設施，需注意感電危害',
-      '現場設有燃氣管線，需注意火災危害',
-      '作業區域有高架平台，需佩戴安全帶',
-      '包含局限空間（如人孔、水塔、水溝等）',
-      '現場有下水道或積水區域，存在溺水危害',
-      '包含吊掛、吊裝作業區域',
-      '現場有機械設備運轉中，需注意夾捲危害',
-      '地面濕滑或不平整，需注意跌倒危害',
-      '包含化學品或有害物質存放區域',
-      '噪音小於80分貝，環境噪音不高',
-      '噪音超過80分貝，需配戴耳塞',
-      '作業區域於居民或辦公區域附近，需注意降低噪音影響',
-      '室外作業，需注意天候變化及日曬防護',
-      '夏季作業，需注意高溫熱傷害防護',
+      '?游?◢?臬末',
+      '?游?◢銝嚗?璈１?◢',
+      '?曉閮剜??餃?閮剜嚗?瘜冽???勗拿',
+      '?曉閮剜??除蝞∠?嚗?瘜冽??怎?勗拿',
+      '雿平???擃撟喳嚗?雿拇摰撣?,
+      '?撅?征??憒犖摮偌憛偌皞?嚗?,
+      '?曉??瘞湧???瘞游???摮皞箸偌?勗拿',
+      '?????鋆?璆剖???,
+      '?曉??璇啗身??頧葉嚗?瘜冽?憭暹?勗拿',
+      '?圈瞈???撟單嚗?瘜冽?頝摰?,
+      '??飛???拿?抵釭摮???,
+      '?芷撠80??嚗憓?喃?擃?,
+      '?芷頞?80??嚗???喳?',
+      '雿平??撅??齒?砍???餈??瘜冽????芷敶梢',
+      '摰文?雿平嚗?瘜冽?憭拙????交?脰風',
+      '憭迤雿平嚗?瘜冽?擃澈?勗摰喲霅?,
     ];
 
     function renderEnvCheckboxes() {
@@ -1599,16 +1601,16 @@
           </td>
           <td class="hazard-risk-cell">
             <span class="hazard-risk-text">${row.risk}</span>
-            <button class="hazard-mobile-toggle" type="button" aria-label="展開${row.op}" aria-expanded="false">▾</button>
+            <button class="hazard-mobile-toggle" type="button" aria-label="撅?${row.op}" aria-expanded="false">??/button>
           </td>
           <td class="hazard-measures-cell">${measureHtml}</td>
         </tr>
         <tr class="hazard-mobile-detail-row">
           <td class="hazard-mobile-detail-cell" colspan="3">
             <div class="hazard-mobile-detail">
-              <span class="hazard-mobile-detail-title">潛在危害因素</span>
+              <span class="hazard-mobile-detail-title">瞏?勗拿??</span>
               <div>${row.risk}</div>
-              <span class="hazard-mobile-detail-title">危害防止對策</span>
+              <span class="hazard-mobile-detail-title">?勗拿?脫迫撠?</span>
               <div class="hazard-mobile-measures">${measureHtml}</div>
             </div>
           </td>
@@ -1676,12 +1678,12 @@
     }
 
     function tplDate(prefix) {
-      return `<span>${tplEscape(tplValue(prefix + '-year'))}</span> 年 <span>${tplEscape(tplValue(prefix + '-month'))}</span> 月 <span>${tplEscape(tplValue(prefix + '-day'))}</span> 日`;
+      return `<span>${tplEscape(tplValue(prefix + '-year'))}</span> 撟?<span>${tplEscape(tplValue(prefix + '-month'))}</span> ??<span>${tplEscape(tplValue(prefix + '-day'))}</span> ?匝;
     }
 
     function tplSig(key) {
       const src = SignatureUtils.load('hazard_' + key) || document.getElementById(key + '-img')?.getAttribute('src') || '';
-      return src && src.startsWith('data:image') ? `<img class="tpl-sig-img" src="${src}" alt="簽章">` : '';
+      return src && src.startsWith('data:image') ? `<img class="tpl-sig-img" src="${src}" alt="蝪賜?">` : '';
     }
 
     function tplPledgeSig() {
@@ -1702,7 +1704,7 @@
           const idx = c * rows + r;
           const item = items[idx] || '';
           const checked = document.getElementById(`${containerId}-${idx}`)?.checked;
-          html += `<td>${item ? `${checked ? '☑' : '□'}${tplEscape(item.replace(/^\d+\.\s*/, match => match))}` : '&nbsp;'}</td>`;
+          html += `<td>${item ? `${checked ? '?? : '??}${tplEscape(item.replace(/^\d+\.\s*/, match => match))}` : '&nbsp;'}</td>`;
         }
         html += '</tr>';
       }
@@ -1717,15 +1719,15 @@
         if (idx === null) return '<td>&nbsp;</td>';
         const item = HAZARDS[idx] || '';
         const checked = document.getElementById(`hazard-grid-${idx}`)?.checked;
-        return `<td>${checked ? '☑' : '□'}${tplEscape(item)}</td>`;
+        return `<td>${checked ? '?? : '??}${tplEscape(item)}</td>`;
       }).join('')}</tr>`).join('');
     }
 
     function tplEnvRows() {
       const selected = ENV_OPTIONS
-        .map((item, idx) => document.getElementById(`env-opt-${idx}`)?.checked ? `☑${tplEscape(item)}` : '')
+        .map((item, idx) => document.getElementById(`env-opt-${idx}`)?.checked ? `??{tplEscape(item)}` : '')
         .filter(Boolean);
-      const rows = selected.length ? selected : ['（請敘明承攬作業現場環境）'];
+      const rows = selected.length ? selected : ['嚗????踵雿平?曉?啣?嚗?];
       return rows.map(item => `<div>${item}</div>`).join('');
     }
 
@@ -1748,76 +1750,76 @@
       if (!target) return;
       const printRules = window.ADMIN_FORM_RULES?.hazard?.printTemplate || {};
       const labels = window.AdminPrintLayout?.hazard?.basicLabels() || printRules.basicTable?.labelsWithOriginalBreaks || {};
-      const pledgeNums = window.AdminPrintLayout?.hazard?.pledgeNumbers() || printRules.pledge?.numberLabels || ['一、', '二、', '三、', '四、', '五、', '六、'];
+      const pledgeNums = window.AdminPrintLayout?.hazard?.pledgeNumbers() || printRules.pledge?.numberLabels || ['銝??, '鈭?, '銝?, '??, '鈭?, '?准?];
       target.innerHTML = `
         <section class="tpl-page tpl-first-page">
-          <h1 class="tpl-main-title">農業部畜產試驗所承攬作業環境危害告知單</h1>
+          <h1 class="tpl-main-title">颲脫平?函??Ｚ岫撽??踵雿平?啣??勗拿???/h1>
           <table class="tpl-basic-table">
             <colgroup>${'<col>'.repeat(10)}</colgroup>
-            <tr><td class="tpl-label">承攬商<br>名稱</td><td colspan="5"><div class="tpl-cell-text">${tplEscape(tplValue('contractor-name'))}</div></td><td class="tpl-label" colspan="2">統一編號</td><td colspan="2"><div class="tpl-cell-text">${tplEscape(tplValue('tax-id'))}</div></td></tr>
-            <tr><td class="tpl-label">負責人<br>簽章</td><td class="tpl-sign-cell" colspan="2">${tplSig('sig-boss')}</td><td class="tpl-label">現場主管<br>簽章</td><td class="tpl-sign-cell" colspan="2">${tplSig('sig-supervisor')}</td><td class="tpl-label" colspan="2">緊急連絡<br>電話</td><td colspan="2"><div class="tpl-cell-text">${tplEscape(tplValue('emergency-tel'))}</div></td></tr>
-            <tr class="tpl-two-line-row"><td class="tpl-label"><span class="tpl-two-line-label">${labels.workName || '承攬作業<br>名稱'}</span></td><td colspan="9"><div class="tpl-wide-text">${tplEscape(tplValue('work-name'))}</div></td></tr>
-            <tr class="tpl-two-line-row"><td class="tpl-label"><span class="tpl-two-line-label">${labels.workPeriod || '承攬作業<br>期間'}</span></td><td colspan="9"><div class="tpl-wide-text">${tplDate('start')} 至 ${tplDate('end')}</div></td></tr>
-            <tr class="tpl-two-line-row"><td class="tpl-label"><span class="tpl-two-line-label">${labels.workLocation || '承攬作業<br>地點'}</span></td><td colspan="9"><div class="tpl-wide-text">${tplEscape(tplValue('work-location'))}</div></td></tr>
-            <tr><td class="tpl-label">請購單位</td><td colspan="2"><div class="tpl-cell-text">${tplEscape(tplValue('purchase-dept'))}</div></td><td class="tpl-label">承辦人<br>簽章</td><td class="tpl-sign-cell" colspan="2">${tplSig('sig-handler')}</td><td class="tpl-label" colspan="2">單位主管<br>簽章</td><td class="tpl-sign-cell" colspan="2">${tplSig('sig-depthead')}</td></tr>
-            <tr><td class="tpl-label">危害告知<br>日期</td><td colspan="9"><div class="tpl-cell-text">${tplDate('notify')}<span class="tpl-date-note">※應於作業開始前將作業環境危害因素告知承攬商</span></div></td></tr>
+            <tr><td class="tpl-label">?踵??br>?迂</td><td colspan="5"><div class="tpl-cell-text">${tplEscape(tplValue('contractor-name'))}</div></td><td class="tpl-label" colspan="2">蝯曹?蝺刻?</td><td colspan="2"><div class="tpl-cell-text">${tplEscape(tplValue('tax-id'))}</div></td></tr>
+            <tr><td class="tpl-label">鞎痊鈭?br>蝪賜?</td><td class="tpl-sign-cell" colspan="2">${tplSig('sig-boss')}</td><td class="tpl-label">?曉銝餌恣<br>蝪賜?</td><td class="tpl-sign-cell" colspan="2">${tplSig('sig-supervisor')}</td><td class="tpl-label" colspan="2">蝺仿?窗<br>?餉店</td><td colspan="2"><div class="tpl-cell-text">${tplEscape(tplValue('emergency-tel'))}</div></td></tr>
+            <tr class="tpl-two-line-row"><td class="tpl-label"><span class="tpl-two-line-label">${labels.workName || '?踵雿平<br>?迂'}</span></td><td colspan="9"><div class="tpl-wide-text">${tplEscape(tplValue('work-name'))}</div></td></tr>
+            <tr class="tpl-two-line-row"><td class="tpl-label"><span class="tpl-two-line-label">${labels.workPeriod || '?踵雿平<br>??'}</span></td><td colspan="9"><div class="tpl-wide-text">${tplDate('start')} ??${tplDate('end')}</div></td></tr>
+            <tr class="tpl-two-line-row"><td class="tpl-label"><span class="tpl-two-line-label">${labels.workLocation || '?踵雿平<br>?圈?'}</span></td><td colspan="9"><div class="tpl-wide-text">${tplEscape(tplValue('work-location'))}</div></td></tr>
+            <tr><td class="tpl-label">隢頃?桐?</td><td colspan="2"><div class="tpl-cell-text">${tplEscape(tplValue('purchase-dept'))}</div></td><td class="tpl-label">?輯齒鈭?br>蝪賜?</td><td class="tpl-sign-cell" colspan="2">${tplSig('sig-handler')}</td><td class="tpl-label" colspan="2">?桐?銝餌恣<br>蝪賜?</td><td class="tpl-sign-cell" colspan="2">${tplSig('sig-depthead')}</td></tr>
+            <tr><td class="tpl-label">?勗拿?<br>?交?</td><td colspan="9"><div class="tpl-cell-text">${tplDate('notify')}<span class="tpl-date-note">?餅??潔?璆剝?憪?撠?璆剔憓摰喳?蝝??交?砍?</span></div></td></tr>
           </table>
 
           <div class="tpl-prehazard-content">
-            <div class="tpl-notice">※以下由承攬商與請購單位共同確認填寫，應說明工作環境狀況，包括設施、佈置及機械設備等，必要時以圖示說明。</div>
-          <div class="tpl-section-title">一、基本遵守事項</div>
+            <div class="tpl-notice">?颱誑銝?踵??隢頃?桐??勗?蝣箄?憛怠神嚗?隤芣?撌乩??啣??瘜??閮剜??蝵桀?璈１閮剖?蝑?敹??誑?內隤芣???/div>
+          <div class="tpl-section-title">銝??祇摰???/div>
           <div class="tpl-rules">
-            <p>（一）已確實詳閱及了解「本所承攬作業環境危害告知單」。</p>
-            <p>（二）人員進入工作場所，應依作業特性，配戴必要之個人安全衛生防護具。</p>
-            <p>（三）作業前使用機具、工具應確實實施點檢，所有捲夾設備嚴禁配戴手套。</p>
-            <p>（四）不隨意碰觸所內電氣設備及操作機台，作業前應知會本案承辦人核准後始可作業。</p>
-            <p>（五）危險機械或設備之操作人員應依法取得合格執照始可操作。</p>
-            <p>（六）承攬商仍應於作業前評估各項細部作業之可能危害，採取相應預防、保護措施，對所屬人員實施法定教育訓練與危害告知，可能危害及對應防護措施，並指派專人於現場指揮監督。</p>
-            <p>（七）本所對於承攬商之作業設施或作業方法，認為有危害人員安全顧慮時，得隨時令其停工，至危害消失為止。</p>
+            <p>嚗?嚗歇蝣箏祕閰喲??閫???踵雿平?啣??勗拿??柴?/p>
+            <p>嚗?嚗犖?⊿脣撌乩??湔?嚗?靘?璆剔?改??敹?銋犖摰銵??脰風?瑯?/p>
+            <p>嚗?嚗?璆剖?雿輻璈?極?瑟?蝣箏祕撖行暺炎嚗??憭曇身?蝳??湔?憟?/p>
+            <p>嚗?嚗??冽?蝣啗孛??折瘞?身????璈嚗?璆剖???獢颲虫犖?詨?敺??臭?璆准?/p>
+            <p>嚗?嚗?芣?璇唳?閮剖?銋?雿犖?⊥?靘?????瑞憪????/p>
+            <p>嚗嚗?砍?隞??潔?璆剖?閰摯??蝝圈雿平銋?賢摰喉??∪??豢????霅瑟?踝?撠?撅砌犖?∪祕?賣?摰??脰?蝺渲??勗拿?嚗?賢摰喳?撠??脰風?芣嚗蒂?晷撠犖?潛?湔??桃???/p>
+            <p>嚗?嚗?撠?踵??雿平閮剜??璆剜瘜?隤?摰喃犖?∪??券“?格?嚗??冽?隞文?極嚗?勗拿瘨仃?箸迫??/p>
           </div>
 
-          <div class="tpl-section-title">二、承攬作業現場環境說明</div>
+          <div class="tpl-section-title">鈭?砌?璆剔?渡憓牧??/div>
           <div class="tpl-pre-note">${tplEnvRows()}</div>
-          <div class="tpl-section-title">三、勾選作業項目</div>
+          <div class="tpl-section-title">銝?訾?璆剝???/div>
           <table class="tpl-check-table"><tbody>${tplCheckRows(WORK_TYPES, 'work-type-grid', 3)}</tbody></table>
           </div>
 
         </section>
 
         <section class="tpl-page tpl-hazard-page">
-          <div class="tpl-section-title">四、勾選可能危害</div>
+          <div class="tpl-section-title">??詨?賢摰?/div>
           <table class="tpl-check-table tpl-hazard-check"><tbody>${tplHazardCheckRows()}</tbody></table>
-          <div class="tpl-section-title">五、危害防止對策</div>
+          <div class="tpl-section-title">鈭摰喲甇Ｗ?蝑?/div>
           <div class="tpl-pre-note">
-            <div>（對應四、勾選可能危害，請敘明危害防止對策，如下表供參閱）</div>
-            <div>備註：本危害告知單正本由請購單位及承攬商雙方各執一份，影本送秘書室留存，修改時並應再以書面為之，本危害告知單等相關文件依規定保存3年。</div>
+            <div>嚗?????詨?賢摰喉?隢??摰喲甇Ｗ?蝑?憒?銵其??嚗?/div>
+            <div>?酉嚗?勗拿??格迤?祉隢頃?桐???砍???銝隞踝?敶望???詨恕??嚗耨?寞?銝行??誑?賊?箔?嚗?勗拿??桃??賊??辣靘?摰?摮?撟氬?/div>
           </div>
           <table class="tpl-hazard-table">
             <colgroup><col class="tpl-num-col"><col class="tpl-op-col"><col class="tpl-risk-col"><col class="tpl-measure-col"></colgroup>
-            <thead><tr><th class="tpl-num">項次</th><th class="tpl-op">作業項目</th><th class="tpl-risk">潛在危害因素</th><th>危害防止對策</th></tr></thead>
+            <thead><tr><th class="tpl-num">?活</th><th class="tpl-op">雿平?</th><th class="tpl-risk">瞏?勗拿??</th><th>?勗拿?脫迫撠?</th></tr></thead>
             <tbody>${tplHazardTableRows()}</tbody>
           </table>
         </section>
 
         <section class="tpl-page tpl-pledge-page">
-          <div class="tpl-pledge-title">農業部畜產試驗所承攬作業安全衛生承諾書</div>
+          <div class="tpl-pledge-title">颲脫平?函??Ｚ岫撽??踵雿平摰銵??輯姥??/div>
           <div class="tpl-pledge-body">
-            <p>本公司（人）${tplEscape(tplValue('pledge-company')) || '　'} 承攬農業部畜產試驗所（以下簡稱貴所）${tplEscape(tplValue('pledge-project')) || '　'} 案。</p>
-            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[0] || '一、'}</span><span>貴所已告知本公司（人）有關工作場所環境危害因素，本公司承諾妥善規劃以避免災害發生，所屬人員進行作業時，全程使用符合職業安全衛生法暨相關規定之防護器具，並於作業期間指派工作場所負責人於現場指揮監督管理及負起雇主應負之一切責任，因作業產生之廢棄物應取得該場所管理人同意暫時堆放於指定區域，並於作業結束後，即盡速清理復原作業區域，若該場所管理人不同意暫時堆放情形，於作業當日立即清運離所。</span></div>
-            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[1] || '二、'}</span><span>本公司若有再交付承攬時，本公司承諾會負起「職業安全衛生法」所定雇主之責任。</span></div>
-            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[2] || '三、'}</span><span>本公司承諾作業開始前評估各項細部作業之可能危害，採取相應防護措施，對所屬人員實施法定教育訓練與危害告知，若貴所要求查證，本公司有提供人員教育訓練證明之義務。</span></div>
-            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[3] || '四、'}</span><span>作業期間如遇颱風、大雨等預報時，本公司應提前採取預防措施。天然災害過後，應實施檢查確認安全無虞後始可復工。</span></div>
-            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[4] || '五、'}</span><span>本公司承諾經貴所巡視發現本公司作業員工有違反法令規定情事，同意貴所要求下立即停止作業，通知本公司改善完成後才復工。</span></div>
-            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[5] || '六、'}</span><span>本公司如違反職業安全衛生法暨相關規定，造成之災害，導致貴所損失，本公司願負起賠償責任。</span></div>
+            <p>?砍?賂?鈭綽?${tplEscape(tplValue('pledge-company')) || '?'} ?踵颲脫平?函??Ｚ岫撽?嚗誑銝陛蝔梯眼?嚗?{tplEscape(tplValue('pledge-project')) || '?'} 獢?/p>
+            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[0] || '銝??}</span><span>鞎湔?撌脣??交?砍嚗犖嚗??極雿??啣??勗拿??嚗?砍?輯姥憒亙?閬?隞仿?摰喟???撅砌犖?⊿脰?雿平???函?雿輻蝚血??瑟平摰銵?瘜?賊?閬?銋霅瑕?瘀?銝行雿平???晷撌乩??湔?鞎痊鈭箸?曉???蝞∠???韏琿?銝餅?鞎?銝?痊隞鳴???璆剔??撱Ｘ??拇???閰脣?蝞∠?鈭箏?????暹?????銝行雿平蝯?敺??喟???儔??璆剖????亥府?湔?蝞∠?鈭箔????急???耦嚗雿平?嗆蝡皜??Ｘ???/span></div>
+            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[1] || '鈭?}</span><span>?砍?貉??鈭支??踵???砍?豢隢暹?鞎絲?璆剖??刻?????摰?銝颱?鞎砌遙??/span></div>
+            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[2] || '銝?}</span><span>?砍?豢隢曆?璆剝?憪?閰摯??蝝圈雿平銋?賢摰喉??∪??豢??脰風?芣嚗??撅砌犖?∪祕?賣?摰??脰?蝺渲??勗拿?嚗鞎湔?閬??亥?嚗?砍??靘犖?⊥??脰?蝺渲???蝢拙???/span></div>
+            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[3] || '??}</span><span>雿平??憒?憸梢◢?之?函?????砍?豢????∪???芣?予?嗥摰喲?敺??祕?賣炎?亦Ⅱ隤??函??憪敺拙極??/span></div>
+            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[4] || '鈭?}</span><span>?砍?豢隢曄?鞎湔?撌∟??潛?砍?訾?璆剖撌交???瘜誘閬???嚗??眼?閬?銝??喳?甇Ｖ?璆哨???砍?豢?????儔撌乓?/span></div>
+            <div class="tpl-pledge-row"><span class="tpl-pledge-num">${pledgeNums[5] || '?准?}</span><span>?砍?詨????瑟平摰銵?瘜?賊?閬?嚗?銋摰喉?撠鞎湔??仃嚗?砍憿?韏瑁??痊隞颯?/span></div>
           </div>
-          <div class="tpl-zhi"><div>此致</div><div>農業部畜產試驗所</div></div>
+          <div class="tpl-zhi"><div>甇方</div><div>颲脫平?函??Ｚ岫撽?</div></div>
           <div class="tpl-pledge-info">
-            <div>承攬商名稱：${tplEscape(tplValue('pledge-name'))}</div>
-            <div>承攬商負責人（代理負責人）簽章：</div>
+            <div>?踵??蝔梧?${tplEscape(tplValue('pledge-name'))}</div>
+            <div>?踵??鞎砌犖嚗誨??鞎砌犖嚗偷蝡?</div>
             <div class="tpl-pledge-sign">${tplPledgeSig()}</div>
-            <div>地址：${tplEscape(tplValue('pledge-address'))}</div>
-            <div>電話：${tplEscape(tplValue('pledge-tel'))}</div>
-            <div>統一編號：${tplEscape(tplValue('pledge-taxid'))}</div>
+            <div>?啣?嚗?{tplEscape(tplValue('pledge-address'))}</div>
+            <div>?餉店嚗?{tplEscape(tplValue('pledge-tel'))}</div>
+            <div>蝯曹?蝺刻?嚗?{tplEscape(tplValue('pledge-taxid'))}</div>
           </div>
           <div class="tpl-sign-date">${tplDate('pledge')}</div>
         </section>`;
@@ -1870,12 +1872,12 @@
       const modal = document.createElement('div');
       modal.id = 'print-choice-modal';
       modal.innerHTML = `
-        <div class="print-choice-panel" role="dialog" aria-modal="true" aria-label="列印或匯出PDF">
-          <div class="print-choice-title">列印 / 匯出PDF</div>
+        <div class="print-choice-panel" role="dialog" aria-modal="true" aria-label="???摺DF">
+          <div class="print-choice-title">? / ?臬PDF</div>
           <div class="print-choice-actions">
-            <button type="button" class="btn btn-ghost" id="print-choice-print">列印</button>
-            <button type="button" class="btn btn-print" id="print-choice-pdf">匯出PDF</button>
-            <button type="button" class="btn btn-ghost" id="print-choice-cancel">取消</button>
+            <button type="button" class="btn btn-ghost" id="print-choice-print">?</button>
+            <button type="button" class="btn btn-print" id="print-choice-pdf">?臬PDF</button>
+            <button type="button" class="btn btn-ghost" id="print-choice-cancel">??</button>
           </div>
         </div>`;
       Object.assign(modal.style, {
@@ -1961,7 +1963,7 @@
     function makeDraftTitle() {
       const contractor = document.getElementById('contractor-name').value.trim();
       const work = document.getElementById('work-name').value.trim();
-      return [contractor, work].filter(Boolean).join(' / ') || '未命名危害告知單';
+      return [contractor, work].filter(Boolean).join(' / ') || '?芸?摰喳??亙';
     }
 
     // ---- Draft to localStorage ----
@@ -1976,7 +1978,7 @@
         const record = {
           id: currentDraftId,
           type: 'hazard',
-          typeLabel: '承攬作業環境危害告知單',
+          typeLabel: '?踵雿平?啣??勗拿???,
           title: makeDraftTitle(),
           url: 'hazard-form.html?draft=' + encodeURIComponent(currentDraftId),
           createdAt: now,
@@ -1996,10 +1998,10 @@
         record.createdAt = savedRecord.createdAt;
         const backLink = document.querySelector('.back-btn');
         if (backLink) backLink.href = FormSession.backToIndexUrl(currentDraftId);
-        showToast('✅ 表單已暫存，可回首頁清冊繼續修改');
+        showToast('??銵典撌脫摮??臬?擐?皜?蝜潛?靽格');
       } catch (e) {
         console.error('[HazardForm] save failed:', e);
-        showToast('⚠️ 暫存失敗，請確認瀏覽器儲存空間或重新整理後再試');
+        showToast('?? ?怠?憭望?嚗?蝣箄??汗?典摮征????渡?敺?閰?);
       }
     }
 
@@ -2035,7 +2037,7 @@
     }
 
     function clearForm() {
-      if (!confirm('確定要清除所有填寫內容嗎？')) return;
+      if (!confirm('蝣箏?閬??斗??‵撖怠摰孵?嚗?)) return;
       document.querySelectorAll('.form-input, .form-textarea').forEach(el => el.value = '');
       document.querySelectorAll('input[type="checkbox"]').forEach(el => {
         el.checked = false;
@@ -2044,7 +2046,7 @@
       });
       localStorage.removeItem('hazard-form-data');
       updateProgress();
-      showToast('🗑 表單已清除');
+      showToast('?? 銵典撌脫???);
     }
 
     function showToast(msg) {
@@ -2094,21 +2096,21 @@
 
 
 <script>
-// ════════════════════════════════════════════
-//   SIGNATURE PAD — Fullscreen Modal System
-// ════════════════════════════════════════════
+// ????????????????????????????????????????????
+//   SIGNATURE PAD ??Fullscreen Modal System
+// ????????????????????????????????????????????
 const SIG_KEYS = ['sig-boss', 'sig-supervisor', 'sig-handler', 'sig-depthead', 'sig-pledge'];
 
 // Label map for modal title
 const SIG_LABELS = {
-  'sig-boss':       '負責人簽章',
-  'sig-supervisor': '現場主管簽章',
-  'sig-handler':    '承辦人簽章',
-  'sig-depthead':   '單位主管簽章',
-  'sig-pledge':     '承攬商負責人簽章',
+  'sig-boss':       '鞎痊鈭箇偷蝡?,
+  'sig-supervisor': '?曉銝餌恣蝪賜?',
+  'sig-handler':    '?輯齒鈭箇偷蝡?,
+  'sig-depthead':   '?桐?銝餌恣蝪賜?',
+  'sig-pledge':     '?踵??鞎砌犖蝪賜?',
 };
 
-// ── Modal elements ──
+// ?? Modal elements ??
 const modal        = document.getElementById('sig-modal');
 const modalTitle   = document.getElementById('sig-modal-title');
 const modalCanvas  = document.getElementById('sig-modal-canvas');
@@ -2123,7 +2125,7 @@ let modalLastX   = 0;
 let modalLastY   = 0;
 let modalHasDraw = false;
 
-// ── Init modal canvas (high-DPR) ──
+// ?? Init modal canvas (high-DPR) ??
 function initModalCanvas() {
   const wrap = document.getElementById('sig-modal-canvas-wrap');
   const rect  = wrap.getBoundingClientRect();
@@ -2141,11 +2143,11 @@ function initModalCanvas() {
   modalCtx.lineJoin    = 'round';
 }
 
-// ── Open modal ──
+// ?? Open modal ??
 function openSigModal(key) {
   activeKey    = key;
   modalHasDraw = false;
-  modalTitle.textContent = '✍️ ' + (SIG_LABELS[key] || '簽名');
+  modalTitle.textContent = '?? ' + (SIG_LABELS[key] || '蝪賢?');
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
 
@@ -2171,14 +2173,14 @@ function openSigModal(key) {
   });
 }
 
-// ── Close modal ──
+// ?? Close modal ??
 function closeSigModal() {
   modal.classList.remove('open');
   document.body.style.overflow = '';
   activeKey = null;
 }
 
-// ── Draw on modal canvas ──
+// ?? Draw on modal canvas ??
 function modalDraw(x1, y1, x2, y2) {
   modalCtx.beginPath();
   modalCtx.moveTo(x1, y1);
@@ -2196,7 +2198,7 @@ function getTouchPos(canvas, touch) {
   return { x: touch.clientX - r.left, y: touch.clientY - r.top };
 }
 
-// ── Modal touch events ──
+// ?? Modal touch events ??
 modalCanvas.addEventListener('touchstart', e => {
   e.preventDefault();
   const pos = getTouchPos(modalCanvas, e.changedTouches[0]);
@@ -2217,7 +2219,7 @@ modalCanvas.addEventListener('touchend', e => {
   modalDrawing = false;
 }, { passive: false });
 
-// ── Modal mouse events (desktop) ──
+// ?? Modal mouse events (desktop) ??
 modalCanvas.addEventListener('mousedown', e => {
   const r = modalCanvas.getBoundingClientRect();
   modalDrawing = true;
@@ -2234,7 +2236,7 @@ modalCanvas.addEventListener('mousemove', e => {
 modalCanvas.addEventListener('mouseup',    () => { modalDrawing = false; });
 modalCanvas.addEventListener('mouseleave', () => { modalDrawing = false; });
 
-// ── Clear modal canvas ──
+// ?? Clear modal canvas ??
 modalClear.addEventListener('click', () => {
   const dpr = window.devicePixelRatio || 1;
   modalCtx.clearRect(0, 0, modalCanvas.width / dpr, modalCanvas.height / dpr);
@@ -2242,7 +2244,7 @@ modalClear.addEventListener('click', () => {
   modalPlaceholder.classList.remove('hidden');
 });
 
-// ── Confirm: copy to mini preview + save ──
+// ?? Confirm: copy to mini preview + save ??
 modalConfirm.addEventListener('click', () => {
   if (!activeKey) { closeSigModal(); return; }
 
@@ -2274,7 +2276,7 @@ modalConfirm.addEventListener('click', () => {
   closeSigModal();
 });
 
-// ── Click on any sig-pad-wrap opens modal ──
+// ?? Click on any sig-pad-wrap opens modal ??
 function initSignaturePads() {
   SIG_KEYS.forEach(key => {
     const wrap = document.getElementById(key);
@@ -2311,7 +2313,7 @@ function initSignaturePads() {
   });
 }
 
-// ── Update hint text in mini pad after confirm ──
+// ?? Update hint text in mini pad after confirm ??
 function clearSig(key) {
   SignatureUtils.remove('hazard_' + key);
   const wrap = document.getElementById(key);
@@ -2347,26 +2349,26 @@ document.addEventListener('DOMContentLoaded', () => {
     AppCache.registerServiceWorker('./service-worker.js');
   });
 
-  // ── Android：偵測安裝提示事件 ──
+  // ?? Android嚗皜砍?鋆?蝷箔?隞???
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredInstallPrompt = e;
     document.getElementById('pwa-install-btn').classList.add('show');
   });
 
-  // ── 點擊「安裝 APP」按鈕 ──
+  // ?? 暺???鋆?APP??????
   function triggerInstall() {
     const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
     const isInStandaloneMode = window.navigator.standalone === true;
 
     if (isIOS && !isInStandaloneMode) {
-      // iOS：顯示手動安裝說明
+      // iOS嚗＊蝷箸???鋆牧??
       document.getElementById('ios-install-hint').classList.add('show');
     } else if (deferredInstallPrompt) {
-      // Android：觸發系統安裝對話框
+      // Android嚗孛?潛頂蝯勗?鋆?閰望?
       deferredInstallPrompt.prompt();
       deferredInstallPrompt.userChoice.then((result) => {
-        console.log('[PWA] 使用者選擇:', result.outcome);
+        console.log('[PWA] 雿輻???', result.outcome);
         if (result.outcome === 'accepted') {
           document.getElementById('pwa-install-btn').classList.remove('show');
         }
@@ -2375,21 +2377,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // ── 安裝完成後隱藏按鈕 ──
+  // ?? 摰?摰?敺??????
   window.addEventListener('appinstalled', () => {
     document.getElementById('pwa-install-btn').classList.remove('show');
-    console.log('[PWA] APP 安裝完成！');
+    console.log('[PWA] APP 摰?摰?嚗?);
   });
 
-  // ── iOS：頁面載入時自動偵測並顯示提示 ──
+  // ?? iOS嚗??Ｚ??交??芸??菜葫銝阡＊蝷箸?蝷???
   window.addEventListener('DOMContentLoaded', () => {
     const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
     const isInStandaloneMode = window.navigator.standalone === true;
     if (isIOS && !isInStandaloneMode) {
-      // iOS 上顯示安裝按鈕（點擊後顯示說明）
+      // iOS 銝＊蝷箏?鋆???暺?敺＊蝷箄牧??
       document.getElementById('pwa-install-btn').classList.add('show');
     }
   });
 </script>
 </body>
 </html>
+
+
+
