@@ -456,6 +456,11 @@
       #hazard-print-template .tpl-first-page {
         display:flex;
         flex-direction:column;
+        height:26.9cm !important;
+        min-height:26.9cm !important;
+        max-height:26.9cm !important;
+        box-sizing:border-box !important;
+        overflow:hidden !important;
       }
       #hazard-print-template .tpl-prehazard-content {
         flex:1 1 auto;
@@ -463,6 +468,10 @@
         display:flex;
         flex-direction:column;
         justify-content:space-between;
+      }
+      #hazard-print-template .tpl-prehazard-content > .tpl-pre-note {
+        columns:2;
+        column-gap:10pt;
       }
       #hazard-print-template .tpl-hazard-page {
         page-break-before:always;
@@ -587,9 +596,15 @@
         font-weight:400;
       }
       #hazard-print-template .tpl-pledge-page {
-        min-height:26.9cm !important;
         width:100% !important;
-        padding-bottom:1.6cm;
+        height:26.9cm !important;
+        min-height:26.9cm !important;
+        max-height:26.9cm !important;
+        box-sizing:border-box !important;
+        display:flex !important;
+        flex-direction:column !important;
+        overflow:hidden !important;
+        padding-bottom:0.45cm !important;
       }
       #hazard-print-template .tpl-pledge-body { line-height:1.8; text-align:justify; width:100%; }
       #hazard-print-template .tpl-pledge-row { display:grid; grid-template-columns:2.1em 1fr; column-gap:0.2em; margin:0 0 2pt; }
@@ -599,7 +614,7 @@
       #hazard-print-template .tpl-pledge-info { margin-top:2pt; line-height:1.85; }
       #hazard-print-template .tpl-pledge-info div { min-height:16pt; padding-bottom:3pt; overflow:visible; }
       #hazard-print-template .tpl-pledge-sign { width:55%; min-height:34pt; border:1px solid #aaa; display:flex; align-items:center; justify-content:center; margin:1pt 0 3pt; }
-      #hazard-print-template .tpl-sign-date { position:absolute; left:0; right:0; bottom:0.45cm; text-align:center; line-height:2; padding-bottom:3pt; }
+      #hazard-print-template .tpl-sign-date { position:static; margin-top:auto; flex:0 0 auto; text-align:center; line-height:2; padding:3pt 0 0; }
       .form-container { max-width:100% !important; padding:0 !important; margin:0 !important; }
 
       /* ─ Header ─ */
