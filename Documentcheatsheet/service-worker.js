@@ -1,5 +1,5 @@
 // 行政資料大補帖 Service Worker
-const CACHE_VERSION = 'hazard-v2.9';
+const CACHE_VERSION = 'hazard-v3.0';
 
 const CACHE_FILES = [
   './style.css',
